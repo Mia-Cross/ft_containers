@@ -1,0 +1,2 @@
+Make sure that each member function, overload and iterator is present and works as expected.
+Use the standard library container to check that everything works the same way.
