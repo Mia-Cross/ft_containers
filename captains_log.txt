@@ -1,0 +1,6 @@
+[2/02]
+Juste créé une architecture globale qui compile avec tous les containers dans le namespace ft 
+Next time : commencer a écrire les fonctions de LIST
+[3/02]
+Je viens de comprendre qu'il faudrait réimplémenter every fucking iterator, j'ai envie de mourrir.
+Next time : faire un input iterator deja, puis rajouter les features et surcharges dans les heritages
