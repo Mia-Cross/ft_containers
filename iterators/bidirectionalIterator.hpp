@@ -1,22 +1,35 @@
-#ifndef MY_FORWARD_ITERATOR_H
-# define MY_FORWARD_ITERATOR_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bidirectionalIterator.hpp                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
+/*   Updated: 2021/02/04 04:26:14 by lemarabe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "ioIterator.hpp"
+#ifndef MY_BIDIRECTIONAL_ITERATOR_H
+# define MY_BIDIRECTIONAL_ITERATOR_H
+
+#include "forwardIterator.hpp"
 
 template < typename T >
-struct myForwardIterator : public virtual myIOIterator<T>
+struct myBidirectionalIterator : public virtual myForwardIterator<T>
 {
-    typedef myForwardIterator  iterator_category;
+    typedef myBidirectionalIterator  iterator_category;
 
     //----- CONSTRUCTORS AND DESTRUCTORS -----//
-    myForwardIterator() : it(NULL) {}
-    myForwardIterator(T *p) : myIOIterator<T>(p) {}
-    myForwardIterator(const myForwardIterator &ref) { this->it = ref.it; };
-    virtual ~myForwardIterator() {}
+    myBidirectionalIterator() {}
+    myBidirectionalIterator(T *p) : myForwardIterator<T>(p) {}
+    myBidirectionalIterator(const myBidirectionalIterator &ref) { this->it = ref.it; };
+    virtual ~myBidirectionalIterator() {}
 
-    //----- OPERATORS : 'dereference as lvalue' -----//
-    T                   &operator*() { return (*this->it); }
-
+    //----- OPERATORS : 'decrementation' -----//
+    myBidirectionalIterator  &operator=(const myBidirectionalIterator &ref) { this->it = ref.it; return (*this); }
+    virtual myBidirectionalIterator  &operator--() { this->it--; return (*this); }
+    virtual myBidirectionalIterator  operator--(int) { myBidirectionalIterator tmp(*this); operator--(); return (tmp); }
 };
 
 #endif
