@@ -1,7 +1,7 @@
 #ifndef LIST_H
 # define LIST_H
 
-#include "../iterator/iterator.hpp"
+#include "../iterators/iterator.hpp"
 #include <memory>
 
 namespace ft
@@ -23,13 +23,13 @@ namespace ft
 			typedef myIterator<T> reverse_iterator;
 			typedef myIterator<T> const_reverse_iterator;
 			typedef size_t		size_type;
-			//typedef ptrdiff_t	difference_type;
+			typedef ptrdiff_t	difference_type;
 
 
             List() {}
             ~List() {}
             List(const List &) {}
-            const List &operator=(const List &) {}
+            List &operator=(const List &) {}
 
         private :
 
