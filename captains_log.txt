@@ -4,6 +4,12 @@ vector = random access iterator
 queue = no iterator
 stack = no iterator
 
+[4/02]
+J'ai presque fini les iterateurs, ils heritent tous de ForwardIterator -> bidirectional -> random_access
+Sur LIST, j'ai fait tous les typedefs et recopié toutes les fcts membres et non membres de cppreference 
+Next time : iterateurs -> manque plus que random_access (operator[] et autres features)
+            architecture -> recopier les membres de STACK, QUEUE, MAP & VECTOR
+            containers -> commencer par STACK ou QUEUE plutot que LIST qui a l'air assez badass qd mm
 [3/02]
 Je viens de comprendre qu'il faudrait réimplémenter every fucking iterator, j'ai envie de mourrir.
 Next time : faire un input iterator deja, puis rajouter les features et surcharges dans les heritages

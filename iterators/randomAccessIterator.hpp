@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/04 04:30:10 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/04 05:28:23 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ struct myRandomAccessIterator : public virtual myBidirectionalIterator<T>
 
     //----- OPERATORS : 'decrementation' -----//
     myRandomAccessIterator  &operator=(const myRandomAccessIterator &ref) { this->it = ref.it; return (*this); }
-    virtual myRandomAccessIterator  &operator--() { this->it--; return (*this); }
-    virtual myRandomAccessIterator  operator--(int) { myRandomAccessIterator tmp(*this); operator--(); return (tmp); }
+    //[...]
 };
 
 #endif
