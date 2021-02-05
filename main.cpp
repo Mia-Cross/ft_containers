@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/04 04:26:20 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/05 01:24:18 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include "containers/map.hpp"
 #include "containers/stack.hpp"
 #include "containers/queue.hpp"
-#include "../iterators/bidirectionalIterator.hpp"
-#include "../iterators/forwardIterator.hpp"
+#include "../utils/bidirectionalIterator.hpp"
+#include "../utils/forwardIterator.hpp"
 #include <iostream>
 
 int main()

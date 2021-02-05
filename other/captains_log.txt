@@ -5,17 +5,6 @@ vector  random access
 queue   none            Single end -> first in, first out
 stack   none            Single end -> last in, first out
 
-QUESTIONS :
-Pourquoi ils ont mis "explicit" devant les constructeurs ?
-Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme ca dans la STL, ou y'a
-        une meilleure raison ?
-
-[5/02]
-Bon ben j'ai essayé de coder les fonctions de QUEUE et STACK, mais j'ai découvert que dedans y'avait un 
-underlying container qui devra etre... une LIST ! Donc j'ai essayé de coder les fonctions de LIST, mais
-j'ai vu qu'il fallait utiliser std::allocator pour creer mes elements et la j'ai vu trouble.
-J'ai créé une doublyLinkedList, mais je comprends pas trop bien comment allouer mes elements.
-Next time : comprendre comment utiliser std::allocator (-> relire ce que Thomas m'a ecrit a ce sujet)
 [4/02]
 J'ai presque fini les iterateurs, ils heritent tous de ForwardIterator -> bidirectional -> random_access
 Sur LIST, j'ai fait tous les typedefs et recopié toutes les fcts membres et non membres de cppreference 
