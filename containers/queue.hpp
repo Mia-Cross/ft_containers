@@ -18,14 +18,14 @@ namespace ft
             Queue(const Queue &) {}
             const Queue &operator=(const Queue &) {}
 
-            bool empty() const {}
-            size_type size() const {}
-            value_type &front() {}
-            const value_type &front() const {}
-            value_type &back() {}
-            const value_type &back() const {}
-            void push(const value_type &val) {}
-            void pop() {}
+            // bool empty() const {}
+            // size_type size() const {}
+            // value_type &front() {}
+            // const value_type &front() const {}
+            // value_type &back() {}
+            // const value_type &back() const {}
+            // void push(const value_type &val) {}
+            // void pop() {}
 
         private :
 
@@ -33,18 +33,18 @@ namespace ft
 
     };
 
-    template < typename T >
-    bool operator== (const Queue<T> &lhs, const Queue<T> &rhs) {}
-    template < typename T >
-    bool operator!= (const Queue<T> &lhs, const Queue<T> &rhs) {}
-    template < typename T >
-    bool operator<  (const Queue<T> &lhs, const Queue<T> &rhs) {}
-    template < typename T >
-    bool operator<= (const Queue<T> &lhs, const Queue<T> &rhs) {}
-    template < typename T >
-    bool operator>  (const Queue<T> &lhs, const Queue<T> &rhs) {}
-    template < typename T >
-    bool operator>= (const Queue<T> &lhs, const Queue<T> &rhs) {}
+    template < typename T, class Alloc >
+    bool operator==(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs == rhs); }
+    template < typename T, class Alloc >
+    bool operator!=(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs != rhs); }
+    template < typename T, class Alloc >
+    bool operator<(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs < rhs); }
+    template < typename T, class Alloc >
+    bool operator<=(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs <= rhs); }
+    template < typename T, class Alloc >
+    bool operator>(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs > rhs); }
+    template < typename T, class Alloc >
+    bool operator>=(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs >= rhs); }
 }
 
 #endif

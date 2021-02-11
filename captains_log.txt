@@ -5,26 +5,43 @@ vector  random access
 queue   none            Single end -> first in, first out
 stack   none            Single end -> last in, first out
 
+Ouais en gros tout ce qui est allocutions des types qui sont passer en template
+au lieu de faire new value_type
+Tu va faire un Alloc allocator; allocator.allocate(n); allocator.construct(value);
+Tu va passer par l'allocator
+Apres quand tu va faire une liste chainer si tu veux creer un maillon a ta liste tu peut utiliser new
+Du moment que le value_type soit allouer construit detruit et desallouer par le allocator
+T'as pas a le refaire parce que c'est un truc qu'on te passera en template
+Mais ils serront tous contruit a partir de cette base std::allocator
+
 QUESTIONS :
 Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme ca dans la STL, ou y'a
         une meilleure raison ?
+A TESTER >> Si ca se trouve je peux m'epargner la peine de faire appel a getNthElement parce que je pense que quand
+j'appelle une fonction membre depuis un element n, this = n et pas la tete de la liste.
 
+[11/02]
+A priori je faisais pas trop de la merde avec ma dLL et mon allocator, du coup j'ai ecrit les fonctions
+dont j'aurais besoin pour la manipuler, et j'ai bien attaqué les fonctions de LIST. Du coup j'ai voulu
+tester ce que j'avais écrit mais apres 1h a regler les pbs de compilation, j'ai pris un segfault de
+l'espace, du coup je debuggerai demain.
+NEXT TIME : eliminer les segfaults
 [5/02]
 Bon ben j'ai essayé de coder les fonctions de QUEUE et STACK, mais j'ai découvert que dedans y'avait un 
 underlying container qui devra etre... une LIST ! Donc j'ai essayé de coder les fonctions de LIST, mais
 j'ai vu qu'il fallait utiliser std::allocator pour creer mes elements et la j'ai vu trouble.
 J'ai créé une doublyLinkedList, mais je comprends pas trop bien comment allouer mes elements.
-Next time : comprendre comment utiliser std::allocator (-> relire ce que Thomas m'a ecrit a ce sujet)
+NEXT TIME : comprendre comment utiliser std::allocator (-> relire ce que Thomas m'a ecrit a ce sujet)
 [4/02]
 J'ai presque fini les iterateurs, ils heritent tous de ForwardIterator -> bidirectional -> random_access
 Sur LIST, j'ai fait tous les typedefs et recopié toutes les fcts membres et non membres de cppreference 
-Next time : iterateurs -> manque plus que random_access (operator[] et autres features)
+NEXT TIME : iterateurs -> manque plus que random_access (operator[] et autres features)
             architecture -> recopier les membres de STACK, QUEUE, MAP & VECTOR
             containers -> commencer par STACK ou QUEUE plutot que LIST qui a l'air assez badass qd mm
 [3/02]
 Je viens de comprendre qu'il faudrait réimplémenter every fucking iterator, j'ai envie de mourrir.
-Next time : faire un input iterator deja, puis rajouter les features et surcharges dans les heritages
+NEXT TIME : faire un input iterator deja, puis rajouter les features et surcharges dans les heritages
 [2/02]
 Juste créé une architecture globale qui compile avec tous les containers dans le namespace ft 
-Next time : commencer a écrire les fonctions de LIST
+NEXT TIME : commencer a écrire les fonctions de LIST

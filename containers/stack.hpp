@@ -15,15 +15,15 @@ namespace ft
 
             Stack() : T(NULL) {}
             ~Stack() {}
-            Stack(const Stack &ref) {}
+            Stack(const Stack &) { }
             const Stack &operator=(const Stack &) {}
 
-            bool empty() const {}
-            size_type size() const {}
-            value_type &top() {}
-            const value_type &top() const {}
-            void push(const value_type &val) {}
-            void pop() {}
+            // bool empty() const {}
+            // size_type size() const {}
+            // value_type &top() {}
+            // const value_type &top() const {}
+            // void push(const value_type &val) {}
+            // void pop() {}
 
         private :
 
@@ -33,18 +33,18 @@ namespace ft
 
     };
 
-    template < typename T >
-    bool operator== (const Stack<T> &lhs, const Stack<T> &rhs) {}
-    template < typename T >
-    bool operator!= (const Stack<T> &lhs, const Stack<T> &rhs) {}
-    template < typename T >
-    bool operator<  (const Stack<T> &lhs, const Stack<T> &rhs) {}
-    template < typename T >
-    bool operator<= (const Stack<T> &lhs, const Stack<T> &rhs) {}
-    template < typename T >
-    bool operator>  (const Stack<T> &lhs, const Stack<T> &rhs) {}
-    template < typename T >
-    bool operator>= (const Stack<T> &lhs, const Stack<T> &rhs) {}
+    template < typename T, class Alloc >
+    bool operator==(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs == rhs); }
+    template < typename T, class Alloc >
+    bool operator!=(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs != rhs); }
+    template < typename T, class Alloc >
+    bool operator<(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs < rhs); }
+    template < typename T, class Alloc >
+    bool operator<=(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs <= rhs); }
+    template < typename T, class Alloc >
+    bool operator>(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs > rhs); }
+    template < typename T, class Alloc >
+    bool operator>=(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs >= rhs); }
 }
 
 

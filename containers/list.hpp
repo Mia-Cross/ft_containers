@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/05 01:59:43 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/11 07:21:38 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,79 +38,109 @@ namespace ft
 			typedef size_t		                size_type;
 			typedef ptrdiff_t	                difference_type;
 
-//             dLList<T>       myList;  //?
-//             allocator_type  myAlloc;
-//             size_type       mySize;
-//             difference_type myDiff;
-
-            List() : mySize(0) {}
-            ~List() {}
+            List() : myList(new dLList<T>), mySize(0) {}
+            ~List() { this->clear(); delete (&myList);}
             List(const List &ref) : mySize(ref.mySize) { *this = ref; }
-            List &operator=(const List &) {
+            List &operator=(const List &ref) {
                 this->clear();
-                for (iterator it )
+                this->mySize = ref.mySize;
+                for (iterator it = ref.begin(); it != ref.end(); it++)
+                    this->push_back(*it);
+                return (*this);
             }
 
             // ----- ITERATORS ----- //
-            iterator begin() { return iterator(myList.content); }
-            iterator end() {}
-            reverse_iterator rbegin() {}
-            reverse_iterator rend() {}
-            const_iterator begin() const {}
-            const_iterator end() const {}
-            const_reverse_iterator rbegin() const {}
-            const_reverse_iterator rend() const {}
+            iterator begin() { return iterator(myList->getNthElement(0)->getValue()); }
+            iterator end() { return iterator(myList->getNthElement(myList->getSize())->getValue());}
+            // reverse_iterator rbegin() {}
+            // reverse_iterator rend() {}
+            const_iterator begin() const { return const_iterator(myList->getNthElement(0)->getValue()); }
+            const_iterator end() const { return const_iterator(myList->getNthElement(myList->getSize())->getValue());}
+            // const_reverse_iterator rbegin() const {}
+            // const_reverse_iterator rend() const {}
 
             // ----- CAPACITY ----- //
-            bool empty() const { return (mySize > 0); }
+            bool empty() const { return (myList->getSize() > 0); }
             size_type size() const { return (mySize); }
-            size_type max_size() const {}
+            size_type max_size() const { return (myAlloc.max_size()); }
 
             // ----- ELEMENT ACCESS ----- //
-            reference front() { return reference(myList.content); }
-            const_reference front() const { return reference(myList.content); }
-            reference back() {}
-            const_reference back() const {}
+            reference front() { return reference(myList->getNthElement(0)->getValue()); }
+            const_reference front() const { return const_reference(myList->getNthElement(0)->getValue()); }
+            reference back() { return reference(myList->getNthElement(mySize)->getValue()); }
+            const_reference back() const { return const_reference(myList->getNthElement(mySize)->getValue()); }
 
             // ----- MODIFIERS ----- //
-            void assign(iterator first, iterator last) {}    //InputIterator in cppreference.comm
-            void assign(size_type n, const value_type &val) {}
-            void push_front(const value_type &val) { 
-                
+            // void assign(iterator first, iterator last) { //InputIterator in cppreference.comm
+            //     ///
+            // }
+            void assign(size_type n, const value_type &val) {
+                dLList<value_type> *elemN = myList->getNthElement(n);
+                if (elemN)
+                    elemN->setValue(val);
             }
-            void pop_front() {}
-            void push_back(const value_type &val) {}
-            void pop_back() {}
-            iterator insert(iterator position, const value_type &val) {}
-            void insert(iterator position, size_type n, const value_type &val) {}
-            void insert(iterator position, iterator first, iterator last) {}    //InputIterator in cppreference.comm
-            iterator erase(iterator position) {}
-            iterator erase(iterator first, iterator last) {}
-            void swap(List &x) {}
-            void resize (size_type n, value_type val = value_type()) {} //?
-            void clear() {}
+            void push_front(const value_type &val) { 
+                myList->insertElement(myList->newElement(val), 0);
+                mySize++;
+            }
+            void pop_front() {
+                myList->deleteElement(0);
+                mySize--;
+            }
+            void push_back(const value_type &val) {
+                myList->insertElement(myList->newElement(val), mySize);
+                mySize++;
+            }
+            void pop_back() {
+                myList->deleteElement(mySize);
+                mySize--;
+            }
+            // iterator insert(iterator position, const value_type &val) {}
+            // void insert(iterator position, size_type n, const value_type &val) {}
+            // void insert(iterator position, iterator first, iterator last) {}    //InputIterator in cppreference.comm
+            // iterator erase(iterator position) {}
+            // iterator erase(iterator first, iterator last) {}
+            void swap(List &x) {
+                List tmp = *this;
+                *this = x;
+                x = tmp;
+            }
+            void resize (size_type n, value_type val = value_type()) {
+                if (n < mySize)
+                {
+                    myList->getNthElement(n)->next = NULL;
+                    dLList<value_type> *limit = myList->getNthElement(n + 1);
+                    limit->clear();
+                }
+                else
+                {
+                    for (size_t diff = n - mySize; diff; diff--)
+                        push_back(val);
+                }
+            }
+            void clear() { myList->clear(); }
 
             // ----- OPERATIONS ----- //
-            void splice (iterator position, List& x) {}
-            void splice (iterator position, List& x, iterator i) {}
-            void splice (iterator position, List& x, iterator first, iterator last) {}
-            void remove (const value_type &val) {}
-            template < class Predicate >
-            void remove_if (Predicate pred) {}
-            void unique() {}
-            template < class BinaryPredicate >
-            void unique(BinaryPredicate binary_pred) {}
-            void merge(List &x) {}
-            template < class Compare >
-            void merge(List &x, Compare comp) {}
-            void sort() {}
-            template < class Compare >
-            void sort(Compare comp) {}
-            void reverse() {}
+            // void splice (iterator position, List& x) {}
+            // void splice (iterator position, List& x, iterator i) {}
+            // void splice (iterator position, List& x, iterator first, iterator last) {}
+            // void remove (const value_type &val) {}
+            // template < class Predicate >
+            // void remove_if (Predicate pred) {}
+            // void unique() {}
+            // template < class BinaryPredicate >
+            // void unique(BinaryPredicate binary_pred) {}
+            // void merge(List &x) {}
+            // template < class Compare >
+            // void merge(List &x, Compare comp) {}
+            // void sort() {}
+            // template < class Compare >
+            // void sort(Compare comp) {}
+            // void reverse() {}
             
         private :
 
-            dLList<T>       myList;  //?
+            dLList<T>       *myList;  //?
             allocator_type  myAlloc;
             size_type       mySize;
             difference_type myDiff;
@@ -118,17 +148,17 @@ namespace ft
     };
 
     template < typename T, class Alloc >
-    bool operator==(const List<T,Alloc>& lhs, const List<T,Alloc>& rhs) { return (lhs == rhs); }
+    bool operator==(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator!=(const List<T,Alloc>& lhs, const List<T,Alloc>& rhs) { return (lhs != rhs); }
+    bool operator!=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs != rhs); }
     template < typename T, class Alloc >
-    bool operator<(const List<T,Alloc>& lhs, const List<T,Alloc>& rhs) { return (lhs < rhs); }
+    bool operator<(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs < rhs); }
     template < typename T, class Alloc >
-    bool operator<=(const List<T,Alloc>& lhs, const List<T,Alloc>& rhs) { return (lhs <= rhs); }
+    bool operator<=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs <= rhs); }
     template < typename T, class Alloc >
-    bool operator>(const List<T,Alloc>& lhs, const List<T,Alloc>& rhs) { return (lhs > rhs); }
+    bool operator>(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs > rhs); }
     template < typename T, class Alloc >
-    bool operator>=(const List<T,Alloc>& lhs, const List<T,Alloc>& rhs) { return (lhs >= rhs); }
+    bool operator>=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs >= rhs); }
     
     template < typename T >
     void swap(List<T> &x, List<T> &y) {
