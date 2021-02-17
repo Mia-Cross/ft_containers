@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/04 04:26:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/16 20:35:29 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ struct myBidirectionalIterator : public virtual myForwardIterator<T>
 
     //----- OPERATORS : 'decrementation' -----//
     myBidirectionalIterator  &operator=(const myBidirectionalIterator &ref) { this->it = ref.it; return (*this); }
-    virtual myBidirectionalIterator  &operator--() { this->it--; return (*this); }
+    virtual myBidirectionalIterator  &operator--() { this->it = this->it->prev; return (*this); }
     virtual myBidirectionalIterator  operator--(int) { myBidirectionalIterator tmp(*this); operator--(); return (tmp); }
 };
 

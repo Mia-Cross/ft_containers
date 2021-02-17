@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:10 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/04 04:26:11 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/16 20:33:53 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class myForwardIterator
 
         //----- OPERATORS : 'assignation' & 'incrementation' -----//
         myForwardIterator  &operator=(const myForwardIterator &ref) { this->it = ref.it; return (*this); }
-        virtual myForwardIterator  &operator++() { this->it++; return (*this); }
+        virtual myForwardIterator  &operator++() { this->it = this->it->next; return (*this); }
         virtual myForwardIterator  operator++(int) { myForwardIterator tmp(*this); operator++(); return (tmp); }
         //----- OPERATORS : 'equality' 'inequality' 'dereference' -----//
         virtual bool    operator==(const myForwardIterator &ref) const { return (this->it == ref.it); }

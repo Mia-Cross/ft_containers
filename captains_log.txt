@@ -13,14 +13,25 @@ Apres quand tu va faire une liste chainer si tu veux creer un maillon a ta liste
 Du moment que le value_type soit allouer construit detruit et desallouer par le allocator
 T'as pas a le refaire parce que c'est un truc qu'on te passera en template
 Mais ils serront tous contruit a partir de cette base std::allocator
+A TESTER >> Si ca se trouve je peux m'epargner la peine de faire appel a getNthElement parce que je pense
+que quand j'appelle une fonction membre depuis un element n, this = n et pas la tete de la liste.
+-> Oui.
 
 QUESTIONS :
 Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme ca dans la STL, ou y'a
         une meilleure raison ?
-A TESTER >> Si ca se trouve je peux m'epargner la peine de faire appel a getNthElement parce que je pense que quand
-j'appelle une fonction membre depuis un element n, this = n et pas la tete de la liste.
 
+[16/02-17/02]
+J'ai pas mal remanié ma DLL, ma LIST et mes iterateurs, c'est mieux maintenant. Du coup j'ai give up le
+systeme de la STL pour les iterateurs, puisqu'en fait ils doivent avoir des comportements specifiques
+selon le container donc de toute facon je peux pas autant les reutiliser aue ce aue je pensais. Du coup,
+j'en ai créé un bidirectionnel general, et j'en fais heriter un const, un reverse et un const reverse.
+Maintenant les fonctions de bases marchent sans segfault et elles font bien ce que je veux, par contre
+ca leake a mort !!
+NEXT TIME : faire la chasse aux leaks
+            ecrire les tests des les fonctions de LIST pas encore testées
+            continuer de rediger les fonctions de modification de LIST
 [11/02]
 A priori je faisais pas trop de la merde avec ma dLL et mon allocator, du coup j'ai ecrit les fonctions
 dont j'aurais besoin pour la manipuler, et j'ai bien attaqué les fonctions de LIST. Du coup j'ai voulu

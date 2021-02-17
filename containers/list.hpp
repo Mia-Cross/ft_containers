@@ -6,14 +6,14 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/11 07:21:38 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/17 03:41:40 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define LIST_H
 
-#include "../utils/bidirectionalIterator.hpp"
+#include "../utils/listIterator.hpp"
 #include "../utils/doublyLinkedList.hpp"
 #include <memory>
 
@@ -25,39 +25,40 @@ namespace ft
         public :
 
 			//defining every member in my List as in the STL
-            typedef T                           value_type;
-            typedef Alloc                       allocator_type;
-            typedef T &                         reference;
-            typedef T *                         pointer;
-            typedef const T &	                const_reference;
-            typedef const T *	                const_pointer;
-			typedef myBidirectionalIterator<T>  iterator;
-			typedef myBidirectionalIterator<T>  const_iterator;           //not exactly
-			typedef myBidirectionalIterator<T>  reverse_iterator;         //not exactly
-			typedef myBidirectionalIterator<T>  const_reverse_iterator;     //not exactly
-			typedef size_t		                size_type;
-			typedef ptrdiff_t	                difference_type;
+            typedef T                       value_type;
+            typedef Alloc                   allocator_type;
+            typedef T &                     reference;
+            typedef T *                     pointer;
+            typedef const T &	            const_reference;
+            typedef const T *	            const_pointer;
+			typedef myIterator< T, dLList<T> >              iterator;
+			typedef myConstIterator< T, dLList<T> >         const_iterator;           //not exactly
+			typedef myReverseIterator< T, dLList<T> >       reverse_iterator;         //not exactly
+			typedef myConstReverseIterator< T, dLList<T> >  const_reverse_iterator;     //not exactly
+			typedef size_t		            size_type;
+			typedef ptrdiff_t	            difference_type;
 
-            List() : myList(new dLList<T>), mySize(0) {}
-            ~List() { this->clear(); delete (&myList);}
-            List(const List &ref) : mySize(ref.mySize) { *this = ref; }
+            List() : myList(new dLList<T, Alloc>), mySize(0) {}
+            ~List() { delete (myList);}
+            List(const List &ref) : myList(new dLList<T, Alloc>) { *this = ref; }
             List &operator=(const List &ref) {
-                this->clear();
+                if (this->mySize)
+                    this->clear();
                 this->mySize = ref.mySize;
-                for (iterator it = ref.begin(); it != ref.end(); it++)
-                    this->push_back(*it);
+                for (size_t i = 0; i < ref.mySize; i++)
+                    this->push_back(ref.myList->getElement(i)->getValueRef());
                 return (*this);
             }
 
             // ----- ITERATORS ----- //
-            iterator begin() { return iterator(myList->getNthElement(0)->getValue()); }
-            iterator end() { return iterator(myList->getNthElement(myList->getSize())->getValue());}
-            // reverse_iterator rbegin() {}
-            // reverse_iterator rend() {}
-            const_iterator begin() const { return const_iterator(myList->getNthElement(0)->getValue()); }
-            const_iterator end() const { return const_iterator(myList->getNthElement(myList->getSize())->getValue());}
-            // const_reverse_iterator rbegin() const {}
-            // const_reverse_iterator rend() const {}
+            iterator        begin() { return iterator(myList->getFrontEnd()); }
+            iterator        end() { return iterator(myList->getBackEnd()->getNext()); }
+            const_iterator  begin() const { return const_iterator(myList->getFrontEnd()); }
+            const_iterator  end() const { return const_iterator(myList->getBackEnd()->getNext()); }
+            reverse_iterator rbegin() { return reverse_iterator(myList->getBackEnd()); }
+            reverse_iterator rend() { return reverse_iterator(myList->getFrontEnd()->getPrev()); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(myList->getBackEnd()); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(myList->getFrontEnd()->getPrev()); }
 
             // ----- CAPACITY ----- //
             bool empty() const { return (myList->getSize() > 0); }
@@ -65,34 +66,36 @@ namespace ft
             size_type max_size() const { return (myAlloc.max_size()); }
 
             // ----- ELEMENT ACCESS ----- //
-            reference front() { return reference(myList->getNthElement(0)->getValue()); }
-            const_reference front() const { return const_reference(myList->getNthElement(0)->getValue()); }
-            reference back() { return reference(myList->getNthElement(mySize)->getValue()); }
-            const_reference back() const { return const_reference(myList->getNthElement(mySize)->getValue()); }
+            reference front() { return (myList->getFrontEnd()->getValueRef()); }
+            const_reference front() const { return (myList->getFrontEnd()->getValueRef()); }
+            reference back() { return (myList->getBackEnd()->getValueRef()); }
+            const_reference back() const { return (myList->getBackEnd()->getValueRef()); }
 
             // ----- MODIFIERS ----- //
             // void assign(iterator first, iterator last) { //InputIterator in cppreference.comm
             //     ///
             // }
             void assign(size_type n, const value_type &val) {
-                dLList<value_type> *elemN = myList->getNthElement(n);
-                if (elemN)
-                    elemN->setValue(val);
+                dLList<T, Alloc> *elem = myList->getElement(n);
+                if (elem)
+                    elem->setValue(val);
             }
             void push_front(const value_type &val) { 
-                myList->insertElement(myList->newElement(val), 0);
+                dLList<T, Alloc> &to_add = myList->newElement(val);
+                myList->getFrontEnd()->insertBefore(to_add);
                 mySize++;
             }
             void pop_front() {
-                myList->deleteElement(0);
+                myList->getFrontEnd()->deleteElement();
                 mySize--;
             }
             void push_back(const value_type &val) {
-                myList->insertElement(myList->newElement(val), mySize);
+                dLList<T, Alloc> &to_add = myList->newElement(val);
+                myList->getBackEnd()->insertAfter(to_add);
                 mySize++;
             }
             void pop_back() {
-                myList->deleteElement(mySize);
+                myList->getBackEnd()->deleteElement();
                 mySize--;
             }
             // iterator insert(iterator position, const value_type &val) {}
@@ -108,9 +111,9 @@ namespace ft
             void resize (size_type n, value_type val = value_type()) {
                 if (n < mySize)
                 {
-                    myList->getNthElement(n)->next = NULL;
-                    dLList<value_type> *limit = myList->getNthElement(n + 1);
-                    limit->clear();
+                    dLList<T, Alloc> *limit = myList->getElement(n);
+                    limit->clearFromIndex(n);
+                    limit->next = NULL;
                 }
                 else
                 {
@@ -118,7 +121,7 @@ namespace ft
                         push_back(val);
                 }
             }
-            void clear() { myList->clear(); }
+            void clear() { myList->clearDLL(); }
 
             // ----- OPERATIONS ----- //
             // void splice (iterator position, List& x) {}
@@ -140,10 +143,10 @@ namespace ft
             
         private :
 
-            dLList<T>       *myList;  //?
-            allocator_type  myAlloc;
-            size_type       mySize;
-            difference_type myDiff;
+            dLList<T, Alloc>    *myList;
+            allocator_type      myAlloc;
+            size_type           mySize;
+            difference_type     myDiff;
 
     };
 
