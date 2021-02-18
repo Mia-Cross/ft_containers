@@ -25,7 +25,8 @@ Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme 
 [18/02]
 Leaks fixed. En revanche, c'est vraiment trop tendu de faire en sorte que le premier element de la liste
 ait du contenu, il vaut mieux qu'il serve juste de wagon de tete, ce sera plus pratique pour les
-allocations et les iterateurs.
+allocations et les iterateurs. Aussi je suis en train d'essayer de faire un operator<<, mais ca marche
+pas de ouf alors ptet que je laisserai tomber, who knows ?
 NEXT TIME : reorganiser la liste pour qu'il y ait un ou 2 maillons vides qui servent de bornes.
 [16/02-17/02]
 J'ai pas mal remanié ma DLL, ma LIST et mes iterateurs, c'est mieux maintenant. Du coup j'ai give up le
