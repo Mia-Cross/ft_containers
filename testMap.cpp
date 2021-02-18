@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   testMap.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/17 22:11:46 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/17 22:35:47 by lemarabe         ###   ########.fr       */
+/*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
+/*   Updated: 2021/02/17 22:20:16 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mainHeader.hpp"
+#include "containers/map.hpp"
 
-int main()
+void testMap()
 {
-    testList();
-    // testMap();
-    // testQueue();
-    // testStack();
-    // testVector();
+    ft::Map<int> myMap;
 }

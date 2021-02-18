@@ -2,7 +2,12 @@ NAME = ft_containers
 
 CXX = clang++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
-SRCS = 	main.cpp
+SRCS = 	main.cpp \
+		testList.cpp \
+		#testMap.cpp \
+		testQueue.cpp \
+		testStack.cpp \
+		testVector.cpp
 
 INCLUDES =	-I containers/
 OBJDIR =	.obj

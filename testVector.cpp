@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   testVector.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/17 22:11:46 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/17 22:35:47 by lemarabe         ###   ########.fr       */
+/*   Created: 2021/02/17 22:23:12 by lemarabe          #+#    #+#             */
+/*   Updated: 2021/02/17 22:23:52 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mainHeader.hpp"
+#include "containers/vector.hpp"
 
-int main()
+void testVector()
 {
-    testList();
-    // testMap();
-    // testQueue();
-    // testStack();
-    // testVector();
+    ft::Vector<int> myVector;
 }

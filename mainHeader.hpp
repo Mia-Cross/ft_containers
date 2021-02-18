@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   mainHeader.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/17 22:11:46 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/17 22:35:47 by lemarabe         ###   ########.fr       */
+/*   Created: 2021/02/17 22:31:19 by lemarabe          #+#    #+#             */
+/*   Updated: 2021/02/17 22:35:35 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mainHeader.hpp"
+#ifndef FT_CONTAINERS_H
+# define FT_CONTAINERS_H
 
-int main()
-{
-    testList();
-    // testMap();
-    // testQueue();
-    // testStack();
-    // testVector();
-}
+
+void testList();
+void testMap();
+void testQueue();
+void testStack();
+void testVector();
+
+#endif

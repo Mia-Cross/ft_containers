@@ -22,6 +22,11 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme ca dans la STL, ou y'a
         une meilleure raison ?
 
+[18/02]
+Leaks fixed. En revanche, c'est vraiment trop tendu de faire en sorte que le premier element de la liste
+ait du contenu, il vaut mieux qu'il serve juste de wagon de tete, ce sera plus pratique pour les
+allocations et les iterateurs.
+NEXT TIME : reorganiser la liste pour qu'il y ait un ou 2 maillons vides qui servent de bornes.
 [16/02-17/02]
 J'ai pas mal remanié ma DLL, ma LIST et mes iterateurs, c'est mieux maintenant. Du coup j'ai give up le
 systeme de la STL pour les iterateurs, puisqu'en fait ils doivent avoir des comportements specifiques
@@ -32,6 +37,7 @@ ca leake a mort !!
 NEXT TIME : faire la chasse aux leaks
             ecrire les tests des les fonctions de LIST pas encore testées
             continuer de rediger les fonctions de modification de LIST
+            -> tester ce que je peux enlever comme securités redondantes dans dLL
 [11/02]
 A priori je faisais pas trop de la merde avec ma dLL et mon allocator, du coup j'ai ecrit les fonctions
 dont j'aurais besoin pour la manipuler, et j'ai bien attaqué les fonctions de LIST. Du coup j'ai voulu
