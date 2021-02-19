@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/17 22:34:22 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/19 02:14:55 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ class myIterator
         bool        operator==(const myIterator &ref) const { return (this->it == ref.it); }
         bool        operator!=(const myIterator &ref) const { return (this->it != ref.it); }
         //----- OPERATORS :  'dereference' -----//
-        reference_type       operator*() const { return (this->it->getValueRef()); }
-        pointer_type         operator->() const { return (this->it->getValuePtr()); }
+        reference_type       operator*() const { return (this->it->getContentRef()); }
+        pointer_type         operator->() const { return (this->it->getContentPtr()); }
         //----- OPERATORS : & 'incrementation''decrementation' -----//
         myIterator  &operator++() { this->it = this->it->getNext(); return (*this); }
         myIterator  operator++(int) { myIterator tmp(*this); operator++(); return (tmp); }
@@ -67,8 +67,8 @@ class myConstIterator : public virtual myIterator<T, C>
         virtual ~myConstIterator() {}
         myConstIterator  &operator=(const myConstIterator &ref) { this->it = ref.it; return (*this); }
         //----- OPERATORS :  'dereference' -----//
-        const_reference_type       operator*() const { return (this->it->getValueRef()); }
-        const_pointer_type         operator->() const { return (this->it->getValuePtr()); }
+        const_reference_type       operator*() const { return (this->it->getContentRef()); }
+        const_pointer_type         operator->() const { return (this->it->getContentPtr()); }
 };
 
 template < typename T, class C >

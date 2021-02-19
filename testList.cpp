@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/18 05:18:47 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/19 03:02:54 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,14 @@ void testList()
     std::cout << myList;
     std::cout << "Filling my List\n";
     myList.push_front(-2); // CONTENT = {     -2,  3              }
-   std::cout << myList;
-    std::cout << "mep" << std::endl;
-    myList.push_front(1);  // CONTENT = {  1, -2,  3,  4, -5      }
-    std::cout << "mep" << std::endl;
-    myList.push_back(3);   // CONTENT = {          3              }
-    std::cout << "yo" << std::endl;
-    std::cout << myList.size() << std::endl;
     std::cout << myList;
-    std::cout << "yo";
-    myList.push_back(-5);  // CONTENT = {     -2,  3,  4, -5      }
+    myList.push_back(3);   // CONTENT = {          3              }
     std::cout << myList;
     myList.push_back(4);   // CONTENT = {     -2,  3,  4          }
     std::cout << myList;
+    myList.push_back(-5);  // CONTENT = {     -2,  3,  4, -5      }
+    std::cout << myList;
+    myList.push_front(1);  // CONTENT = {  1, -2,  3,  4, -5      }
     std::cout << myList;
     myList.push_back(6);   // CONTENT = {  1, -2,  3,  4, -5,  6  }
     std::cout << myList;
