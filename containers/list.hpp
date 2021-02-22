@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/22 06:41:56 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/22 22:18:57 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,16 @@ namespace ft
                 *this = ref;
             }
             List &operator=(const List &ref) {
+                std::cout << "\\" << mySize << std::endl;
                 if (this->mySize)
-                //    this->myList->clearFromIndex(1);
-                    std::cout << *this;
+                   this->erase(myList->getFirstElement(), myList->getTail());
                 this->mySize = ref.mySize;
+                std::cout << "/" << mySize << std::endl;
                 for (typename List<T>::const_iterator it = ref.begin(); it != ref.end(); it++)
+                {
+                    std::cout << "+" << *it << std::endl;
                     this->push_back(*it);
+                }
                 return (*this);
             }
 
@@ -110,6 +114,8 @@ namespace ft
             }
             iterator insert(iterator position, const value_type &val) {
                 dLList<T, Alloc> *elem = myList->getElement(position.operator->());
+                // std::cout << "I want to add " << val<< std::endl;
+                // std::cout << elem << elem->getContentRef() ;
                 if (elem)
                 {
                     elem->insertBefore(new dLList<T, Alloc>(val));
@@ -119,36 +125,48 @@ namespace ft
                 return (position);
             }
             void insert(iterator position, size_type n, const value_type &val) {
-                dLList<T, Alloc> *elem = myList->getElement(position.operator->());
-                while (elem && position != NULL && n--)
+                while (position != NULL && n--)
                     position = this->insert(position, val);
             }
             void insert(iterator position, iterator first, iterator last) {
-                dLList<T, Alloc> *elem = myList->getElement(position.operator->());
-                while (elem && position != NULL && first != last)
-                {
-                    position = this->insert(position, *first);
-                    first++;
-                }
+                while (position != NULL && last != first)
+                    position = this->insert(position, *(--last));
+                // if (position != NULL)
+                //     position = this->insert(position, *(first));
             }
-            // iterator erase(iterator position) {}
-            // iterator erase(iterator first, iterator last) {}
+            iterator erase(iterator position) {
+                dLList<T, Alloc> *elem = myList->getElement(position.operator->());
+                position--;
+                if (elem)
+                    elem->deleteElement();
+                return (position);
+            }
+            iterator erase(iterator first, iterator last) {
+                --last;
+                while (last != NULL && last != first)
+                    last = this->erase(last);
+                return (last);
+            }
             void swap(List &x) {
-                List tmp = *this;
+                std::cout << "1" << std::endl;
+                List *tmp = new List(*this);
+                // List tmp = *this;
+                std::cout << "2" << std::endl;
                 *this = x;
-                x = tmp;
+                // *this = x;
+                std::cout << "3" << std::endl;
+                x = *tmp;
+                // x = tmp;
+                std::cout << "4" << std::endl;
             }
             void resize (size_type n, value_type val = value_type()) {
                 dLList<T, Alloc> *limit = myList->getElement(n);
                 if (limit)
-                {
-                    limit->clearFromIndex(n);
-                    limit->next = NULL;
-                }
+                    this->erase(iterator(limit), myList->getTail());
                 else
                 {
                     while (mySize < n)
-                        push_back(val);
+                        this->push_back(val);
                 }
             }
             void clear() { myList->clearDLL(); }

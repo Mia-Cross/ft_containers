@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/22 06:45:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/22 22:18:10 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@
 
 void testList()
 {
-    std::cout << "Creating List A\n";
-    ft::List<int> listA;
-
     std::cout << "   *  _ ___\n";
     std::cout << "|  | |_  | \n";
     std::cout << "|_ |  _| | \n\n";
 
+    std::cout << "Creating List A\n";
+    ft::List<int> listA;
+    std::cout << listA;
+
     std::cout << "EMPTY : " << listA.empty() << std::endl;
-    std::cout << listA;
-    std::cout << "Filling List A\n";
-    listA.push_front(-2); // CONTENT = {     -2,  3              }
-    std::cout << listA;
+    std::cout << "Filling List A :\n";
     listA.push_back(3);   // CONTENT = {          3              }
+    std::cout << listA;
+    listA.push_front(-2); // CONTENT = {     -2,  3              }
     std::cout << listA;
     listA.push_back(4);   // CONTENT = {     -2,  3,  4          }
     std::cout << listA;
@@ -44,7 +44,7 @@ void testList()
     // std::cout << "Making a modifiable copy of my List...\n";
     // ft::List<int> copy(listA);
 
-    // ----- ITERATORS ----- //
+    std::cout << "\n// ----- ITERATORS ----- //\n\n";
 
     std::cout << "Displaying List A with ITERATION :\t\t";
     for (ft::List<int>::iterator it = listA.begin(); it != listA.end(); it++)
@@ -60,21 +60,22 @@ void testList()
         std::cout << "[" << *rit << "]";
     std::cout << std::endl;
     
-    // ----- CAPACITY ----- //
+    std::cout << "\n// ----- CAPACITY ----- //\n\n";
     
     std::cout << "EMPTY :\t" << listA.empty() << std::endl;
     std::cout << "SIZE :\t" << listA.size() << std::endl;
     std::cout << "MAX_SIZE :\t" << listA.max_size() << std::endl;
 
-    // ----- ELEMENT ACCESS ----- //
+    std::cout << "\n// ----- ELEMENT ACCESS ----- //\n\n";
 
     std::cout << "FRONT :\t" << listA.front() << std::endl;
     std::cout << "BACK :\t" << listA.back() << std::endl;
-   std::cout << "FRONT (List C) :\t" << listC.front() << std::endl;
-   std::cout << "BACK (List C) :\t" << listC.back() << std::endl;
+   std::cout << "FRONT (List C):\t" << listC.front() << std::endl;
+   std::cout << "BACK (List C):\t" << listC.back() << std::endl;
 
-    // ----- MODIFIERS ----- //
+    std::cout << "\n// ----- MODIFIERS ----- //\n\n";
 
+    std::cout << "/ - ASSIGN - /\n";
     std::cout << "List A : Assigning 42 with new size 3 (already assigned)\n";
     listA.assign(3, 42);
     std::cout << listA;
@@ -87,25 +88,57 @@ void testList()
     listB.assign(listC.begin(), listC.end());
     std::cout << listB;
 
-    std::cout << "List A : Popping front and back...\n";
+    std::cout << "/ - POP - /\n";
+    std::cout << "List A : Popping back...\n";
     listA.pop_back();      // CONTENT = {  1, -2,  3,  4, -5, __  }
     std::cout << listA;
+    std::cout << "List A : Popping front...\n";
     listA.pop_front();     // CONTENT = {  __ -2,  3,  4, -5, __  }
     std::cout << listA;
 
+    std::cout << "/ - INSERT - /\n";
     ft::List<int>::iterator it = listA.begin(); it++; it++; it++; it++; it++;
-    std::cout << "List A : insert 667 to 6th place\tReturn : " << *(listA.insert(it, 667));
-    std::cout << listA;
-    std::cout << "List A : insert 3 * 7 to 6th place\n";
+    std::cout << "List A : insert value\t\tReturn = " << *(listA.insert(it, 667));
+    std::cout << listA << "List A : insert 3 * 7\t\t\t";
     listA.insert(it, 3, 7);
-    it++; it++;
-    std::cout << listA << "List A : insert iterators to ?th place\n";
-    listA.insert(it, listC.rbegin(), listC.rend());
+    std::cout << listA << "List A : insert iterators\t\t";
+    listA.insert(it, listC.begin(), listC.end()); // this works
+    // listA.insert(it, listB.rbegin(), listB.rend());
+    //listA.insert(it, listC.rbegin(), listC.rend());
+            // these dont work --> segfault
     std::cout << listA;
 
+    std::cout << "/ - ERASE - /\n";
+    ft::List<int>::iterator it2 = listA.begin(); it2++; it2++; it2++; it2++; it2++;
+    it2 = listA.erase(it2);
+    std::cout << "List A : erase value 667\tReturn : " << *it2 << listA;
+    it2 = listA.erase(it2, it);
+    std::cout << "List A : erase iterators\tReturn : " << *it2 << listA; // this works
+    // ft::List<int>::iterator it3 = listA.erase(it2, it);
+    // listA.erase(it, listB.rbegin(), listB.rend());
+    //listA.erase(it, listC.rbegin(), listC.rend());
+            // these dont work --> segfault
+    std::cout << listA;
+
+
+    std::cout << "/ - RESIZE - /\n";
+    std::cout << "List A : Resize to 10 elements\n";
+    listA.resize(10);
+    std::cout << listA;
+    std::cout << "List B : Resize to 10 elements\n";
+    listB.resize(10, 123);
+    std::cout << listB;
+
+    std::cout << "/ - CLEAR - /\n";
+    std::cout << "List B : Clear\n";
+    listB.clear();
+    std::cout << listB;
+    
+    std::cout << "/ - SWAP - /\n";
     std::cout << "Before SWAP :\tlist A" << listA << "\t\tlist B" << listB;
-    //listA.swap(listB);
+    listB.swap(listA);
     std::cout << "After SWAP : list A" << listA << " list B" << listB;
+    listA.swap(listB);
         // ----- OPERATIONS ----- //
 
 

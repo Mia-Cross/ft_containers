@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/22 06:26:00 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/22 16:41:19 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,18 +173,18 @@ class dLList
             }
             delete elem;
         }
-        void clearFromIndex(size_t n) {
-            dLList *elem = getElement(n);
-            while (elem)
-            {
-                dLList *to_del = elem;
-                elem = elem->next;
-                delete to_del;
-            }
-            elem = getLastElement();
-            if (elem)
-                elem->next = NULL;
-        }
+        // void clearFromIndex(size_t n) {
+        //     dLList *elem = getElement(n);
+        //     while (elem)
+        //     {
+        //         dLList *to_del = elem;
+        //         elem = elem->next;
+        //         delete to_del;
+        //     }
+        //     elem = getLastElement();
+        //     if (elem)
+        //         elem->next = NULL;
+        // }
 
 };
 
