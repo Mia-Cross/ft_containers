@@ -5,14 +5,6 @@ vector  random access
 queue   none            Single end -> first in, first out
 stack   none            Single end -> last in, first out
 
-Ouais en gros tout ce qui est allocutions des types qui sont passer en template
-au lieu de faire new value_type
-Tu va faire un Alloc allocator; allocator.allocate(n); allocator.construct(value);
-Tu va passer par l'allocator
-Apres quand tu va faire une liste chainer si tu veux creer un maillon a ta liste tu peut utiliser new
-Du moment que le value_type soit allouer construit detruit et desallouer par le allocator
-T'as pas a le refaire parce que c'est un truc qu'on te passera en template
-Mais ils serront tous contruit a partir de cette base std::allocator
 A TESTER >> Si ca se trouve je peux m'epargner la peine de faire appel a getNthElement parce que je pense
 que quand j'appelle une fonction membre depuis un element n, this = n et pas la tete de la liste.
 -> Oui.
@@ -21,7 +13,13 @@ QUESTIONS :
 Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme ca dans la STL, ou y'a
         une meilleure raison ?
+Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 
+[22/02]
+Je galere un peu sur les fonctions d'insert, entre les segfaults et les double-free. J'ai rajouté aussi
+un wagon de queue a ma liste histoire d'encore plus mimic le vrai list.
+NEXT TIME : segfault insert by range of iterators a resoudre
+            rediger erase et les fonctions d'operations
 [18/02]
 Leaks fixed. En revanche, c'est vraiment trop tendu de faire en sorte que le premier element de la liste
 ait du contenu, il vaut mieux qu'il serve juste de wagon de tete, ce sera plus pratique pour les
