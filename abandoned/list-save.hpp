@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.hpp                                           :+:      :+:    :+:   */
+/*   list-save.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/24 05:28:10 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/24 02:08:20 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define LIST_H
 
 #include "../utils/myIterator.hpp"
-#include "../utils/doublyLinkedList.hpp"
+#include "../utils/doublyLinkedList-save.hpp"
 #include <memory>
-#include <exception>
+
 namespace ft
 {
     template < typename T, class Alloc = std::allocator<T> >
@@ -38,12 +38,11 @@ namespace ft
             typedef size_t                                  size_type;
             typedef ptrdiff_t                               difference_type;
 
-            List() : myList(new dLList<T, Alloc>), mySize(0) { 
+            List() : myList(new dLList<T, Alloc>), mySize(0) {
                 myList->insertAfter(new dLList<T, Alloc>);
             }
             ~List() {
-                clear();
-                delete myList->getTail();
+                this->clear();
                 delete myList;
             }
             List(const List &ref) : myList(new dLList<T, Alloc>), mySize(0) {
@@ -53,13 +52,21 @@ namespace ft
             List &operator=(const List &ref) {
                 if (this != &ref)
                 {
+                    // std::cout << "ref =" << ref <<  "\tthis =" << *this;
                     if (this->mySize)
                         this->clear();
-                    // if (ref.myList->getNext() == ref.myList->getTail())
-                    //     std::cout << "ref bien vide" << std::endl;
-                    // std::cout << ref.size() << std::endl;
-                    this->insert(iterator(this->myList->getFirst()),
-                    iterator(ref.myList->getFirst()), iterator(ref.myList->getTail()));
+                    this->myList = ref.myList;
+                    this->insert(iterator(this->myList->getHead()), iterator(ref.myList->getFirst()), iterator(ref.myList->getTail()));
+                    // std::cout << (this->myList->getHead()->next == ref.myList->getHead()->next) << std::endl;
+                    // std::cout << (this->myList->getTail()->prev == ref.myList->getTail()->prev) << std::endl;
+                    // this->myList.deepCopy(ref.myList->getHead());
+                    // std::cout << "/" << mySize << std::endl;
+                    // for (iterator it = myList.begin(); it != myList.end(); it++)
+                    // // for (iterator it(myList.getHead()); it != NULL; it++)
+                    // {
+                    //     std::cout << "+" << *it << std::endl;
+                    //     this->push_back(*it);
+                    // }
                 }
                 return (*this);
             }
@@ -83,28 +90,11 @@ namespace ft
 
             // ----- ELEMENT ACCESS ----- //
             
-                    
-            reference front() {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getFirst()->getContentRef());
-            }
-            const_reference front() const {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getFirst()->getContentRef());
-            }
-            reference back() {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getLast()->getContentRef());
-            }
-            const_reference back() const {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getLast()->getContentRef());
-            }
-            
+            reference front() { return (myList->getFirst()->getContentRef()); }
+            const_reference front() const { return (myList->getFirst()->getContentRef()); }
+            reference back() { return (myList->getLast()->getContentRef()); }
+            const_reference back() const { return (myList->getLast()->getContentRef()); }
+
             // ----- MODIFIERS ----- //
             
             void assign(iterator first, iterator last) {
@@ -116,7 +106,7 @@ namespace ft
                     push_back(val);
             }
             void push_front(const value_type &val) {
-                myList->getHead()->insertAfter(new dLList<T, Alloc>(val));
+                myList->getFirst()->insertBefore(new dLList<T, Alloc>(val));
                 mySize++;
             }
             void pop_front() {
@@ -124,7 +114,7 @@ namespace ft
                 mySize--;
             }
             void push_back(const value_type &val) {
-                myList->getTail()->insertBefore(new dLList<T, Alloc>(val));
+                myList->getLast()->insertAfter(new dLList<T, Alloc>(val));
                 mySize++;
             }
             void pop_back() {
@@ -132,12 +122,14 @@ namespace ft
                 mySize--;
             }
             iterator insert(iterator position, const value_type &val) {
-                dLList<T, Alloc> *elem = position.operator->();
+                dLList<T, Alloc> *elem = myList->getElement(position.operator->());
                 if (elem)
                 {
+                    std::cout << " val = "<< val <<  std::endl;
                     elem->insertBefore(new dLList<T, Alloc>(val));
-                    position--;
+                    std::cout << " check" <<  std::endl;
                     mySize++;
+                    return (iterator(elem->getPrev()));
                 }
                 return (position);
             }
@@ -146,12 +138,12 @@ namespace ft
                     position = this->insert(position, val);
             }
             void insert(iterator position, iterator first, iterator last) {
-                while (position != NULL && last != NULL && last != first)
+                while (position != NULL && last != first)
                     position = this->insert(position, *(--last));
             }
             iterator erase(iterator position) {
-                dLList<T, Alloc> *elem = position.operator->();
-                if (elem && elem->getContentPtr() != NULL)
+                dLList<T, Alloc> *elem = myList->getElement(position.operator->());
+                if (elem)
                 {
                     position--;
                     elem->deleteElement();
@@ -166,15 +158,19 @@ namespace ft
                 return (last);
             }
             void swap(List &x) {
-                List tmp(x);
-                // std::cout << "1) tmp = " << tmp << &tmp;
-                // std::cout << "1_) x = " << x << &x;
-                x = *this;
-                // std::cout << "2) x = " << x << &x;
-                // std::cout << "2) this = " << *this << this;
-                *this = tmp;
-                // std::cout << "3) tmp = " << tmp << &tmp;
-                // std::cout << "3_) this = " << *this << this;
+                // this->myList->swapDLL(&x);
+                std::cout << "1" << std::endl;
+                // // std::cout << "ref = "<< x;
+                // // std::cout << "this = " << *this;
+                // List *tmp = new List(*this);
+                List tmp(*this);
+                std::cout << "2" << std::endl;
+                *this = x;
+                std::cout << "3" << std::endl;
+                // x = *tmp;
+                x = tmp;
+                std::cout << "4" << std::endl;
+                // delete tmp;
             }
             void resize (size_type n, value_type val = value_type()) {
                 dLList<T, Alloc> *limit = myList->getElement(n);
@@ -187,7 +183,7 @@ namespace ft
                 }
             }
             void clear() {
-                erase(begin(), end());
+                myList->clearDLL();
                 mySize = 0;
             }
 
@@ -209,10 +205,6 @@ namespace ft
             // template < class Compare >
             // void sort(Compare comp) {}
             // void reverse() {}
-            struct MissingReferenceException : public std::exception {
-                const char* what() const throw() {
-                    return ("List Empty -> can't access element\n"); }
-            };
             
         private :
 
@@ -246,16 +238,12 @@ namespace ft
     
     template < typename T >
     std::ostream &operator<<(std::ostream &out, List<T> const &list) {
-        size_t size = list.size();
-        out << "\t>> LIST [" << size << "]\t= { ";
-        if (size)
+        out << "\t>> LIST\t|size = " << list.size() << "|\t{ ";
+        // std::cout << list.size() << std::endl;
+        if (!list.empty())
         {
-            for (typename List<T>::const_iterator it = list.begin(); size-- > 0; it++)
-            {
-                out << *it;
-                if (size)
-                    out << ", ";
-            }
+            for (typename List<T>::const_iterator it = list.begin(); it != list.end(); it++)
+                out << "[" << *it << "]";
         }
         out << " }" << std::endl;
         return (out);

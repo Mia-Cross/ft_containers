@@ -5,19 +5,30 @@ vector  random access
 queue   none            Single end -> first in, first out
 stack   none            Single end -> last in, first out
 
-A TESTER >> Si ca se trouve je peux m'epargner la peine de faire appel a getNthElement parce que je pense
+TO-DO :
+---------
+        A TESTER >> Si ca se trouve je peux m'epargner la peine de faire appel a getNthElement parce que je pense
 que quand j'appelle une fonction membre depuis un element n, this = n et pas la tete de la liste.
 -> Oui.
-A REGLER >> super flemme de m'en occuper maintenant, mais y'a un segfault quand je veux remplir une liste
+        A REGLER >> super flemme de m'en occuper maintenant, mais y'a un segfault quand je veux remplir une liste
 avec un reverse_iterator (depuis que j'ai mis la tail ?), mais aucun souci si j'utilise ce meme iterateur
 pour de l'affichage...
+-> Done.
+        Insert avec reverse_iterator ??
 
 QUESTIONS :
+--------------
 Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme ca dans la STL, ou y'a
         une meilleure raison ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 
+[24/02]
+J'arrete pas de remettre et renlever le systeme de tail, je sais toujours pas si c'est tres bien, mais
+actuellement il y est. J'ai enfin reussi a run tous les tests (sauf modifiers) jusqu'au bout sans segfault,
+mais ca leake pas mal, surtout sur le swap donc a investiguer. Swap avec liste vide --> resultats chelou, 
+il ajoute des elements, soit d'une autre liste, soit qu'il a gardé en memoire, jcomprends pas...
+NEXT TIME : swap / leaks / modifiers 
 [22/02]
 Je galere un peu sur les fonctions d'insert, entre les segfaults et les double-free. J'ai rajouté aussi
 un wagon de queue a ma liste histoire d'encore plus mimic le vrai list.
