@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/24 05:28:10 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/25 01:44:55 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace ft
                 myList->insertAfter(new dLList<T, Alloc>);
             }
             ~List() {
-                clear();
+                this->clear();
                 delete myList->getTail();
                 delete myList;
             }
@@ -53,13 +53,9 @@ namespace ft
             List &operator=(const List &ref) {
                 if (this != &ref)
                 {
-                    if (this->mySize)
-                        this->clear();
-                    // if (ref.myList->getNext() == ref.myList->getTail())
-                    //     std::cout << "ref bien vide" << std::endl;
-                    // std::cout << ref.size() << std::endl;
-                    this->insert(iterator(this->myList->getFirst()),
-                    iterator(ref.myList->getFirst()), iterator(ref.myList->getTail()));
+                    this->clear();
+                    for (iterator it(ref.myList->getFirst()); it != ref.myList->getTail(); it++)
+                        this->push_back(*it);
                 }
                 return (*this);
             }
@@ -167,14 +163,8 @@ namespace ft
             }
             void swap(List &x) {
                 List tmp(x);
-                // std::cout << "1) tmp = " << tmp << &tmp;
-                // std::cout << "1_) x = " << x << &x;
                 x = *this;
-                // std::cout << "2) x = " << x << &x;
-                // std::cout << "2) this = " << *this << this;
                 *this = tmp;
-                // std::cout << "3) tmp = " << tmp << &tmp;
-                // std::cout << "3_) this = " << *this << this;
             }
             void resize (size_type n, value_type val = value_type()) {
                 dLList<T, Alloc> *limit = myList->getElement(n);
@@ -187,8 +177,8 @@ namespace ft
                 }
             }
             void clear() {
-                erase(begin(), end());
-                mySize = 0;
+                this->erase(iterator(myList->getHead()), this->end());
+                //mySize = 0;
             }
 
             // ----- OPERATIONS ----- //

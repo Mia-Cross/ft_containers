@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/24 05:27:08 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/25 01:26:56 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,19 +122,17 @@ void testList()
     std::cout << "List B : Resize to 10 elements, filling with 123\n";
     listB.resize(10, 123);
     std::cout << listB;
-
-    std::cout << "/ - SWAP - /\n";
-    listA.clear();
-    listB.clear();
-    std::cout << "Before SWAP :\tlist A" << &listA << listA << "\t\tlist B" << &listB << listB;
-    listA.swap(listB);
-    std::cout << "After SWAP :\tlist A" << &listA << listA << "\t\tlist B" << &listB << listB;
-    listB.swap(listA);
     
     std::cout << "/ - CLEAR - /\n";
     std::cout << "List B : Clear\n";
     listB.clear();
     std::cout << listB;
+
+    std::cout << "/ - SWAP - /\n";
+    std::cout << "Before SWAP :\tlist A" << &listA << listA << "\t\tlist B" << &listB << listB;
+    listA.swap(listB);
+    std::cout << "After SWAP :\tlist A" << &listA << listA << "\t\tlist B" << &listB << listB;
+    listB.swap(listA);
     
         // ----- OPERATIONS ----- //
 
