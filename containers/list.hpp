@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/25 01:44:55 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/25 05:12:36 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,9 +183,34 @@ namespace ft
 
             // ----- OPERATIONS ----- //
             
-            // void splice (iterator position, List& x) {}
-            // void splice (iterator position, List& x, iterator i) {}
-            // void splice (iterator position, List& x, iterator first, iterator last) {}
+            void splice (iterator position, List& x) {
+                dLList<T, Alloc> *elem = position.operator->();
+                if (elem)
+                {
+                    // std::cout << "splice content = " << elem->getContentRef() << std::endl;
+                    elem->insertElements(x.myList->getFirst(), x.myList->getTail());
+                }
+            }
+            void splice (iterator position, List& x, iterator i) {
+                (void)x;
+                dLList<T, Alloc> *dest = position.operator->();
+                dLList<T, Alloc> *src = i.operator->();
+                if (dest && src)
+                {
+                    src->setPointers()
+                    if (src->getNext())
+                        src->getNext()->getPrev() = src->getPrev();
+                    if (src->getPrev)
+                        src->getPrev->getNext() = src->getNext();
+                    dest->insertBefore(src);
+                }
+            }
+            void splice (iterator position, List& x, iterator first, iterator last) {
+                (void)x;
+                dLList<T, Alloc> *dest = position.operator->();
+                if (dest)
+                    dest->insertElements(first, last);
+            }
             // void remove (const value_type &val) {}
             // template < class Predicate >
             // void remove_if (Predicate pred) {}

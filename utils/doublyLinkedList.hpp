@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/25 01:35:49 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/25 05:11:39 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ class dLList
         //     this->next = NULL;
         //     this->prev = NULL;
         // }
+
+        void setPointers(dLList *next, dLList *prev) {
+            this->next = next;
+            this->prev = prev;
+        }
 
         dLList  *getHead() {
             dLList *elem = this;
@@ -140,6 +145,18 @@ class dLList
             if (this->next)
                 this->next->prev = to_add;
             this->next = to_add;
+        }
+        void insertElements(dLList *begin, dLList *end) {
+            dLList *elem = this->prev;
+            while (elem && end->prev && end != begin)
+            {
+                // std::cout << "end = " << end << std::endl;
+                // std::cout << "end->prev = " << end->prev << std::endl;
+                // std::cout << "begin = " << begin << std::endl;
+                std::cout << "content = " << *end->content << std::endl;
+                end = end->prev;
+                elem->insertAfter(end);
+            }
         }
         void deleteElement() {
             if (this->next)

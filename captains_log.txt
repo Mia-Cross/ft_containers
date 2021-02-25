@@ -23,6 +23,11 @@ Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme 
         une meilleure raison ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 
+[25/02]
+Bon j'ai codé splice, mais ca marche pas, et il me parait necessaire a ce stade de separer la DLL : il
+faut que j'ai une classe pour le node comme Thomas, et une classe liste. Et faire les fonctions les plus
+petites et precises possibles. La je mets beaucoup trop de securités, c'est moche.
+NEXT TIME : revoir ENCORE l'architecture de la DLL
 [24/02]
 J'arrete pas de remettre et renlever le systeme de tail, je sais toujours pas si c'est tres bien, mais
 actuellement il y est. J'ai enfin reussi a run tous les tests (sauf modifiers) jusqu'au bout sans segfault,
@@ -33,7 +38,7 @@ NEXT TIME : swap / leaks / modifiers
 Je galere un peu sur les fonctions d'insert, entre les segfaults et les double-free. J'ai rajouté aussi
 un wagon de queue a ma liste histoire d'encore plus mimic le vrai list.
 >> tout compte fait je pense que c'est pas une bonne idee, ca complique beaucoup le code alors que je pense
-que j'ai depuis resolu le pb qui a fait que j'ai voulu implementer ca en premier lieu...\
+que j'ai depuis resolu le pb qui a fait que j'ai voulu implementer ca en premier lieu...
 >> je fais un push pour enlever tout ca (T-T)
 NEXT TIME : segfault insert by range of iterators a resoudre
             rediger erase et les fonctions d'operations
