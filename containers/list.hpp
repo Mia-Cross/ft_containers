@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/25 05:12:36 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/26 03:56:31 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,32 +31,48 @@ namespace ft
             typedef T *                                     pointer;
             typedef const T &	                            const_reference;
             typedef const T *	                            const_pointer;
-            typedef myIterator< T, dLList<T> >              iterator;
-            typedef myConstIterator< T, dLList<T> >         const_iterator;
-            typedef myReverseIterator< T, dLList<T> >       reverse_iterator;
-            typedef myConstReverseIterator< T, dLList<T> >  const_reverse_iterator;
+            typedef myIterator< T, element<T,Alloc> >              iterator;
+            typedef myCIterator< T, element<T,Alloc> >         const_iterator;
+            typedef myRIterator< T, element<T,Alloc> >       reverse_iterator;
+            typedef myCRIterator< T, element<T,Alloc> >  const_reverse_iterator;
             typedef size_t                                  size_type;
             typedef ptrdiff_t                               difference_type;
 
-            List() : myList(new dLList<T, Alloc>), mySize(0) { 
-                myList->insertAfter(new dLList<T, Alloc>);
+            // DEFAULT CONSTRUCTOR
+            explicit List(const allocator_type& alloc = allocator_type()) :
+                myList(new dLList<T, Alloc>), mySize(0), myAlloc(alloc)
+            { }
+            // CONSTRUCTOR BY FILLING
+            explicit List(size_type n, const value_type& val = value_type(),
+                const allocator_type& alloc = allocator_type()) : 
+                myList(new dLList<T, Alloc>), mySize(0), myAlloc(alloc)
+            {
+                while (mySize < n)
+                    push_front(val);
             }
-            ~List() {
-                this->clear();
-                delete myList->getTail();
-                delete myList;
+            // CONSTRUCTOR BY RANGE
+            List(iterator first, iterator last,
+                const allocator_type& alloc = allocator_type()) :
+                myList(new dLList<T, Alloc>), mySize(0), myAlloc(alloc)
+            {
+                while (first != last)
+                    push_back(*first++);
             }
-            List(const List &ref) : myList(new dLList<T, Alloc>), mySize(0) {
-                myList->insertAfter(new dLList<T, Alloc>);
+            // CONSTRUCTOR BY COPY
+            List(const List &ref) : myList(new dLList<T, Alloc>),
+                mySize(0), myAlloc(ref.myAlloc)
+            {
                 *this = ref;
             }
+            // DESTRUCTOR
+            ~List() {
+                this->clear();
+                delete myList;
+            }
+            // ASSIGNATION
             List &operator=(const List &ref) {
-                if (this != &ref)
-                {
-                    this->clear();
-                    for (iterator it(ref.myList->getFirst()); it != ref.myList->getTail(); it++)
-                        this->push_back(*it);
-                }
+                resize(0);
+                assign(ref.begin(), ref.end());
                 return (*this);
             }
 
@@ -79,27 +95,10 @@ namespace ft
 
             // ----- ELEMENT ACCESS ----- //
             
-                    
-            reference front() {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getFirst()->getContentRef());
-            }
-            const_reference front() const {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getFirst()->getContentRef());
-            }
-            reference back() {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getLast()->getContentRef());
-            }
-            const_reference back() const {
-                if (!mySize)
-                    throw MissingReferenceException();
-                return (myList->getLast()->getContentRef());
-            }
+            reference front() { return (myList->getFirst()->getContentRef()); }
+            const_reference front() const { return (myList->getFirst()->getContentRef()); }
+            reference back() { return (myList->getLast()->getContentRef()); }
+            const_reference back() const { return (myList->getLast()->getContentRef()); }
             
             // ----- MODIFIERS ----- //
             
@@ -112,7 +111,7 @@ namespace ft
                     push_back(val);
             }
             void push_front(const value_type &val) {
-                myList->getHead()->insertAfter(new dLList<T, Alloc>(val));
+                myList->getHead()->insertAfter(new element<T, Alloc>(val));
                 mySize++;
             }
             void pop_front() {
@@ -120,7 +119,7 @@ namespace ft
                 mySize--;
             }
             void push_back(const value_type &val) {
-                myList->getTail()->insertBefore(new dLList<T, Alloc>(val));
+                myList->getTail()->insertBefore(new element<T, Alloc>(val));
                 mySize++;
             }
             void pop_back() {
@@ -128,10 +127,10 @@ namespace ft
                 mySize--;
             }
             iterator insert(iterator position, const value_type &val) {
-                dLList<T, Alloc> *elem = position.operator->();
+                element<T, Alloc> *elem = position.operator->();
                 if (elem)
                 {
-                    elem->insertBefore(new dLList<T, Alloc>(val));
+                    elem->insertBefore(new element<T, Alloc>(val));
                     position--;
                     mySize++;
                 }
@@ -146,8 +145,8 @@ namespace ft
                     position = this->insert(position, *(--last));
             }
             iterator erase(iterator position) {
-                dLList<T, Alloc> *elem = position.operator->();
-                if (elem && elem->getContentPtr() != NULL)
+                element<T, Alloc> *elem = position.operator->();
+                if (elem)
                 {
                     position--;
                     elem->deleteElement();
@@ -167,47 +166,39 @@ namespace ft
                 *this = tmp;
             }
             void resize (size_type n, value_type val = value_type()) {
-                dLList<T, Alloc> *limit = myList->getElement(n);
-                if (limit)
-                    this->erase(iterator(limit), this->end());
-                else
-                {
-                    while (mySize < n)
-                        this->push_back(val);
-                }
+                while (mySize < n)
+                    this->push_back(val);
+                while (mySize > n)
+                    this->pop_back();
             }
             void clear() {
-                this->erase(iterator(myList->getHead()), this->end());
-                //mySize = 0;
+                resize(0);
+                // this->erase(begin(), end());
+                // this->erase(iterator(myList->getHead()), this->end());
             }
 
             // ----- OPERATIONS ----- //
             
-            void splice (iterator position, List& x) {
-                dLList<T, Alloc> *elem = position.operator->();
-                if (elem)
-                {
-                    // std::cout << "splice content = " << elem->getContentRef() << std::endl;
-                    elem->insertElements(x.myList->getFirst(), x.myList->getTail());
-                }
+            void splice(iterator position, List& x) {
+                for (iterator it = x.begin(); it != x.end(); it++)
+                    splice(position, x, it);
+                // dLList<T, Alloc> *elem = position.operator->();
+                // if (elem)
+                // {
+                //     // std::cout << "splice content = " << elem->getContentRef() << std::endl;
+                //     elem->insertElements(x.myList->getFirst(), x.myList->getTail());
+                // }
             }
-            void splice (iterator position, List& x, iterator i) {
+            void splice(iterator position, List& x, iterator i) {
                 (void)x;
-                dLList<T, Alloc> *dest = position.operator->();
-                dLList<T, Alloc> *src = i.operator->();
+                element<T, Alloc> *dest = position.operator->();
+                element<T, Alloc> *src = i.operator->();
                 if (dest && src)
-                {
-                    src->setPointers()
-                    if (src->getNext())
-                        src->getNext()->getPrev() = src->getPrev();
-                    if (src->getPrev)
-                        src->getPrev->getNext() = src->getNext();
-                    dest->insertBefore(src);
-                }
+                    dest->spliceDLL(src);
             }
-            void splice (iterator position, List& x, iterator first, iterator last) {
+            void splice(iterator position, List& x, iterator first, iterator last) {
                 (void)x;
-                dLList<T, Alloc> *dest = position.operator->();
+                element<T, Alloc> *dest = position.operator->();
                 if (dest)
                     dest->insertElements(first, last);
             }
@@ -224,17 +215,13 @@ namespace ft
             // template < class Compare >
             // void sort(Compare comp) {}
             // void reverse() {}
-            struct MissingReferenceException : public std::exception {
-                const char* what() const throw() {
-                    return ("List Empty -> can't access element\n"); }
-            };
             
         private :
 
             dLList<T, Alloc>    *myList;
-            allocator_type      myAlloc;
             size_type           mySize;
-            difference_type     myDiff;
+            allocator_type      myAlloc;
+            // difference_type     myDiff;
 
     };
 

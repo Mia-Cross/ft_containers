@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/25 05:11:39 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/26 03:57:17 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,114 +15,56 @@
 
 # include <memory>
 # include <iostream>
+# include "element.hpp"
 
-template < typename T, class Alloc = std::allocator<T> >
+template < typename T, class Alloc >
 class dLList
 {
     private:
 
-        T       *content;
-        dLList  *next;
-        dLList  *prev;
-        Alloc   myAlloc;
+        element<T, Alloc> *first;
+        element<T, Alloc> *last;
 
     public :
 
-        // ----- COPLIEN FORM  ----- //
+        typedef element< T, Alloc > elem_type;
 
-        dLList() : content(NULL), next(NULL), prev(NULL) {
-            // std::cout << " *** Jalloue un dLList vide// addr = " << this << std::endl;
-        }
-        dLList(T value) : next(NULL), prev(NULL) {
-            this->content = myAlloc.allocate(1);
-            *this->content = value;
-            // std::cout << " *** Jalloue un dLList // addr = " << this << " // avec content.addr = " << content << std::endl;
+        dLList() : first(new elem_type), last(new elem_type) {
+            first->linkWith(last);
         }
         ~dLList() {
-            // std::cout << " *** Je free un dLList // addr = " << this;
-            if (this->content)
-            {
-                // std::cout << " // avec content.addr = " << content;
-                myAlloc.deallocate(this->content, 1);
-            }
-            // std::cout << std::endl;
+            delete first;
+            delete last;
         }
-        dLList(const dLList &ref) : next(ref.next), prev(ref.prev) {
-            this->content = myAlloc.allocate(1); 
-            *this->content = *ref.content; }
+        dLList(const dLList &ref) { *this = ref; }
         dLList &operator=(const dLList &ref) {
-            std::cout << "J'affecte " << *ref.content << " a " << this << std::endl;
-            *this->content = *ref.content;
-            // std::cout << "J'ai affecté " << *this->content << std::endl;
-            this->next = ref.next;
-            this->prev = ref.prev;
+            this->first = ref.first;
+            this->last = ref.last;
             return (*this);
         }
 
-        // ----- SETTERS & GETTERS  ----- //
-
-        dLList  *getNext() const { return (this->next); }
-        dLList  *getPrev() const { return (this->prev); }
-        T       *getContentPtr() const { return (this->content); }
-        T       &getContentRef() const { return (*this->content); }
-        void    setContent(T const &val) { *this->content = val; }
+        // elem_type  *forward() const { return (getNext()); }
+        // elem_type  *backward() const { return (getPrev()); }
         
-        // void resetPointers() {
-        //     this->next = NULL;
-        //     this->prev = NULL;
-        // }
-
-        void setPointers(dLList *next, dLList *prev) {
-            this->next = next;
-            this->prev = prev;
-        }
-
-        dLList  *getHead() {
-            dLList *elem = this;
-            while (elem->prev)
-                elem = elem->prev;
-            return (elem);
-        }
-        const dLList  *getHead() const {
-            const dLList *elem = this;
-            while (elem->prev)
-                elem = elem->prev;
-            return (elem);
-        }
-        dLList  *getTail() {
-            dLList *elem = this;
-            while (elem->next)
-                elem = elem->next;
-            return (elem);
-        }
-        const dLList  *getTail() const {
-            const dLList *elem = this;
-            while (elem->next)
-                elem = elem->next;
-            return (elem);
-        }
-        dLList  *getFirst() {
-            return (getHead()->next);
-        }
-        const dLList  *getFirst() const {
-            return (getHead()->next);
-        }
-        dLList  *getLast() {
-            return (getTail()->prev);
-        }
-        const dLList  *getLast() const {
-            return (getTail()->prev);
-        }
-        dLList  *getElement(size_t index) {
-            dLList *elem = this->getHead();
+        elem_type         *getHead() { return (first); }
+        const elem_type   *getHead() const { return (first); }
+        elem_type         *getTail() { return (last); }
+        const elem_type   *getTail() const { return (last); }
+        elem_type         *getFirst() { return (first->getNext()); }
+        const elem_type   *getFirst() const { return (first->getNext()); }
+        elem_type         *getLast() { return (last->getPrev()); }
+        const elem_type   *getLast() const { return (last->getPrev()); }
+        
+        elem_type  *getElement(size_t index) {
+            elem_type *elem = this->getHead();
             while (elem->next && index--)
                 elem = elem->next;
             if (!elem->content)
                 return (NULL);
             return (elem);
         }
-        const dLList  *getElement(size_t index) const {
-            const dLList *elem = this->getHead();
+        const elem_type  *getElement(size_t index) const {
+            const elem_type *elem = this->getHead();
             while (elem && index--)
                 elem = elem->next;
             if (!elem->content)
@@ -130,22 +72,10 @@ class dLList
             return (elem);
         }
 
-        // ----- LIST MODIFIERS  ----- //
+        // elem_type *addElement(elem_type *to_add) {
+            
+        // }
 
-        void insertBefore(dLList *to_add) {
-            to_add->next = this;
-            to_add->prev = this->prev;
-            if (this->prev)
-                this->prev->next = to_add;
-            this->prev = to_add;
-        }
-        void insertAfter(dLList *to_add) {
-            to_add->prev = this;
-            to_add->next = this->next;
-            if (this->next)
-                this->next->prev = to_add;
-            this->next = to_add;
-        }
         void insertElements(dLList *begin, dLList *end) {
             dLList *elem = this->prev;
             while (elem && end->prev && end != begin)
@@ -153,17 +83,19 @@ class dLList
                 // std::cout << "end = " << end << std::endl;
                 // std::cout << "end->prev = " << end->prev << std::endl;
                 // std::cout << "begin = " << begin << std::endl;
-                std::cout << "content = " << *end->content << std::endl;
+                // std::cout << "content = " << *end->content << std::endl;
                 end = end->prev;
                 elem->insertAfter(end);
             }
         }
-        void deleteElement() {
-            if (this->next)
-                this->next->prev = this->prev;
-            if (this->prev)
-                this->prev->next = this->next;
-            delete this;
+        
+
+        void spliceDLL(dLList *src) {
+            if (src->next)
+                src->next->prev = src->prev;
+            if (src->prev)
+                src->prev->next = src->next;
+            this->insertBefore(src);
         }
 
         // void copyList(dLList *src) {
@@ -171,7 +103,7 @@ class dLList
         //     while (src && src->content)
         //     {
         //         std::cout << "src = " << *src->content << std::endl;
-        //         dest->insertAfter(new dLList(*(src->content)));
+        //         dest->insertAfter(new element(*(src->content)));
         //         // dest = dest->next;
         //         src = src->next;
         //     }

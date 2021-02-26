@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/24 02:08:20 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/26 02:57:32 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,18 @@ namespace ft
         public :
 
             //defining every member in my List as in the STL
-            typedef T                                       value_type;
-            typedef Alloc                                   allocator_type;
-            typedef T &                                     reference;
-            typedef T *                                     pointer;
-            typedef const T &	                            const_reference;
-            typedef const T *	                            const_pointer;
-            typedef myIterator< T, dLList<T> >              iterator;
-            typedef myConstIterator< T, dLList<T> >         const_iterator;
-            typedef myReverseIterator< T, dLList<T> >       reverse_iterator;
-            typedef myConstReverseIterator< T, dLList<T> >  const_reverse_iterator;
-            typedef size_t                                  size_type;
-            typedef ptrdiff_t                               difference_type;
+            typedef T                               value_type;
+            typedef Alloc                           allocator_type;
+            typedef T &                             reference;
+            typedef T *                             pointer;
+            typedef const T &	                    const_reference;
+            typedef const T *	                    const_pointer;
+            typedef myIterator< T, dLList<T> >      iterator;
+            typedef myCIterator< T, dLList<T> >     const_iterator;
+            typedef myRIterator< T, dLList<T> >     reverse_iterator;
+            typedef myCRIterator< T, dLList<T> >    const_reverse_iterator;
+            typedef size_t                          size_type;
+            typedef ptrdiff_t                       difference_type;
 
             List() : myList(new dLList<T, Alloc>), mySize(0) {
                 myList->insertAfter(new dLList<T, Alloc>);
@@ -53,9 +53,10 @@ namespace ft
                 if (this != &ref)
                 {
                     // std::cout << "ref =" << ref <<  "\tthis =" << *this;
-                    if (this->mySize)
-                        this->clear();
-                    this->myList = ref.myList;
+                    if (mySize)
+                        clear();
+                    myList = ref.myList;
+                    assign(ref.begin(), ref.)
                     this->insert(iterator(this->myList->getHead()), iterator(ref.myList->getFirst()), iterator(ref.myList->getTail()));
                     // std::cout << (this->myList->getHead()->next == ref.myList->getHead()->next) << std::endl;
                     // std::cout << (this->myList->getTail()->prev == ref.myList->getTail()->prev) << std::endl;

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/25 05:08:22 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/26 03:57:49 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void testList()
     
     std::cout << "\n/ - CLEAR - /\n";
     std::cout << "List B : Clear\n";
+    std::cout << listB;
     listB.clear();
     std::cout << listB;
 
@@ -132,16 +133,18 @@ void testList()
     std::cout << "Before SWAP :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
     listA.swap(listB);
     std::cout << "After SWAP :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
+    // listA.swap(listB);
     
     std::cout << "\n// ----- OPERATIONS ----- //\n\n";
 
     std::cout << "\n/ - SPLICE - /\n";
-    std::cout << "1) Before SPLICE :\tlist A -> "<< listA << "\t\tlist B -> " << listB;
-    listA.splice(listA.begin(), listB);
-    std::cout << "After SPLICE :\tlist A -> " << listA << "\t\tlist B -> " << listB;
-    std::cout << "2) Before SPLICE :\tlist A -> " << listA << "\t\tlist D -> " << listD;
-    ft::List<int>::iterator it = listA.begin(); it++; it++; it++;
+    std::cout << "1)Before SPLICE:\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    it = listA.begin(); it++; it++; it++;
     listA.splice(listD.begin(), listA, it);
-    std::cout << "After SPLICE :\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    std::cout << "After SPLICE:\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    std::cout << "2)Before SPLICE:\tlist A -> "<< listA;
+    std::cout << "\t\tlist D -> " << listD;
+    listA.splice(listA.begin(), listD);
+    std::cout << "After SPLICE:\tlist A -> " << listA << "\t\tlist D -> " << listD;
 
 }
