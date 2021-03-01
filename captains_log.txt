@@ -23,6 +23,11 @@ Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme 
         une meilleure raison ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 
+[1/03]
+Comme d'habitude je piétine, j'ai rassemble dLL et element parce que je me servais pas de l'intermediaire
+de toute facon. Du coup, il faut que je fasse en sorte que myList soit un truc constant avec next = first
+& prev = last, comme ca j'ai acces aux 2 bouts. Par contre va falloir bien compter.
+NEXT TIME : installer le systeme de tete
 [26/02]
 J'ai divisé DLL et elements de la liste dans l'architecture. Tout fonctionne bien et c'est air-tight, au 
 moins jusqu'a SWAP. SPLICE compile pas encore, faut revoir les fonctions a petite echelle. J'ai aussi

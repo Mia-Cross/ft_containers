@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/01 02:34:47 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/01 04:52:50 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,62 +15,159 @@
 
 # include <memory>
 # include <iostream>
-# include "element.hpp"
+// # include "myIterator.hpp"
 
 template < typename T, class Alloc >
 class dLList
 {
     private:
 
-        element<T, Alloc>   *first;
-        element<T, Alloc>   *last;
-        size_t              sizeDLL;
+        T       *content;
+        // dLList  *head;
+        // dLList  *first;
+        // dLList  *last;
+        dLList  *next;
+        dLList  *prev;
+        Alloc   allocDLL;
+        // size_t  sizeDLL;
 
     public :
 
-        typedef element< T, Alloc > elem_type;
+        //create blank list
+        dLList() : next(NULL), prev(NULL), allocDLL(Alloc()) {}
 
-        dLList() : first(new elem_type), last(new elem_type) {
-            first->linkWith(last);
-        }
+        // create new element with given value
+        dLList(T value) : next(NULL), prev(NULL),
+            allocDLL(Alloc()) {
+                this->content = allocDLL.allocate(1);
+                *this->content = value;
+            }
+
+        // create new element by value and insert it at iter
+        dLList(T value, dLList *iter) : next(iter->next),
+            prev(iter->prev), allocDLL(Alloc()) {
+                this->content = allocDLL.allocate(1);
+                *this->content = value;
+                if (iter->prev)
+                    iter->prev->next = this;
+                iter->prev = this;
+                // sizeDLL++;
+            }
+
         ~dLList() {
-            delete first;
-            delete last;
+            if (this->content)
+                allocDLL.deallocate(this->content, 1);
         }
+        
         dLList(const dLList &ref) { *this = ref; }
+        
         dLList &operator=(const dLList &ref) {
+            *this->content = *ref.content;
             this->first = ref.first;
             this->last = ref.last;
+            this->next = ref.next;
+            this->prev = ref.prev;
+            // this->sizeDLL = ref.sizeDLL;
+            this->allocDLL = ref.allocDLL;
             return (*this);
         }
 
-        elem_type         *getHead() { return (first); }
-        const elem_type   *getHead() const { return (first); }
-        elem_type         *getTail() { return (last); }
-        const elem_type   *getTail() const { return (last); }
-        elem_type         *getFirst() { return (first->getNext()); }
-        const elem_type   *getFirst() const { return (first->getNext()); }
-        elem_type         *getLast() { return (last->getPrev()); }
-        const elem_type   *getLast() const { return (last->getPrev()); }
-        
-        elem_type  *getElement(size_t index) {
-            elem_type *elem = this->getHead();
-            while (elem->next && index--)
-                elem = elem->next;
-            if (!elem->content)
-                return (NULL);
+        // dLList         *getHead() { return (head); }
+        // const dLList   *getHead() const { return (head); }
+        // dLList         *getTail() { return (last); }
+        // const dLList   *getTail() const { return (last); }
+        // dLList         *getFirst() { return (head->next); }
+        // const dLList   *getFirst() const { return (head->next); }
+        dLList *getFirst() {
+            dLList *elem = this;
+            while (elem->prev)
+                elem = elem->prev;
             return (elem);
         }
-        const elem_type  *getElement(size_t index) const {
-            const elem_type *elem = this->getHead();
-            while (elem && index--)
-                elem = elem->next;
-            if (!elem->content)
-                return (NULL);
+        const dLList *getFirst() const {
+            const dLList *elem = this;
+            while (elem->prev)
+                elem = elem->prev;
             return (elem);
+        }
+        dLList *getLast() {
+            dLList *elem = this;
+            while (elem->next)
+                elem = elem->next;
+            return (elem);
+        }
+        const dLList *getLast() const {
+            const dLList *elem = this;
+            while (elem->next)
+                elem = elem->next;
+            return (elem);
+        }
+        dLList *getNext() const { return (this->next); }
+        dLList *getPrev() const { return (this->prev); }
+        T       *getContentPtr() const { return (this->content); }
+        T       &getContentRef() const { return (*this->content); }
+        // size_t  getSize() const { return (this->sizeDLL); }
+        dLList  *getElement(T *to_find) {
+            dLList *elem = this->getFirst();
+            while (elem && elem->content)
+            {
+                if (elem->content == to_find)
+                    return (elem);
+                elem = elem->next;
+            }
+            return (NULL);
         }
 
-        // elem_type *addElement(elem_type *to_add) {
+        // void linkWith(dLList *to_follow) {
+        //     if (this->next)
+        //         this->next->prev = to_follow;
+        //     if (this->prev)
+        //         this->prev->next
+        //     to_follow->next = this->next;
+        //     this->next = to_follow;
+        //     to_follow->prev = this;
+        //     // this->sizeDLL++;
+        // }
+        void insertBefore(dLList *to_add) {
+            to_add->next = this;
+            to_add->prev = this->prev;
+            if (this->prev)
+                this->prev->next = to_add;
+            this->prev = to_add;
+        }
+        void extractElement() {
+            if (this->next)
+                this->next->prev = this->prev;
+            if (this->prev)
+                this->prev->next = this->next;
+            // this->sizeDLL--;
+        }
+        void deleteElement() {
+            this->extractElement();
+            delete this;
+        }
+
+
+
+        
+        // dLList  *getElement(size_t index) {
+        //     dLList *elem = this->getHead();
+        //     while (elem->next && index--)
+        //         elem = elem->next;
+        //     if (!elem->content)
+        //         return (NULL);
+        //     return (elem);
+        // }
+        // const dLList  *getElement(size_t index) const {
+        //     const dLList *elem = this->getHead();
+        //     while (elem && index--)
+        //         elem = elem->next;
+        //     if (!elem->content)
+        //         return (NULL);
+        //     return (elem);
+        // }
+
+        // dLList *addElement(dLList *to_add) {
             
         // }
 
@@ -94,8 +191,8 @@ class dLList
         //         src->prev->next = src->next;
         //     this->insertBefore(src);
         // }
-        // elem_type  *forward() const { return (getNext()); }
-        // elem_type  *backward() const { return (getPrev()); }
+        // dLList  *forward() const { return (next); }
+        // dLList  *backward() const { return (prev); }
         
 
         // void copyList(dLList *src) {

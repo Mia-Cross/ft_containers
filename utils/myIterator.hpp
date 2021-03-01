@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/26 03:02:39 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/01 03:36:22 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ class myIterator
         bool        operator!=(const myIterator &ref) const { return (this->it != ref.it); }
         //----- OPERATORS :  'dereference' -----//
         T           &operator*() const { return (this->it->getContentRef()); }
-        E           *operator->() const { return (this->it); }
+        T           *operator->() const { return (this->it->getContentPtr()); }
+        // E           *operator->() const { return (this->it); }
         //----- OPERATORS : & 'incrementation''decrementation' -----//
         myIterator  &operator++() { this->it = this->it->getNext(); return (*this); }
         myIterator  operator++(int) { myIterator tmp(*this); operator++(); return (tmp); }

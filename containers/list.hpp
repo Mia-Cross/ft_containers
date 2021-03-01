@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/01 02:31:51 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/01 04:50:27 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ namespace ft
             typedef T *                                     pointer;
             typedef const T &	                            const_reference;
             typedef const T *	                            const_pointer;
-            typedef myIterator< T, element<T,Alloc> >              iterator;
-            typedef myCIterator< T, element<T,Alloc> >         const_iterator;
-            typedef myRIterator< T, element<T,Alloc> >       reverse_iterator;
-            typedef myCRIterator< T, element<T,Alloc> >  const_reverse_iterator;
+            typedef myIterator< T, dLList<T,Alloc> >              iterator;
+            typedef myCIterator< T, dLList<T,Alloc> >         const_iterator;
+            typedef myRIterator< T, dLList<T,Alloc> >       reverse_iterator;
+            typedef myCRIterator< T, dLList<T,Alloc> >  const_reverse_iterator;
             typedef size_t                                  size_type;
             typedef ptrdiff_t                               difference_type;
 
@@ -79,13 +79,13 @@ namespace ft
             // ----- ITERATORS ----- //
             
             iterator        begin() { return iterator(myList->getFirst()); }
-            iterator        end() { return iterator(myList->getTail()); }
+            iterator        end() { return iterator(NULL); }
             const_iterator  begin() const { return const_iterator(myList->getFirst()); }
-            const_iterator  end() const { return const_iterator(myList->getTail()); }
+            const_iterator  end() const { return const_iterator(NULL); }
             reverse_iterator rbegin() { return reverse_iterator(myList->getLast()); }
-            reverse_iterator rend() { return reverse_iterator(myList->getHead()); }
+            reverse_iterator rend() { return reverse_iterator(NULL); }
             const_reverse_iterator rbegin() const { return const_reverse_iterator(myList->getLast()); }
-            const_reverse_iterator rend() const { return const_reverse_iterator(myList->getHead()); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(NULL); }
 
             // ----- CAPACITY ----- //
             
@@ -111,7 +111,12 @@ namespace ft
                     push_back(val);
             }
             void push_front(const value_type &val) {
-                myList->getHead()->insertAfter(new element<T, Alloc>(val));
+                dLList<T, Alloc> *elem = new dLList<T, Alloc>(val, myList);
+                (void)elem;
+                // myList->first = elem;
+                // if (size() == 1)
+                //     myList->last = elem;
+                // myList->getFirst()->insertAfter();
                 mySize++;
             }
             void pop_front() {
@@ -119,7 +124,12 @@ namespace ft
                 mySize--;
             }
             void push_back(const value_type &val) {
-                myList->getTail()->insertBefore(new element<T, Alloc>(val));
+                dLList<T, Alloc> *elem = new dLList<T, Alloc>(val, myList->getLast());
+                (void)elem;
+                // myList->last = elem;
+                // if (size() == 1)
+                //     myList->first = elem;
+                // myList->getTail()->insertBefore(new dLList<T, Alloc>(val));
                 mySize++;
             }
             void pop_back() {
@@ -127,10 +137,11 @@ namespace ft
                 mySize--;
             }
             iterator insert(iterator position, const value_type &val) {
-                element<T, Alloc> *elem = position.operator->();
+                dLList<T, Alloc> *elem = myList->getElement(position.operator->());
                 if (elem)
                 {
-                    elem->insertBefore(new element<T, Alloc>(val));
+                    // dLList<T, Alloc> *insert = new dLList<T, Alloc>(val, elem);
+                    elem->insertBefore(new dLList<T, Alloc>(val));
                     position--;
                     mySize++;
                 }
@@ -145,7 +156,7 @@ namespace ft
                     position = this->insert(position, *(--last));
             }
             iterator erase(iterator position) {
-                element<T, Alloc> *elem = position.operator->();
+                dLList<T, Alloc> *elem = myList->getElement(position.operator->());
                 if (elem)
                 {
                     position--;
@@ -179,18 +190,19 @@ namespace ft
                 splice(position, x, x.begin(), x.end());
             }
             void splice(iterator position, List& x, iterator i) {
-                element<T, Alloc> *dest = position.operator->();
-                element<T, Alloc> *src = i.operator->();
+                dLList<T, Alloc> *dest = myList->getElement(position.operator->());
+                dLList<T, Alloc> *src = myList->getElement(i.operator->());
                 if (dest && src && x.mySize)
                 {
                     src->extractElement();
+                    // src->linkWith(dest);
                     dest->insertBefore(src);
                     this->mySize++;
                     x.mySize--;
                 }
             }
             void splice(iterator position, List& x, iterator first, iterator last) {
-                // element<T, Alloc> *src = last.operator->()->getPrev();
+                // dLList<T, Alloc> *src = last.operator->()->getPrev();
                 while (last != first && last != x.begin() && x.mySize)
                 {
                     std::cout << "X = " << x.mySize << "\tTHIS = " << mySize;
@@ -254,7 +266,7 @@ namespace ft
         {
             for (typename List<T>::const_iterator it = list.begin(); size-- > 0; it++)
             {
-                std::cout << std::endl;
+                // std::cout << std::endl;
                 out << *it;
                 if (size)
                     out << ", ";
