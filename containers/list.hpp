@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/26 03:56:31 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/01 02:31:51 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,36 +171,36 @@ namespace ft
                 while (mySize > n)
                     this->pop_back();
             }
-            void clear() {
-                resize(0);
-                // this->erase(begin(), end());
-                // this->erase(iterator(myList->getHead()), this->end());
-            }
+            void clear() { resize(0); }
 
             // ----- OPERATIONS ----- //
             
             void splice(iterator position, List& x) {
-                for (iterator it = x.begin(); it != x.end(); it++)
-                    splice(position, x, it);
-                // dLList<T, Alloc> *elem = position.operator->();
-                // if (elem)
-                // {
-                //     // std::cout << "splice content = " << elem->getContentRef() << std::endl;
-                //     elem->insertElements(x.myList->getFirst(), x.myList->getTail());
-                // }
+                splice(position, x, x.begin(), x.end());
             }
             void splice(iterator position, List& x, iterator i) {
-                (void)x;
                 element<T, Alloc> *dest = position.operator->();
                 element<T, Alloc> *src = i.operator->();
-                if (dest && src)
-                    dest->spliceDLL(src);
+                if (dest && src && x.mySize)
+                {
+                    src->extractElement();
+                    dest->insertBefore(src);
+                    this->mySize++;
+                    x.mySize--;
+                }
             }
             void splice(iterator position, List& x, iterator first, iterator last) {
-                (void)x;
-                element<T, Alloc> *dest = position.operator->();
-                if (dest)
-                    dest->insertElements(first, last);
+                // element<T, Alloc> *src = last.operator->()->getPrev();
+                while (last != first && last != x.begin() && x.mySize)
+                {
+                    std::cout << "X = " << x.mySize << "\tTHIS = " << mySize;
+                    splice(position, x, --last);
+                    std::cout << "\t//\tX = " << x.mySize << "\tTHIS = " << mySize << std::endl;
+                    // std::cout << *last << " " << *first<< std::endl;
+                    //position--;
+                    //std::cout << *position << std::endl;
+                }
+                    //dest->insertElements(first, last);
             }
             // void remove (const value_type &val) {}
             // template < class Predicate >
@@ -254,6 +254,7 @@ namespace ft
         {
             for (typename List<T>::const_iterator it = list.begin(); size-- > 0; it++)
             {
+                std::cout << std::endl;
                 out << *it;
                 if (size)
                     out << ", ";

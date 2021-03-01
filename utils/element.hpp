@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 20:19:52 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/26 03:55:19 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/02/28 20:05:54 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,19 @@ class element
                 this->next->prev = to_add;
             this->next = to_add;
         }
-        void deleteElement() {
+        void extractElement() {
             if (this->next)
                 this->next->prev = this->prev;
             if (this->prev)
                 this->prev->next = this->next;
-            // std::cout << "Je delete elem -> " << this << std::endl;
+            this->next = NULL;
+            this->prev = NULL;
+        }
+        void deleteElement() {
+            this->extractElement();
             delete this;
         }
+
         element *getNext() const { return (this->next); }
         element *getPrev() const { return (this->prev); }
         T       *getContentPtr() const { return (this->content); }

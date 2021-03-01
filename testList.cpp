@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/26 03:57:49 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/01 02:22:35 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,21 +130,22 @@ void testList()
     std::cout << listB;
 
     std::cout << "\n/ - SWAP - /\n";
-    std::cout << "Before SWAP :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
+    std::cout << "Before :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
     listA.swap(listB);
-    std::cout << "After SWAP :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
-    // listA.swap(listB);
+    std::cout << "After :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
+    listA.swap(listB);
     
     std::cout << "\n// ----- OPERATIONS ----- //\n\n";
 
     std::cout << "\n/ - SPLICE - /\n";
-    std::cout << "1)Before SPLICE:\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    std::cout << "1) Before :\tlist A -> " << listA << "\t\tlist D -> " << listD;
     it = listA.begin(); it++; it++; it++;
     listA.splice(listD.begin(), listA, it);
-    std::cout << "After SPLICE:\tlist A -> " << listA << "\t\tlist D -> " << listD;
-    std::cout << "2)Before SPLICE:\tlist A -> "<< listA;
-    std::cout << "\t\tlist D -> " << listD;
-    listA.splice(listA.begin(), listD);
-    std::cout << "After SPLICE:\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    std::cout << "   After :\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    std::cout << "2) Before :\tlist A -> "<< listA;
+    std::cout << "\t\tlist B -> " << listB;
+    it = listA.begin(); it++;
+    listB.splice(listB.begin(), listA, it, listA.end());
+    std::cout << "   After :\tlist A -> " << listA << "\t\tlist B -> " << listB;
 
 }

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/26 03:57:17 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/01 02:34:47 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ class dLList
 {
     private:
 
-        element<T, Alloc> *first;
-        element<T, Alloc> *last;
+        element<T, Alloc>   *first;
+        element<T, Alloc>   *last;
+        size_t              sizeDLL;
 
     public :
 
@@ -43,9 +44,6 @@ class dLList
             return (*this);
         }
 
-        // elem_type  *forward() const { return (getNext()); }
-        // elem_type  *backward() const { return (getPrev()); }
-        
         elem_type         *getHead() { return (first); }
         const elem_type   *getHead() const { return (first); }
         elem_type         *getTail() { return (last); }
@@ -76,27 +74,29 @@ class dLList
             
         // }
 
-        void insertElements(dLList *begin, dLList *end) {
-            dLList *elem = this->prev;
-            while (elem && end->prev && end != begin)
-            {
-                // std::cout << "end = " << end << std::endl;
-                // std::cout << "end->prev = " << end->prev << std::endl;
-                // std::cout << "begin = " << begin << std::endl;
-                // std::cout << "content = " << *end->content << std::endl;
-                end = end->prev;
-                elem->insertAfter(end);
-            }
-        }
-        
+        // void insertElements(dLList *begin, dLList *end) {
+        //     dLList *elem = this->prev;
+        //     while (elem && end->prev && end != begin)
+        //     {
+        //         // std::cout << "end = " << end << std::endl;
+        //         // std::cout << "end->prev = " << end->prev << std::endl;
+        //         // std::cout << "begin = " << begin << std::endl;
+        //         // std::cout << "content = " << *end->content << std::endl;
+        //         end = end->prev;
+        //         elem->insertAfter(end);
+        //     }
+        // }
 
-        void spliceDLL(dLList *src) {
-            if (src->next)
-                src->next->prev = src->prev;
-            if (src->prev)
-                src->prev->next = src->next;
-            this->insertBefore(src);
-        }
+        // void spliceDLL(dLList *src) {
+        //     if (src->next)
+        //         src->next->prev = src->prev;
+        //     if (src->prev)
+        //         src->prev->next = src->next;
+        //     this->insertBefore(src);
+        // }
+        // elem_type  *forward() const { return (getNext()); }
+        // elem_type  *backward() const { return (getPrev()); }
+        
 
         // void copyList(dLList *src) {
         //     dLList *dest = this->getHead();
