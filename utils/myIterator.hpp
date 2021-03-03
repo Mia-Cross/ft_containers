@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/01 03:36:22 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/03 23:20:28 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class myIterator
         typedef T *             pointer_type;
         typedef T &             reference_type;
         typedef E               element_type;
+        typedef E *             elem_ptr_type;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         myIterator() {}
@@ -39,9 +40,9 @@ class myIterator
         bool        operator==(const myIterator &ref) const { return (this->it == ref.it); }
         bool        operator!=(const myIterator &ref) const { return (this->it != ref.it); }
         //----- OPERATORS :  'dereference' -----//
-        T           &operator*() const { return (this->it->getContentRef()); }
-        T           *operator->() const { return (this->it->getContentPtr()); }
-        // E           *operator->() const { return (this->it); }
+        reference_type  operator*() const { return (this->it->getContentRef()); }
+        pointer_type    operator->() const { return (this->it->getContentPtr()); }
+        elem_ptr_type   getElemAddr() const { return (this->it); }
         //----- OPERATORS : & 'incrementation''decrementation' -----//
         myIterator  &operator++() { this->it = this->it->getNext(); return (*this); }
         myIterator  operator++(int) { myIterator tmp(*this); operator++(); return (tmp); }
@@ -112,8 +113,8 @@ class myCRIterator : public virtual myCIterator<T, E>, public virtual myRIterato
         myCRIterator  &operator--() { this->it = this->it->getNext(); return (*this);  }
         myCRIterator  operator--(int) { myCRIterator tmp(*this); operator--(); return (tmp); }
          //----- OPERATORS :  'dereference' -----//
-        const_reference_type  operator*() const { return (myCIterator<T,E>::operator*()); }
-        const_pointer_type    operator->() const { return (myCIterator<T,E>::operator->()); }
+        const_reference_type  operator*() const { return (this->it->getContentRef()); }
+        const_pointer_type    operator->() const { return (this->it->getContentPtr()); }
 };
 
 #endif

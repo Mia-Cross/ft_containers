@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/01 04:50:27 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/03 23:36:32 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,14 @@ namespace ft
                 *this = ref;
             }
             // DESTRUCTOR
-            ~List() {
+            ~List()
+            {
                 this->clear();
                 delete myList;
             }
             // ASSIGNATION
-            List &operator=(const List &ref) {
+            List &operator=(const List &ref)
+            {
                 resize(0);
                 assign(ref.begin(), ref.end());
                 return (*this);
@@ -79,13 +81,13 @@ namespace ft
             // ----- ITERATORS ----- //
             
             iterator        begin() { return iterator(myList->getFirst()); }
-            iterator        end() { return iterator(NULL); }
+            iterator        end() { return iterator(myList); }
             const_iterator  begin() const { return const_iterator(myList->getFirst()); }
-            const_iterator  end() const { return const_iterator(NULL); }
+            const_iterator  end() const { return const_iterator(myList); }
             reverse_iterator rbegin() { return reverse_iterator(myList->getLast()); }
-            reverse_iterator rend() { return reverse_iterator(NULL); }
+            reverse_iterator rend() { return reverse_iterator(myList); }
             const_reverse_iterator rbegin() const { return const_reverse_iterator(myList->getLast()); }
-            const_reverse_iterator rend() const { return const_reverse_iterator(NULL); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(myList); }
 
             // ----- CAPACITY ----- //
             
@@ -103,20 +105,18 @@ namespace ft
             // ----- MODIFIERS ----- //
             
             void assign(iterator first, iterator last) {
-                for (iterator it = first; it != last; it++)
-                    push_back(*it);
+                while (first != last)
+                    push_back(*first++);
             }
             void assign(size_type n, const value_type &val) {
                 while (mySize < n)
                     push_back(val);
             }
             void push_front(const value_type &val) {
-                dLList<T, Alloc> *elem = new dLList<T, Alloc>(val, myList);
-                (void)elem;
-                // myList->first = elem;
-                // if (size() == 1)
-                //     myList->last = elem;
-                // myList->getFirst()->insertAfter();
+                dLList<T, Alloc> *elem = new dLList<T, Alloc>(val);
+                myList->insertAfter(elem);
+                // if (mySize == 0)
+                //     myList->setAsLast(elem);
                 mySize++;
             }
             void pop_front() {
@@ -124,12 +124,10 @@ namespace ft
                 mySize--;
             }
             void push_back(const value_type &val) {
-                dLList<T, Alloc> *elem = new dLList<T, Alloc>(val, myList->getLast());
-                (void)elem;
-                // myList->last = elem;
-                // if (size() == 1)
-                //     myList->first = elem;
-                // myList->getTail()->insertBefore(new dLList<T, Alloc>(val));
+                dLList<T, Alloc> *elem = new dLList<T, Alloc>(val);
+                myList->insertBefore(elem);
+                // if (mySize == 0)
+                //     myList->setAsFirst(elem);
                 mySize++;
             }
             void pop_back() {
@@ -190,8 +188,8 @@ namespace ft
                 splice(position, x, x.begin(), x.end());
             }
             void splice(iterator position, List& x, iterator i) {
-                dLList<T, Alloc> *dest = myList->getElement(position.operator->());
-                dLList<T, Alloc> *src = myList->getElement(i.operator->());
+                dLList<T, Alloc> *dest = position.getElemAddr();
+                dLList<T, Alloc> *src = i.getElemAddr();
                 if (dest && src && x.mySize)
                 {
                     src->extractElement();
@@ -205,11 +203,11 @@ namespace ft
                 // dLList<T, Alloc> *src = last.operator->()->getPrev();
                 while (last != first && last != x.begin() && x.mySize)
                 {
-                    std::cout << "X = " << x.mySize << "\tTHIS = " << mySize;
+                    // std::cout << "X = " << x.mySize << "\tTHIS = " << mySize;
                     splice(position, x, --last);
-                    std::cout << "\t//\tX = " << x.mySize << "\tTHIS = " << mySize << std::endl;
+                    // std::cout << "\t//\tX = " << x.mySize << "\tTHIS = " << mySize << std::endl;
                     // std::cout << *last << " " << *first<< std::endl;
-                    //position--;
+                    // position--;
                     //std::cout << *position << std::endl;
                 }
                     //dest->insertElements(first, last);
