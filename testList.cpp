@@ -6,13 +6,16 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/03 23:38:50 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/04 04:46:31 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "containers/list.hpp"
 #include "../utils/myIterator.hpp"
 #include <iostream>
+
+bool isEven(int x) { return (x % 2 ? false : true); }
+bool isDigit(int x) { return (x < 10 && x > -1 ? true : false); }
 
 void testList()
 {
@@ -132,20 +135,44 @@ void testList()
     std::cout << "\n/ - SWAP - /\n";
     std::cout << "Before :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
     listA.swap(listB);
-    std::cout << "After :\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
-    listA.swap(listB);
+    std::cout << "After :\t\tlist A -> " << &listA << listA << "\t\tlist B -> " << &listB << listB;
+    // listA.swap(listB);
     
     std::cout << "\n// ----- OPERATIONS ----- //\n\n";
 
-    std::cout << "\n/ - SPLICE - /\n";
-    std::cout << "1) Before :\tlist A -> " << listA << "\t\tlist D -> " << listD;
-    it = listA.begin(); it++; it++; it++;
-    listA.splice(listD.begin(), listA, it);
-    std::cout << "   After :\tlist A -> " << listA << "\t\tlist D -> " << listD;
-    std::cout << "2) Before :\tlist A -> "<< listA;
-    std::cout << "\t\tlist B -> " << listB;
-    it = listA.begin(); it++;
-    listB.splice(listB.begin(), listA, it, listA.end());
-    std::cout << "   After :\tlist A -> " << listA << "\t\tlist B -> " << listB;
+    // std::cout << "\n/ - SPLICE - /\n";
+    // std::cout << "1) Before :\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    // it = listA.begin(); it++; it++; it++;
+    // listA.splice(listD.begin(), listA, it);
+    // std::cout << "   After :\tlist A -> " << listA << "\t\tlist D -> " << listD;
+    // std::cout << "2) Before :\tlist A -> "<< listA;
+    // std::cout << "\t\tlist B -> " << listB;
+    // it = listA.begin(); it++;
+    // listB.splice(listB.begin(), listA, it, listA.end());
+    // std::cout << "   After :\tlist A -> " << listA << "\t\tlist B -> " << listB;
+    
+    std::cout << "\n/ - UNIQUE - /\n";
+    std::cout << "Removing value 123 from all lists\n";
+    listA.unique();
+    listB.unique();
+    listD.unique();
+    std::cout << listA << listB << listD;
+
+    std::cout << "\n/ - REMOVE - /\n";
+    std::cout << "Removing value 123 from all lists\n";
+    listA.remove(123);
+    listB.remove(123);
+    listD.remove(123);
+    std::cout << listA << listB << listD;
+
+    std::cout << "\n/ - REMOVE IF - /\n";
+    std::cout << "List A & D : Removing elements if they are even numbers\n";
+    listA.remove_if(&isEven);
+    listD.remove_if(&isEven);
+    std::cout << listA << listD;
+    std::cout << "List B : Removing elements if they are digits\n";
+    listB.remove_if(&isDigit);
+    std::cout << listB;
+
 
 }

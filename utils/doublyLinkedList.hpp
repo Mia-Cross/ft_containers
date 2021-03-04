@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/03 23:18:29 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/04 04:41:46 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,12 @@ class dLList
         void deleteElement() {
             this->extractElement();
             delete this;
+        }
+        bool equalsNext() {
+            if (this->content == this->next->content
+                && this != head && this->next != head)
+                return (true);
+            return (false);
         }
         // create new element in a list at iterator with given value
         // dLList(T value, dLList *iter) : head(iter->head), next(iter), prev(iter->prev),

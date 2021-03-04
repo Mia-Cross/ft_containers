@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/03 23:36:32 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/04 05:00:00 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ namespace ft
                 while (last != first && last != x.begin() && x.mySize)
                 {
                     // std::cout << "X = " << x.mySize << "\tTHIS = " << mySize;
-                    splice(position, x, --last);
+                    splice(position--, x, --last);
                     // std::cout << "\t//\tX = " << x.mySize << "\tTHIS = " << mySize << std::endl;
                     // std::cout << *last << " " << *first<< std::endl;
                     // position--;
@@ -212,10 +212,41 @@ namespace ft
                 }
                     //dest->insertElements(first, last);
             }
-            // void remove (const value_type &val) {}
-            // template < class Predicate >
-            // void remove_if (Predicate pred) {}
-            // void unique() {}
+            void remove (const value_type &val) {
+                iterator it = begin();
+                while (it != end())
+                {
+                    if (*it == val)
+                    {
+                        dLList<T, Alloc> *to_remove = it++.operator->();
+                        // it++;
+                        to_remove->deleteElement();
+                        mySize--;
+                    }
+                    else
+                        it++;
+                }
+            }
+            template < class Predicate >
+            void remove_if (Predicate pred) {
+                iterator it = begin();
+                while (it != end())
+                {
+                    if (pred(*it) == true)
+                    {
+                        dLList<T, Alloc> *to_remove = it++.operator->();
+                        to_remove->deleteElement();
+                        mySize--;
+                    }
+                    else
+                        it++;
+                }
+            }
+            void unique() {
+                // remove_if(dLList<T, Alloc>::equalsNext());
+                bool (dLList<T, Alloc>::*fptr) (void) = &dLList<T, Alloc>::equalsNext;
+                remove_if(fptr);
+            }
             // template < class BinaryPredicate >
             // void unique(BinaryPredicate binary_pred) {}
             // void merge(List &x) {}
