@@ -6,16 +6,19 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/04 04:46:31 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/05 05:31:04 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "containers/list.hpp"
 #include "../utils/myIterator.hpp"
+#include <cstdlib>
 #include <iostream>
 
 bool isEven(int x) { return (x % 2 ? false : true); }
 bool isDigit(int x) { return (x < 10 && x > -1 ? true : false); }
+// bool isMultiple(int x, int y){ return ( !(x % y) ? true : false);}
+bool isNear(int x, int y) { return (abs(x - y) < 5); }
 
 void testList()
 {
@@ -91,6 +94,24 @@ void testList()
     listB.assign(listC.begin(), listC.end());
     std::cout << listB;
 
+    std::cout << "\n/ - SORT - /\n";
+    std::cout << "List B : sort by value order\n";
+    listB.sort();
+    std::cout << listB;
+    // std::cout << "List B : sort by predicate order\n";
+    // listB.sort(isNear);
+    // std::cout << listB;
+    // std::cout << "List A : sort by predicate order\n";
+    // listA.sort(isNear);
+    // std::cout << listA;
+
+    std::cout << "\n/ - UNIQUE - /\n";
+    std::cout << "Removing non unique values from all lists\n";
+    listA.unique(isNear);
+    listB.unique(isNear);
+    listD.unique(isNear);
+    std::cout << listA << listB << listD;
+
     std::cout << "\n/ - POP - /\n";
     std::cout << "List A : Popping back...\n";
     listA.pop_back();      // CONTENT = {  1, -2,  3,  4, -5, __  }
@@ -152,11 +173,19 @@ void testList()
     // std::cout << "   After :\tlist A -> " << listA << "\t\tlist B -> " << listB;
     
     std::cout << "\n/ - UNIQUE - /\n";
-    std::cout << "Removing value 123 from all lists\n";
+    std::cout << "Removing non unique values from all lists\n";
     listA.unique();
     listB.unique();
     listD.unique();
     std::cout << listA << listB << listD;
+
+    std::cout << "\n/ - REVERSE - /\n";
+    std::cout << "Reverse elements in all lists\n";
+    listA.reverse();
+    listB.reverse();
+    listD.reverse();
+    std::cout << listA << listB << listD;
+
 
     std::cout << "\n/ - REMOVE - /\n";
     std::cout << "Removing value 123 from all lists\n";

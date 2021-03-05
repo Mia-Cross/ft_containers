@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/04 04:41:46 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/05 01:51:01 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ class dLList
         dLList  *next;
         dLList  *prev;
         Alloc   allocDLL;
-        // size_t  sizeDLL;
 
     public :
 
@@ -56,7 +55,6 @@ class dLList
             this->last = ref.last;
             this->next = ref.next;
             this->prev = ref.prev;
-            // this->sizeDLL = ref.sizeDLL;
             this->allocDLL = ref.allocDLL;
             return (*this);
         }
@@ -97,7 +95,6 @@ class dLList
             to_add->head = this->head;
             to_add->next = this;
             to_add->prev = this->prev;
-            // if (this->prev)
             this->prev->next = to_add;
             this->prev = to_add;
         }
@@ -105,26 +102,30 @@ class dLList
             to_add->head = this->head;
             to_add->prev = this;
             to_add->next = this->next;
-            // if (this->next)
             this->next->prev = to_add;
             this->next = to_add;
         }
         void extractElement() {
-            // if (this->next)
             this->next->prev = this->prev;
-            // if (this->prev)
             this->prev->next = this->next;
             this->head = NULL;
+            this->next = NULL;
+            this->prev = NULL;
         }
         void deleteElement() {
             this->extractElement();
             delete this;
         }
-        bool equalsNext() {
-            if (this->content == this->next->content
-                && this != head && this->next != head)
-                return (true);
-            return (false);
+        void swapPointers() {
+            dLList *tmp = this->next;
+            this->next = this->prev;
+            this->prev = tmp;
+        }
+        void swapWithNext() {
+            dLList *next = this->next;
+            this->next = this->next->next;
+            next->extractElement();
+            this->insertBefore(next);            
         }
         // create new element in a list at iterator with given value
         // dLList(T value, dLList *iter) : head(iter->head), next(iter), prev(iter->prev),

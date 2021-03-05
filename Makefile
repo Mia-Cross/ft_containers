@@ -4,6 +4,7 @@ CXX = clang++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 SRCS = 	main.cpp \
 		testList.cpp \
+		# testThomas.cpp \
 		#testMap.cpp \
 		testQueue.cpp \
 		testStack.cpp \

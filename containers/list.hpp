@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/04 05:00:00 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/05 03:01:24 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,14 +182,19 @@ namespace ft
             }
             void clear() { resize(0); }
 
+
+            ////////////////////////////
             // ----- OPERATIONS ----- //
+            ////////////////////////////
+            
+            // ----- SPLICE ----- //
             
             void splice(iterator position, List& x) {
                 splice(position, x, x.begin(), x.end());
             }
             void splice(iterator position, List& x, iterator i) {
-                dLList<T, Alloc> *dest = position.getElemAddr();
-                dLList<T, Alloc> *src = i.getElemAddr();
+                dLList<T, Alloc> *dest = position.operator->();
+                dLList<T, Alloc> *src = i.operator->();
                 if (dest && src && x.mySize)
                 {
                     src->extractElement();
@@ -212,6 +217,9 @@ namespace ft
                 }
                     //dest->insertElements(first, last);
             }
+            
+            // ----- REMOVE ----- //
+            
             void remove (const value_type &val) {
                 iterator it = begin();
                 while (it != end())
@@ -219,7 +227,6 @@ namespace ft
                     if (*it == val)
                     {
                         dLList<T, Alloc> *to_remove = it++.operator->();
-                        // it++;
                         to_remove->deleteElement();
                         mySize--;
                     }
@@ -242,20 +249,87 @@ namespace ft
                         it++;
                 }
             }
+
+            // ----- UNIQUE ----- //
+            
             void unique() {
-                // remove_if(dLList<T, Alloc>::equalsNext());
-                bool (dLList<T, Alloc>::*fptr) (void) = &dLList<T, Alloc>::equalsNext;
-                remove_if(fptr);
+                iterator it = begin();
+                while (it != end())
+                {
+                    iterator comp = it++;
+                    if (*it == *comp)
+                    {
+                        dLList<T, Alloc> *to_remove = it++.operator->();
+                        to_remove->deleteElement();
+                        mySize--;
+                        it--;
+                    }
+                }
             }
-            // template < class BinaryPredicate >
-            // void unique(BinaryPredicate binary_pred) {}
+            template < class BinaryPredicate >
+            void unique(BinaryPredicate binary_pred) {
+                iterator it = begin();
+                while (it != end())
+                {
+                    iterator comp = it++;
+                    if (binary_pred(*comp, *it) == true)
+                    {
+                        dLList<T, Alloc> *to_remove = it++.operator->();
+                        to_remove->deleteElement();
+                        mySize--;
+                        it--;
+                    }
+                }
+            }
+
+            // ----- MERGE ----- //
+            
             // void merge(List &x) {}
             // template < class Compare >
             // void merge(List &x, Compare comp) {}
-            // void sort() {}
-            // template < class Compare >
-            // void sort(Compare comp) {}
-            // void reverse() {}
+
+            // ----- SORT ----- //
+
+            void sort() {
+                iterator it = begin();
+                while (it != end())
+                {
+                    iterator current = it++;
+                    if (*it < *current && it != end())
+                    {
+                        dLList<T, Alloc> *elem = current.operator->();
+                        elem->swapWithNext();
+                        it = begin();
+                    }
+                }
+            }
+            template < class Compare >
+            void sort(Compare comp) {
+                iterator it = begin();
+                while (it != end())
+                {
+                    iterator current = it++;
+                    std::cout << "*IT = " << *it << " || *CUR = " << *current << " --> COMP = " << comp(*it, *current) <<std::endl;
+                    if (comp(*it, *current) && it != end())
+                    {
+                        dLList<T, Alloc> *elem = current.operator->();
+                        elem->swapWithNext();
+                        it = begin();
+                    }
+                }
+            }
+
+            // ----- REVERSE ----- //
+
+            void reverse() {
+                iterator it = begin();
+                while (it != end())
+                {
+                    dLList<T, Alloc> *elem = it++.operator->();
+                    elem->swapPointers();
+                }
+                myList->swapPointers();
+            }
             
         private :
 
