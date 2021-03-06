@@ -6,24 +6,28 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:11:46 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 04:25:22 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 06:23:04 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/mainHeader.hpp"
-#include <cstdlib>
+bool isOdd(int x);
+bool isDigit(int x);
+bool compareAbs(int x, int y);
+bool isNear(int x, int y);
 
-// bool isOdd(int x) { return (x % 2 ? true : false); }
-// bool isDigit(int x) { return (x < 10 && x > -1 ? true : false); }
-// bool compareAbs(int x, int y){ return ( abs(x) < abs(y) ? true : false);}
-// bool isNear(int x, int y) { return (abs(x - y) < 5); }
+void testList();
+void testMap();
+void testQueue();
+void testStack();
+void testVector();
+// void test();
 
 int main()
 {
-    testList();
-    // test();
-    // testMap();
+    // testList();
     // testQueue();
     // testStack();
-    // testVector();
+    testVector();
+    // testMap();
+    // test();
 }

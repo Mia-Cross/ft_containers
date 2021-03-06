@@ -6,14 +6,13 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 04:24:53 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 06:24:17 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../containers/list.hpp"
 #include "../templates/myIterator.hpp"
 #include <cstdlib>
-
 
 bool isOdd(int x) { return (x % 2 ? true : false); }
 bool isDigit(int x) { return (x < 10 && x > -1 ? true : false); }
@@ -346,5 +345,6 @@ void testList()
     listB.reverse();
     listE.reverse();
     std::cout << listA << listB << listE;
+    std::cout << std::endl << std::endl;
 
 }

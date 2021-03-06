@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/17 22:26:43 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 06:12:03 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define STACK_H
 
 # include "list.hpp"
+#include <memory>
+#include <iostream>
 
 namespace ft
 {
@@ -23,27 +25,34 @@ namespace ft
         public :
 
             //defining every member in my List as in the STL
-            typedef T       value_type;
-            typedef C       container_type;
-            typedef size_t  size_type;
+            typedef T                                   value_type;
+            typedef C                                   container_type;
+            typedef typename container_type::size_type  size_type;
 
-            Stack() : T(NULL) {}
+            // CONSTRUCTOR BY CONTAINER TYPE
+            explicit Stack(const container_type& ctnr = container_type()) :
+                container(ctnr) {}
+            // CONSTRUCTOR BY COPY
+            Stack(const Stack &ref) : container(ref.container) {}
+            // DESTRUCTOR
             ~Stack() {}
-            Stack(const Stack &) { }
-            const Stack &operator=(const Stack &) {}
+            // ASSIGNATION
+            const Stack &operator=(const Stack &ref) { container = ref.container; }
 
-            // bool empty() const {}
-            // size_type size() const {}
-            // value_type &top() {}
-            // const value_type &top() const {}
-            // void push(const value_type &val) {}
-            // void pop() {}
+            // MEMBER FUNCTIONS
+            bool empty() const { return (container.empty()); }
+            size_type size() const { return (container.size()); }
+            value_type &top() { return (container.back()); }
+            const value_type &top() const { return (container.back()); }
+            void push(const value_type &val) { container.push_back(val); }
+            void pop() { container.pop_back(); }
+            
+            // ADDITION ( ONLY FOR DISPLAY )
+            C &getContainer() const { return (const_cast<C&>(container)); }
 
         private :
 
-            T               *stack;
-            container_type  under;
-            //size_type   size;
+            container_type  container;
 
     };
 
@@ -59,7 +68,23 @@ namespace ft
     bool operator>(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs > rhs); }
     template < typename T, class Alloc >
     bool operator>=(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs >= rhs); }
+    
+    template < typename T >
+    std::ostream &operator<<(std::ostream &out, Stack<T> const &Stack) {
+        size_t size = Stack.size();
+        out << "\t>> STACK [" << size << "]\t= { ";
+        if (size)
+        {
+            for (typename List<T>::reverse_iterator it = Stack.getContainer().rbegin(); size-- > 0; it++)
+            {
+                out << *it;
+                if (size)
+                    out << ", ";
+            }
+        }
+        out << " }" << std::endl;
+        return (out);
+    }
 }
-
 
 #endif

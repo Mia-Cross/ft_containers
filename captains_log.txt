@@ -7,22 +7,17 @@ stack   none            Single end -> last in, first out
 
 TO-DO :
 ---------
-        A TESTER >> Si ca se trouve je peux m'epargner la peine de faire appel a getNthElement parce que je pense
-que quand j'appelle une fonction membre depuis un element n, this = n et pas la tete de la liste.
--> Oui.
-        A REGLER >> super flemme de m'en occuper maintenant, mais y'a un segfault quand je veux remplir une liste
-avec un reverse_iterator (depuis que j'ai mis la tail ?), mais aucun souci si j'utilise ce meme iterateur
-pour de l'affichage...
--> Done.
         Insert avec reverse_iterator ??
 
 QUESTIONS :
 --------------
 Pourquoi ils ont mis "explicit" devant les constructeurs ?
-Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme ca dans la STL, ou y'a
-        une meilleure raison ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
+Est ce qu'il faut faire la specialisation vector<bool> ?
 
+[6/03].bis
+Bon ben je me suis chauffée a faire STACK ET QUEUE en 2h donc bénef !
+NEXT TIME : -> VECTOR (j'ai deja fait les typedef et les constr/destr)
 [6/03]
 J'AI FINI LIST !!! Et ca aura pris seulement... un mois. Du coup on se revoit fin juin pour push sans bonus !
 NEXT TIME : Reprendre STACK ou QUEUE, au choix (maintenant que j'ai ma LIST pour mettre dedans)

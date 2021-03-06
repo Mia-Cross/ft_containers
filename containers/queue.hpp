@@ -6,42 +6,55 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/17 22:25:26 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 05:34:14 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef QUEUE_H
 # define QUEUE_H
 
+#include "list.hpp"
+#include <memory>
+#include <iostream>
+
 namespace ft
 {
-    template < typename T, class uContainer = ft::List<T> >
+    template < typename T, class C = ft::List<T> >
     class Queue {
 
         public :
 
             //defining every member in my List as in the STL
-            typedef T                           value_type;
-            typedef uContainer                  container_type;
-            typedef size_t                      size_type;
+            typedef T                                   value_type;
+            typedef C                                   container_type;
+            typedef typename container_type::size_type  size_type;
 
-            Queue() {}
+            // CONSTRUCTOR BY CONTAINER TYPE
+            explicit Queue(const container_type& ctnr = container_type()) :
+                container(ctnr) {}
+            // CONSTRUCTOR BY COPY
+            Queue(const Queue &ref) : container(ref.container) {}
+            // DESTRUCTOR
             ~Queue() {}
-            Queue(const Queue &) {}
-            const Queue &operator=(const Queue &) {}
+            // ASSIGNATION
+            const Queue &operator=(const Queue &ref) { container = ref.container; }
 
-            // bool empty() const {}
-            // size_type size() const {}
-            // value_type &front() {}
-            // const value_type &front() const {}
-            // value_type &back() {}
-            // const value_type &back() const {}
-            // void push(const value_type &val) {}
-            // void pop() {}
+            // MEMBER FUNCTIONS
+            bool empty() const { return (container.empty()); }
+            size_type size() const { return (container.size()); }
+            value_type &front() { return (container.front()); }
+            const value_type &front() const { return (container.front()); }
+            value_type &back() { return (container.back()); }
+            const value_type &back() const { return (container.back()); }
+            void push(const value_type &val) { container.push_back(val); }
+            void pop() { container.pop_back(); }
+            
+            // ADDITION ( ONLY FOR DISPLAY )
+            C &getContainer() const { return (const_cast<C&>(container)); }
 
         private :
 
-            container_type under;
+            container_type  container;
 
     };
 
@@ -57,6 +70,23 @@ namespace ft
     bool operator>(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs > rhs); }
     template < typename T, class Alloc >
     bool operator>=(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs >= rhs); }
+
+    template < typename T >
+    std::ostream &operator<<(std::ostream &out, Queue<T> const &queue) {
+        size_t size = queue.size();
+        out << "\t>> QUEUE [" << size << "]\t= { ";
+        if (size)
+        {
+            for (typename List<T>::iterator it = queue.getContainer().begin(); size-- > 0; it++)
+            {
+                out << *it;
+                if (size)
+                    out << ", ";
+            }
+        }
+        out << " }" << std::endl;
+        return (out);
+    }
 }
 
 #endif
