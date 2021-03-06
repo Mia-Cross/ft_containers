@@ -6,17 +6,18 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/05 03:01:24 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 04:12:12 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define LIST_H
 
-#include "../utils/myIterator.hpp"
-#include "../utils/doublyLinkedList.hpp"
+#include "../templates/myIterator.hpp"
+#include "../templates/doublyLinkedList.hpp"
 #include <memory>
-#include <exception>
+#include <iostream>
+
 namespace ft
 {
     template < typename T, class Alloc = std::allocator<T> >
@@ -31,10 +32,10 @@ namespace ft
             typedef T *                                     pointer;
             typedef const T &	                            const_reference;
             typedef const T *	                            const_pointer;
-            typedef myIterator< T, dLList<T,Alloc> >              iterator;
-            typedef myCIterator< T, dLList<T,Alloc> >         const_iterator;
+            typedef myIterator< T, dLList<T,Alloc> >        iterator;
+            typedef myCIterator< T, dLList<T,Alloc> >       const_iterator;
             typedef myRIterator< T, dLList<T,Alloc> >       reverse_iterator;
-            typedef myCRIterator< T, dLList<T,Alloc> >  const_reverse_iterator;
+            typedef myCRIterator< T, dLList<T,Alloc> >      const_reverse_iterator;
             typedef size_t                                  size_type;
             typedef ptrdiff_t                               difference_type;
 
@@ -115,22 +116,22 @@ namespace ft
             void push_front(const value_type &val) {
                 dLList<T, Alloc> *elem = new dLList<T, Alloc>(val);
                 myList->insertAfter(elem);
-                // if (mySize == 0)
-                //     myList->setAsLast(elem);
                 mySize++;
             }
             void pop_front() {
+                if (!mySize)
+                    return ;
                 myList->getFirst()->deleteElement();
                 mySize--;
             }
             void push_back(const value_type &val) {
                 dLList<T, Alloc> *elem = new dLList<T, Alloc>(val);
                 myList->insertBefore(elem);
-                // if (mySize == 0)
-                //     myList->setAsFirst(elem);
                 mySize++;
             }
             void pop_back() {
+                if (!mySize)
+                    return ;
                 myList->getLast()->deleteElement();
                 mySize--;
             }
@@ -138,7 +139,6 @@ namespace ft
                 dLList<T, Alloc> *elem = myList->getElement(position.operator->());
                 if (elem)
                 {
-                    // dLList<T, Alloc> *insert = new dLList<T, Alloc>(val, elem);
                     elem->insertBefore(new dLList<T, Alloc>(val));
                     position--;
                     mySize++;
@@ -155,7 +155,7 @@ namespace ft
             }
             iterator erase(iterator position) {
                 dLList<T, Alloc> *elem = myList->getElement(position.operator->());
-                if (elem)
+                if (elem && mySize)
                 {
                     position--;
                     elem->deleteElement();
@@ -182,7 +182,6 @@ namespace ft
             }
             void clear() { resize(0); }
 
-
             ////////////////////////////
             // ----- OPERATIONS ----- //
             ////////////////////////////
@@ -198,24 +197,16 @@ namespace ft
                 if (dest && src && x.mySize)
                 {
                     src->extractElement();
-                    // src->linkWith(dest);
                     dest->insertBefore(src);
                     this->mySize++;
                     x.mySize--;
                 }
             }
             void splice(iterator position, List& x, iterator first, iterator last) {
-                // dLList<T, Alloc> *src = last.operator->()->getPrev();
-                while (last != first && last != x.begin() && x.mySize)
-                {
-                    // std::cout << "X = " << x.mySize << "\tTHIS = " << mySize;
-                    splice(position--, x, --last);
-                    // std::cout << "\t//\tX = " << x.mySize << "\tTHIS = " << mySize << std::endl;
-                    // std::cout << *last << " " << *first<< std::endl;
-                    // position--;
-                    //std::cout << *position << std::endl;
-                }
-                    //dest->insertElements(first, last);
+                --last;
+                while (last != NULL && last != first)
+                    splice(position, x, last--);
+                splice(position, x, first);
             }
             
             // ----- REMOVE ----- //
@@ -284,9 +275,29 @@ namespace ft
 
             // ----- MERGE ----- //
             
-            // void merge(List &x) {}
-            // template < class Compare >
-            // void merge(List &x, Compare comp) {}
+            void merge(List &x) {
+                iterator itx = x.begin();
+                iterator ity = this->begin();
+                while (itx != x.end())
+                {
+                    if (*itx < *ity || ity == this->end())
+                        splice(ity, x, itx++);
+                    else
+                        ity++;
+                }
+            }
+            template < class Compare >
+            void merge(List &x, Compare comp) {
+                iterator itx = x.begin();
+                iterator ity = this->begin();
+                while (itx != x.end())
+                {
+                    if (comp(*itx, *ity) || ity == this->end())
+                        splice(ity, x, itx++);
+                    else
+                        ity++;
+                }
+            }
 
             // ----- SORT ----- //
 
@@ -309,7 +320,6 @@ namespace ft
                 while (it != end())
                 {
                     iterator current = it++;
-                    std::cout << "*IT = " << *it << " || *CUR = " << *current << " --> COMP = " << comp(*it, *current) <<std::endl;
                     if (comp(*it, *current) && it != end())
                     {
                         dLList<T, Alloc> *elem = current.operator->();
@@ -336,7 +346,7 @@ namespace ft
             dLList<T, Alloc>    *myList;
             size_type           mySize;
             allocator_type      myAlloc;
-            // difference_type     myDiff;
+            difference_type     myDiff;
 
     };
 
@@ -369,7 +379,6 @@ namespace ft
         {
             for (typename List<T>::const_iterator it = list.begin(); size-- > 0; it++)
             {
-                // std::cout << std::endl;
                 out << *it;
                 if (size)
                     out << ", ";

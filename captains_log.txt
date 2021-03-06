@@ -23,13 +23,16 @@ Pourquoi on utilise un allocator ? Est ce que c'est juste parce que c'est comme 
         une meilleure raison ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 
+[6/03]
+J'AI FINI LIST !!! Et ca aura pris seulement... un mois. Du coup on se revoit fin juin pour push sans bonus !
+NEXT TIME : Reprendre STACK ou QUEUE, au choix (maintenant que j'ai ma LIST pour mettre dedans)
 [5/03]
 Le systeme de tete unique a 2 entrees marche tres bien. Il me reste plus que 3 fcts a ecrire. Et il faudrait un peu
-remanier le main : creer une chaine sur laquelle on pourrait montrer toutes les operations et reset les changement
-a chaque fois parce que la jpp de travailler avec des chaines de 2 elements en fin de tests
-NEXT TIME :     fix sort(comp);
-                merge(); merge(list, comp);
-                remanier le main
+remanier le main : creer une chaine sur laquelle on pourrait montrer toutes les operations et reset les changements
+a chaque fois parce que la jpp de travailler avec des chaines de 2 elements en fin de test
+NEXT TIME :     fix sort(comp);                 done
+                merge(); merge(list, comp);     done
+                remanier le main                done
 [1/03]
 Comme d'habitude je piétine, j'ai rassemble dLL et element parce que je me servais pas de l'intermediaire
 de toute facon. Du coup, il faut que je fasse en sorte que myList soit un truc constant avec next = first

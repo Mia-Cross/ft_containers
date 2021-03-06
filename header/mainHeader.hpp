@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   mainHeader.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/17 22:11:46 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/05 02:43:18 by lemarabe         ###   ########.fr       */
+/*   Created: 2021/02/17 22:31:19 by lemarabe          #+#    #+#             */
+/*   Updated: 2021/03/06 04:24:25 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mainHeader.hpp"
+#ifndef FT_CONTAINERS_H
+# define FT_CONTAINERS_H
 
-int main()
-{
-    testList();
-    // test();
-    // testMap();
-    // testQueue();
-    // testStack();
-    // testVector();
-}
+bool isOdd(int x);
+bool isDigit(int x);
+bool compareAbs(int x, int y);
+bool isNear(int x, int y);
+
+void testList();
+void testMap();
+void testQueue();
+void testStack();
+void testVector();
+
+void test();
+
+#endif

@@ -2,6 +2,7 @@ NAME = ft_containers
 
 CXX = clang++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
+SRCDIR =	mains
 SRCS = 	main.cpp \
 		testList.cpp \
 		# testThomas.cpp \
@@ -28,7 +29,7 @@ $(NAME) : $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(NAME) ${OBJS}
 	@echo Compiled $(NAME) successfully !
 
-$(OBJDIR)/%.o : %.cpp | $(OBJDIR)
+$(OBJDIR)/%.o : $(SRCDIR)/%.cpp | $(OBJDIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJDIR) :

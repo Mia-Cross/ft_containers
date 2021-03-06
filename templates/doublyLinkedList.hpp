@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/05 01:51:01 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 02:40:30 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,16 @@ class dLList
             to_add->head = this->head;
             to_add->next = this;
             to_add->prev = this->prev;
-            this->prev->next = to_add;
+            if (this->prev)
+                this->prev->next = to_add;
             this->prev = to_add;
         }
         void insertAfter(dLList *to_add) {
             to_add->head = this->head;
             to_add->prev = this;
             to_add->next = this->next;
-            this->next->prev = to_add;
+            if (this->next)
+                this->next->prev = to_add;
             this->next = to_add;
         }
         void extractElement() {
