@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/04 04:00:52 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/09 02:18:24 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MY_ITERATOR_H
 
 # include "doublyLinkedList.hpp"
-# include <iterator>
 # include <cstddef>
 
 template < typename T, class E >

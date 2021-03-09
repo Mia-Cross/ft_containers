@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 06:12:03 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 06:46:26 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define STACK_H
 
 # include "list.hpp"
-#include <memory>
-#include <iostream>
+# include <memory>
+# include <iostream>
 
 namespace ft
 {

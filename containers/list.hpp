@@ -6,17 +6,17 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 04:39:38 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 06:45:52 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define LIST_H
 
-#include "../templates/myIterator.hpp"
-#include "../templates/doublyLinkedList.hpp"
-#include <memory>
-#include <iostream>
+# include "../templates/myIterator.hpp"
+# include "../templates/doublyLinkedList.hpp"
+# include <memory>
+# include <iostream>
 
 namespace ft
 {

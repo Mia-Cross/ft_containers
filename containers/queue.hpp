@@ -6,16 +6,16 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 05:34:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/06 06:46:23 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef QUEUE_H
 # define QUEUE_H
 
-#include "list.hpp"
-#include <memory>
-#include <iostream>
+# include "list.hpp"
+# include <memory>
+# include <iostream>
 
 namespace ft
 {
