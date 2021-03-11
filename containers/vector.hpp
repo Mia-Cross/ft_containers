@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/09 05:28:29 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/11 23:27:12 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,29 @@ namespace ft
             typedef T *                                     pointer;
             typedef const T &	                            const_reference;
             typedef const T *	                            const_pointer;
-            typedef myIterator< T, dynArr<T,Alloc> >        iterator;
-            typedef myCIterator< T, dynArr<T,Alloc> >       const_iterator;
-            typedef myRIterator< T, dynArr<T,Alloc> >       reverse_iterator;
-            typedef myCRIterator< T, dynArr<T,Alloc> >      const_reverse_iterator;
+            typedef myAccessIterator<T>        iterator;
+            // typedef myCIterator< T, dynArr<T,Alloc> >       const_iterator;
+            // typedef myRIterator< T, dynArr<T,Alloc> >       reverse_iterator;
+            // typedef myCRIterator< T, dynArr<T,Alloc> >      const_reverse_iterator;
             typedef size_t                                  size_type;
             typedef ptrdiff_t                               difference_type;
 
             // DEFAULT CONSTRUCTOR
             explicit Vector(const allocator_type& alloc = allocator_type()) :
-                myVect(new dynArr<T, Alloc>), mySize(0), myAlloc(alloc)
+                myVect(), mySize(0), myAlloc(alloc)
             { }
             // CONSTRUCTOR BY FILLING
-            explicit Vector(size_type n, const value_type& val = value_type(),
+            explicit Vector(size_type n, const value_type &val = value_type(),
                 const allocator_type& alloc = allocator_type()) :
-                myVect(new dynArr<T, Alloc>), mySize(0), myAlloc(alloc)
+                myVect(n), mySize(n), myAlloc(alloc)
             {
-                while (mySize < n)
-                    push_back(val);
+                for (size_t i = 0; i < n; i++)
+                    myVect.addElement(val);
             }
             // CONSTRUCTOR BY RANGE
             Vector(iterator first, iterator last,
                 const allocator_type& alloc = allocator_type()) :
-                myVect(new dynArr<T, Alloc>), mySize(0), myAlloc(alloc)
+                myVect(), mySize(0), myAlloc(alloc)
             {
                 while (first != last)
                     push_back(*first++);
@@ -65,16 +65,15 @@ namespace ft
                 //     push_back(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Vector(const Vector &ref) : myVect(new dynArr<T, Alloc>(ref.mySize)),
+            Vector(const Vector &ref) : myVect(ref.mySize),
                 mySize(ref.mySize), myAlloc(ref.myAlloc)
             {
                 *this = ref;
             }
             // DESTRUCTOR
             ~Vector()
-            {
-                delete myVect;
-            }
+            { // delete myVect;
+             }
             // ASSIGNATION
             const Vector &operator=(const Vector &ref)
             {
@@ -96,16 +95,16 @@ namespace ft
 
             // ----- CAPACITY ----- //
             
-            // size_type size() const { return (mySize); }
-            // size_type max_size() const { return (myAlloc.max_size()); }
-            // void resize(size_type n, value_type val = value_type()) {
-            //     while (mySize < n)
-            //         this->push_back(val);
-            //     while (mySize > n)
-            //         this->pop_back();
-            // }
-            // size_type capacity() const {}
-            // bool empty() const { return (mySize == 0); }
+            size_type size() const { return (mySize); }
+            size_type max_size() const { return (myAlloc.max_size()); }
+            void resize(size_type n, value_type val = value_type()) {
+                while (mySize < n)
+                    this->push_back(val);
+                while (mySize > n)
+                    this->pop_back();
+            }
+            size_type capacity() const { return (myVect.getCapacity()); }
+            bool empty() const { return (mySize == 0); }
             // void reserve(size_type n) {}
             
             // ----- ELEMENT ACCESS ----- //
@@ -114,8 +113,16 @@ namespace ft
             // const_reference front() const { return (myVector->getFirst()->getContentRef()); }
             // reference back() { return (myVector->getLast()->getContentRef()); }
             // const_reference back() const { return (myVector->getLast()->getContentRef()); }
-            // reference operator[](size_type n);
-            // const_reference operator[] (size_type n) const;
+            reference operator[](size_type n) {
+                if (n < mySize)
+                    return (*(myVect + n));
+                return (myVect.throwNulRef());
+            }
+            const_reference operator[] (size_type n) const {
+                if (n < mySize)
+                    return (*(myVect + n));
+                return (myVect.throwNulRef());
+            }
             // reference at (size_type n);
             // const_reference at (size_type n) const;
             
@@ -130,15 +137,14 @@ namespace ft
             //         push_back(val);
             // }
             void push_back(const value_type &val) {
-                if (++mySize > myVect->getCapacity())
-                    myVect->reallocate(mySize);
-                // dLVector<T, Alloc> *elem = new dLVector<T, Alloc>(val);
-                myVect->addElement(val);
+                // std::cout << mySize << std::endl;
+                myVect.addElement(val);
+                mySize++;
             }
             void pop_back() {
+                // std::cout << mySize << std::endl;
                 if (mySize)
-                    myVect->deleteElement(mySize--);
-                // mySize--;
+                    myVect.deleteElement(--mySize);
             }
             // iterator insert(iterator position, const value_type &val) {
             //     dLVector<T, Alloc> *elem = myVector->getElement(position.operator->());
@@ -182,11 +188,11 @@ namespace ft
             // void clear() { resize(0); }
 
             // ADDITION ( ONLY FOR DISPLAY )
-            T *getDynArray() const { return (myVect->getArray()); }
+            T *getDynArray() const { return (myVect.getArray()); }
 
         private :
 
-            dynArr<T,Alloc> *myVect;
+            dynArr<T,Alloc> myVect;
             size_type       mySize;
             allocator_type  myAlloc;
             difference_type myDiff;
@@ -217,6 +223,7 @@ namespace ft
     template < typename T >
     std::ostream &operator<<(std::ostream &out, Vector<T> const &Vector) {
         T *arr = Vector.getDynArray();
+        // size_t size = 2;
         size_t size = Vector.size();
         out << "\t>> VECTOR [" << size << "]\t= { ";
         while (size-- > 0)
@@ -228,6 +235,6 @@ namespace ft
         out << " }" << std::endl;
         return (out);
     }
-}
+};
 
 #endif

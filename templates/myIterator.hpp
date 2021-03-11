@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:13 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/09 02:18:24 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/10 00:39:28 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MY_ITERATOR_H
 
 # include "doublyLinkedList.hpp"
+# include "dynamicArray.hpp"
 # include <cstddef>
 
 template < typename T, class E >
@@ -114,6 +115,61 @@ class myCRIterator : public virtual myCIterator<T, E>, public virtual myRIterato
          //----- OPERATORS :  'dereference' -----//
         const_reference_type  operator*() const { return (this->it->getContentRef()); }
         const_pointer_type    operator->() const { return (this->it->getContentPtr()); }
+};
+
+template < typename T >
+class myAccessIterator
+{
+    public :
+
+        typedef T               value_type;
+        typedef ptrdiff_t       difference_type;
+        typedef T *             pointer_type;
+        typedef T &             reference_type;
+        typedef dynArr<T> *     dynamic_array;
+
+        //----- CONSTRUCTORS & DESTRUCTORS -----//
+        myAccessIterator() {}
+        myAccessIterator(T *ptr) : it(ptr) {}
+        myAccessIterator(dynamic_array arr) : it(arr->getArray()) {}
+        myAccessIterator(const myAccessIterator &ref) : it(ref.it) {}
+        virtual ~myAccessIterator() {}
+
+        //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
+        myAccessIterator  &operator=(const myAccessIterator &ref) { this->it = ref.it; return (*this); }
+        bool        operator==(const myAccessIterator &ref) const { return (this->it == ref.it); }
+        bool        operator!=(const myAccessIterator &ref) const { return (this->it != ref.it); }
+        //----- OPERATORS :  'dereference' -----//
+        reference_type  operator*() const { return (*it); }
+        reference_type  operator[](difference_type n) const {
+            dynamic_array arr = it->getArray();
+            if (n < arr->size())
+                return (*(arr + n));
+            return (arr->throwNulRef());
+        }
+        // elem_ptr_type   operator->() const { return (this->it); }
+        //    getElemAddr() const { return (this->it); }
+        //----- OPERATORS : & 'incrementation''decrementation' -----//
+        myAccessIterator  &operator++() { this->it++; return (*this); }
+        myAccessIterator  operator++(int) { myAccessIterator tmp(*this); operator++(); return (tmp); }
+        myAccessIterator  &operator--() { this->it--; return (*this); }
+        myAccessIterator  operator--(int) { myAccessIterator tmp(*this); operator--(); return (tmp); }
+        myAccessIterator  &operator+(difference_type x) {
+            while (x--)
+                this->it++;
+            return (*this);
+        }
+        // myIterator  operator++(int) { myIterator tmp(*this); operator++(); return (tmp); }
+        myAccessIterator  &operator-(difference_type x) {
+            while (x--)
+                this->it--;
+            return (*this);
+        }
+        // myIterator  operator--(int) { myIterator tmp(*this); operator--(); return (tmp); }
+
+    protected :
+
+        T *it;
 };
 
 #endif
