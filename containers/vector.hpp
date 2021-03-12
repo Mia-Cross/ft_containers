@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/11 23:27:12 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/12 04:35:34 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@ namespace ft
         public :
 
             //defining every member in my Vector as in the STL
-            typedef T                                       value_type;
-            typedef Alloc                                   allocator_type;
-            typedef T &                                     reference;
-            typedef T *                                     pointer;
-            typedef const T &	                            const_reference;
-            typedef const T *	                            const_pointer;
-            typedef myAccessIterator<T>        iterator;
-            // typedef myCIterator< T, dynArr<T,Alloc> >       const_iterator;
-            // typedef myRIterator< T, dynArr<T,Alloc> >       reverse_iterator;
-            // typedef myCRIterator< T, dynArr<T,Alloc> >      const_reverse_iterator;
-            typedef size_t                                  size_type;
-            typedef ptrdiff_t                               difference_type;
+            typedef T                       value_type;
+            typedef Alloc                   allocator_type;
+            typedef T &                     reference;
+            typedef T *                     pointer;
+            typedef const T &	            const_reference;
+            typedef const T *	            const_pointer;
+            typedef myAccessIterator<T>     iterator;
+            typedef myCAccessIterator<T>    const_iterator;
+            typedef myRAccessIterator<T>    reverse_iterator;
+            typedef myCRAccessIterator<T>   const_reverse_iterator;
+            typedef size_t                  size_type;
+            typedef ptrdiff_t               difference_type;
 
             // DEFAULT CONSTRUCTOR
             explicit Vector(const allocator_type& alloc = allocator_type()) :
@@ -58,11 +58,6 @@ namespace ft
             {
                 while (first != last)
                     push_back(*first++);
-                // for (size_t size = 0 && iterator it = first; it != last; i++)
-                //     size++;
-                // myVect = new dynArr(size);
-                // while (first != last)
-                //     push_back(*first++);
             }
             // CONSTRUCTOR BY COPY
             Vector(const Vector &ref) : myVect(ref.mySize),
@@ -72,8 +67,7 @@ namespace ft
             }
             // DESTRUCTOR
             ~Vector()
-            { // delete myVect;
-             }
+            { }
             // ASSIGNATION
             const Vector &operator=(const Vector &ref)
             {
@@ -84,14 +78,14 @@ namespace ft
 
             // ----- ITERATORS ----- //
             
-            // iterator        begin() { return iterator(myVector->getFirst()); }
-            // iterator        end() { return iterator(myVector); }
-            // const_iterator  begin() const { return const_iterator(myVector->getFirst()); }
-            // const_iterator  end() const { return const_iterator(myVector); }
-            // reverse_iterator rbegin() { return reverse_iterator(myVector->getLast()); }
-            // reverse_iterator rend() { return reverse_iterator(myVector); }
-            // const_reverse_iterator rbegin() const { return const_reverse_iterator(myVector->getLast()); }
-            // const_reverse_iterator rend() const { return const_reverse_iterator(myVector); }
+            iterator        begin() { return iterator(myVect.getArray()); }
+            iterator        end() { return iterator(myVect.getArray() + mySize); }
+            const_iterator  begin() const { return const_iterator(myVect.getArray()); }
+            const_iterator  end() const { return const_iterator(myVect.getArray() + mySize); }
+            reverse_iterator rbegin() { return reverse_iterator(myVect.getArray() + mySize - 1); }
+            reverse_iterator rend() { return reverse_iterator(myVect.getArray() - 1); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(myVect.getArray() + mySize - 1); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(myVect.getArray() - 1); }
 
             // ----- CAPACITY ----- //
             
@@ -105,90 +99,115 @@ namespace ft
             }
             size_type capacity() const { return (myVect.getCapacity()); }
             bool empty() const { return (mySize == 0); }
-            // void reserve(size_type n) {}
+            void reserve(size_type n) {
+                if (capacity() < n)
+                    myVect.reallocateArray(n);
+            }
             
             // ----- ELEMENT ACCESS ----- //
             
-            // reference front() { return (myVector->getFirst()->getContentRef()); }
-            // const_reference front() const { return (myVector->getFirst()->getContentRef()); }
-            // reference back() { return (myVector->getLast()->getContentRef()); }
-            // const_reference back() const { return (myVector->getLast()->getContentRef()); }
-            reference operator[](size_type n) {
-                if (n < mySize)
-                    return (*(myVect + n));
+            reference front() {
+                if (mySize)
+                    return (*(myVect.getArray()));
                 return (myVect.throwNulRef());
+            }
+            const_reference front() const { 
+                 if (mySize)
+                    return (*(myVect.getArray()));
+                return (myVect.throwNulRef());
+            }
+            reference back() {
+                if (mySize)
+                    return (*(myVect.getArray() + mySize - 1));
+                return (myVect.throwNulRef());
+            }
+            const_reference back() const {
+                if (mySize)
+                    return (*(myVect.getArray() + mySize - 1));
+                return (myVect.throwNulRef());
+            }
+            reference operator[](size_type n) {
+                return (*(myVect.getArray() + n));
             }
             const_reference operator[] (size_type n) const {
+                return (*(myVect.getArray() + n));
+            }
+            reference at (size_type n) {
                 if (n < mySize)
-                    return (*(myVect + n));
+                    return (*(myVect.getArray() + n));
                 return (myVect.throwNulRef());
             }
-            // reference at (size_type n);
-            // const_reference at (size_type n) const;
+            const_reference at (size_type n) const {
+                if (n < mySize)
+                    return (*(myVect.getArray() + n));
+                return (myVect.throwNulRef());
+            }
             
             // ----- MODIFIERS ----- //
             
-            // void assign(iterator first, iterator last) {
-            //     while (first != last)
-            //         push_back(*first++);
-            // }
-            // void assign(size_type n, const value_type &val) {
-            //     while (mySize < n)
-            //         push_back(val);
-            // }
+            void assign(iterator first, iterator last) {
+                while (first != last)
+                    push_back(*first++);
+            }
+            void assign(size_type n, const value_type &val) {
+                while (mySize < n)
+                    push_back(val);
+            }
             void push_back(const value_type &val) {
-                // std::cout << mySize << std::endl;
                 myVect.addElement(val);
                 mySize++;
             }
             void pop_back() {
-                // std::cout << mySize << std::endl;
                 if (mySize)
                     myVect.deleteElement(--mySize);
             }
-            // iterator insert(iterator position, const value_type &val) {
-            //     dLVector<T, Alloc> *elem = myVector->getElement(position.operator->());
-            //     if (elem)
-            //     {
-            //         elem->insertBefore(new dLVector<T, Alloc>(val));
-            //         position--;
-            //         mySize++;
-            //     }
-            //     return (position);
-            // }
-            // void insert(iterator position, size_type n, const value_type &val) {
-            //     while (position != NULL && n--)
-            //         position = this->insert(position, val);
-            // }
-            // void insert(iterator position, iterator first, iterator last) {
-            //     while (position != NULL && last != NULL && last != first)
-            //         position = this->insert(position, *(--last));
-            // }
-            // iterator erase(iterator position) {
-            //     dLVector<T, Alloc> *elem = myVector->getElement(position.operator->());
-            //     if (elem && mySize)
-            //     {
-            //         position--;
-            //         elem->deleteElement();
-            //         mySize--;
-            //     }
-            //     return (position);
-            // }
-            // iterator erase(iterator first, iterator last) {
-            //     --last;
-            //     while (last != NULL && last != first)
-            //         last = this->erase(last);
-            //     return (last);
-            // }
-            // void swap(Vector &x) {
-            //     Vector tmp(x);
-            //     x = *this;
-            //     *this = tmp;
-            // }
-            // void clear() { resize(0); }
-
-            // ADDITION ( ONLY FOR DISPLAY )
-            T *getDynArray() const { return (myVect.getArray()); }
+            iterator insert(iterator position, const value_type &val) {
+                size_t index = position.distanceBetween(begin(), position);
+                if (capacity() <= mySize + 1)
+                    myVect.reallocateSplitArray(index, 1);
+                myVect.constructValue(index, val);
+                mySize++;
+                return (position);
+            }
+            void insert(iterator position, size_type n, const value_type &val) {
+                size_t index = position.distanceBetween(begin(), position);
+                if (capacity() <= mySize + n)
+                    myVect.reallocateSplitArray(index, n);
+                for (size_t i = 0; i < n; i++)
+                    myVect.constructValue(index + i, val);
+                mySize += n;
+            }
+            void insert(iterator position, iterator first, iterator last) {
+                size_t index = position.distanceBetween(begin(), position);
+                size_t dist = first.distanceBetween(first, last);
+                if (capacity() <= mySize + dist)
+                    myVect.reallocateSplitArray(index, dist);
+                while (index < mySize + dist && first != last)
+                    myVect.constructValue(index++, *first++);
+                mySize += dist;
+            }
+            iterator erase(iterator position) {
+                if (mySize)
+                {
+                    // std::cout << *position << "/";
+                    position--;
+                    // std::cout << *position << std::endl;
+                    myVect.deleteElement(position.distanceBetween(begin(), position + 1));
+                    mySize--;
+                }
+                return (position);
+            }
+            iterator erase(iterator first, iterator last) {
+                while (first != last)
+                    first = erase(first);
+                return (last);
+            }
+            void swap(Vector &x) {
+                Vector tmp(x);
+                x = *this;
+                *this = tmp;
+            }
+            void clear() { resize(0); }
 
         private :
 
@@ -221,14 +240,12 @@ namespace ft
     }
     
     template < typename T >
-    std::ostream &operator<<(std::ostream &out, Vector<T> const &Vector) {
-        T *arr = Vector.getDynArray();
-        // size_t size = 2;
-        size_t size = Vector.size();
+    std::ostream &operator<<(std::ostream &out, Vector<T> const &vect) {
+        size_t size = vect.size();
         out << "\t>> VECTOR [" << size << "]\t= { ";
-        while (size-- > 0)
+        for (typename Vector<T>::const_iterator it = vect.begin(); size-- > 0; it++)
         {
-            out << *arr++;
+            out << *it;
             if (size)
                 out << ", ";
         }

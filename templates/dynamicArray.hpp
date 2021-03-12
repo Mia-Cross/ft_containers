@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/11 23:30:13 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/12 04:17:04 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,31 @@ class dynArr {
 
         size_t  getCapacity() const { return (capacity); }
         size_t  getSize() const { return (size); }
-        const T &throwNulRef() const { return (nul); }
+        T &throwNulRef() const { return (const_cast<T&>(nul)); }
         T       *getArray() const { return (array);}
-        // T *getEnd() const {
-        //     if (size > 0)
-        //         return (array[size - 1]);
-        //     return (NULL);
-        // }
         
         void addElement(const T &value) {
-            if (capacity == size)
+            if (capacity <= size)
                 reallocateArray(capacity + 1);
             allocDA.construct(array + size++, value);
         }
+
+        void constructValue(size_t index, const T &value) {
+            allocDA.construct(array + index, value);
+        }
         
         void deleteElement(size_t n) {
-            if (n <= size - 1)
-                allocDA.destroy(this->array + n);
+            if (n >= size || !size)
+                return;
+            allocDA.destroy(array + n);
             size--;
+            while (n < size)
+            {
+                // std::cout << "n = " << n << " (size = " << size << ")" << std::endl;
+                // std::cout << "ELEM a deplacer = " << array[n + 1]<< std::endl;
+                array[n] = array[n + 1];
+                n++;
+            }
         }
 
         T *duplicateArray(size_t size, size_t capacity) {
@@ -85,14 +92,27 @@ class dynArr {
             this->capacity = n;
         }
 
+        T *duplicateSplitArray(size_t index, size_t length) {
+            T *dup = allocDA.allocate(this->capacity + length);
+            size_t j = 0;
+            for (size_t i = 0; i < index; i++)
+                allocDA.construct(dup + i, *(array + j++));
+            for (size_t i = index + length; i < capacity + length; i++)
+                allocDA.construct(dup + i, *(array + j++));
+            capacity += length;
+            size += length;
+            return (dup);
+        }
+        
+        void reallocateSplitArray(size_t index, size_t length) {
+            T *newArr = duplicateSplitArray(index, length);
+            allocDA.deallocate(this->array, this->capacity);
+            this->array = newArr;
+            // this->capacity = n;
+        }
 
+        
 
-        // size_t iteratorDistance(iterator begin, iterator end) {
-        //     size_t dist = 0;
-        //     while (begin++ != end)
-        //         dist++;
-        //     return (dist);
-        // }
 
 
     private :

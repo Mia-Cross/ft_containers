@@ -5,10 +5,11 @@ vector  random access
 queue   none            Single end -> first in, first out
 stack   none            Single end -> last in, first out
 
-TO-DO :
+DETAILS A REVOIR AVANT DE TERMINER :
 ---------
         Insert avec reverse_iterator ??
         Voir quelles securités sont superflues dans DLL
+        Je ferai mieux d'utiliser plus de polymorphisme dans mes fcts sur dynamic array
 
 QUESTIONS :
 --------------
@@ -16,6 +17,11 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 Est ce qu'il faut faire la specialisation vector<bool> ?
 
+[12/03]
+Sur VECTOR il reste plus que erase et swap (avec une liste vide) et on est bons. Ca segfault depuis que j'ai
+modifie deleteElement() donc il faut que je me penche dessus, et que je fasse aussi une fonction qui delete et
+decale plusieurs elements en meme temps.
+NEXT TIME : S'arranger pour ne pas perdre les iterateurs dans erase
 [10/03]
 Je m'embrouille entre les sizes selon depuis quelle fonction "mere" fait appel a une autre, du coup ca segfault.
 Faut revoir la gestion de la reallocation, ou les moments où la size est verifiée/incrementée
