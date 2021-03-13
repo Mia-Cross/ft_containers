@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/12 04:35:34 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/13 02:47:43 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,13 +159,14 @@ namespace ft
             }
             void pop_back() {
                 if (mySize)
-                    myVect.deleteElement(--mySize);
+                    myVect.deleteElements(--mySize, 1);
             }
             iterator insert(iterator position, const value_type &val) {
                 size_t index = position.distanceBetween(begin(), position);
                 if (capacity() <= mySize + 1)
                     myVect.reallocateSplitArray(index, 1);
                 myVect.constructValue(index, val);
+                myVect.incrementSize(1);
                 mySize++;
                 return (position);
             }
@@ -175,6 +176,7 @@ namespace ft
                     myVect.reallocateSplitArray(index, n);
                 for (size_t i = 0; i < n; i++)
                     myVect.constructValue(index + i, val);
+                myVect.incrementSize(n);
                 mySize += n;
             }
             void insert(iterator position, iterator first, iterator last) {
@@ -189,17 +191,16 @@ namespace ft
             iterator erase(iterator position) {
                 if (mySize)
                 {
-                    // std::cout << *position << "/";
-                    position--;
-                    // std::cout << *position << std::endl;
-                    myVect.deleteElement(position.distanceBetween(begin(), position + 1));
+                    iterator to_erase = position--;
+                    myVect.deleteElements(position.distanceBetween(begin(), to_erase), 1);
                     mySize--;
                 }
                 return (position);
             }
             iterator erase(iterator first, iterator last) {
-                while (first != last)
-                    first = erase(first);
+                size_t dist = first.distanceBetween(first, last);
+                myVect.deleteElements(first.distanceBetween(begin(), first), dist);
+                mySize -= dist;
                 return (last);
             }
             void swap(Vector &x) {

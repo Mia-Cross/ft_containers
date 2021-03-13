@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/12 04:17:04 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/13 02:47:53 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ template < typename T, class Alloc = std::allocator<T> >
 class dynArr {
     
     public :
-
-        // typedef myAccessIterator<T>  iterator;
 
         //create empty vector
         dynArr() : allocDA(Alloc()), capacity(1), size(0),
@@ -51,8 +49,9 @@ class dynArr {
 
         size_t  getCapacity() const { return (capacity); }
         size_t  getSize() const { return (size); }
-        T &throwNulRef() const { return (const_cast<T&>(nul)); }
-        T       *getArray() const { return (array);}
+        T       &throwNulRef() const { return (const_cast<T&>(nul)); }
+        T       *getArray() const { return (array); }
+        void    incrementSize(size_t n) { size += n; }
         
         void addElement(const T &value) {
             if (capacity <= size)
@@ -63,19 +62,15 @@ class dynArr {
         void constructValue(size_t index, const T &value) {
             allocDA.construct(array + index, value);
         }
-        
-        void deleteElement(size_t n) {
-            if (n >= size || !size)
+
+        void deleteElements(size_t index, size_t n) {
+            if (index >= size || !size)
                 return;
-            allocDA.destroy(array + n);
-            size--;
-            while (n < size)
-            {
-                // std::cout << "n = " << n << " (size = " << size << ")" << std::endl;
-                // std::cout << "ELEM a deplacer = " << array[n + 1]<< std::endl;
-                array[n] = array[n + 1];
-                n++;
-            }
+            for (size_t i = index; i < index + n; i++)
+                allocDA.destroy(array + i);
+            size -= n;
+            for (size_t i = index; i < size; i++)
+                array[i] = array[i + n];
         }
 
         T *duplicateArray(size_t size, size_t capacity) {
@@ -108,12 +103,7 @@ class dynArr {
             T *newArr = duplicateSplitArray(index, length);
             allocDA.deallocate(this->array, this->capacity);
             this->array = newArr;
-            // this->capacity = n;
         }
-
-        
-
-
 
     private :
     
