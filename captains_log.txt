@@ -11,6 +11,7 @@ DETAILS A REVOIR AVANT DE TERMINER :
         Voir quelles securités sont superflues dans DLL
         Je ferai mieux d'utiliser plus de polymorphisme dans mes fcts sur dynamic array
         Je fais quoi avec les difference_type ? ca sert a r mais c'est dans la stl domc hmmm.........
+        Faire des tests avec autre chose que des ints
 
 QUESTIONS :
 --------------
@@ -20,6 +21,11 @@ Est ce qu'il faut faire la specialisation vector<bool> ?
 
 [13/03]
 #vectorisoverparty !!
+Si je veux essayer de reutiliser le meme iterateur que pour LIST, il faut absolument que je passe par un
+objet intermediaire comme DLL, sinon je vais pas avoir les fonctions getNext/Prev. Mais avant de faire trop
+la ouf je vais lire la docu, histoire de voir si je vais dans le mur ou pas.
+NEXT TIME : tester les constructeurs par defaut et copie et essayer d'ajouter et visualiser le contenu,
+les iterateurs on verra plus tard.
 [12/03]
 Sur VECTOR il reste plus que erase et swap (avec une liste vide) et on est bons. Ca segfault depuis que j'ai
 modifie deleteElement() donc il faut que je me penche dessus, et que je fasse aussi une fonction qui delete et
