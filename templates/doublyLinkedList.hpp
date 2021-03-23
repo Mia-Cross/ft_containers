@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 02:18:45 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 02:44:10 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ class dLList
         dLList &operator=(const dLList &ref) {
             *this->content = *ref.content;
             this->head = ref.head;
-            this->last = ref.last;
             this->next = ref.next;
             this->prev = ref.prev;
             this->allocDLL = ref.allocDLL;

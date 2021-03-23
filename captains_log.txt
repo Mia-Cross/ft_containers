@@ -12,7 +12,8 @@ DETAILS A REVOIR AVANT DE TERMINER :
         Je ferai mieux d'utiliser plus de polymorphisme dans mes fcts sur dynamic array
         Je fais quoi avec les difference_type ? ca sert a r mais c'est dans la stl domc hmmm.........
         Faire des tests avec autre chose que des ints
-        Je pense que tous les fichiers de templates/ ne doivent pas avoir de default, retravailler VECTOR et DynArr
+        Voir si je peux enlever Alloc du template de vector vu que je m'en sers pas
+        typedef inutiles dans les iters ?
 
 QUESTIONS :
 --------------
@@ -20,6 +21,10 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 Est ce qu'il faut faire la specialisation vector<bool> ?
 
+[23/03]
+Je peux creer une map via le constructeur par defaut, maintenant faut se pencher sur l'iterateur et les inserts.
+Par contre je pige rien au coup du value_compare, je vois pas du tout a quel objet ca peut faire reference.
+NEXT TIME : inserer du contenu et afficher le contenu via iterateur et non le syteme D comme actuellement
 [13/03]
 #vectorisoverparty !!
 Si je veux essayer de reutiliser le meme iterateur que pour LIST, il faut absolument que je passe par un

@@ -6,27 +6,31 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 01:44:00 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 06:32:18 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../containers/map.hpp"
 #include <cstdlib>
 
-bool isOdd(int x) { return (x % 2 ? true : false); }
-bool isDigit(int x) { return (x < 10 && x > -1 ? true : false); }
-bool compareAbs(int x, int y){ return ( abs(x) < abs(y) ? true : false);}
-bool isNear(int x, int y) { return (abs(x - y) < 5); }
+// bool isOdd(int x) { return (x % 2 ? true : false); }
+// bool isDigit(int x) { return (x < 10 && x > -1 ? true : false); }
+// bool compareAbs(int x, int y){ return ( abs(x) < abs(y) ? true : false);}
+// bool isNear(int x, int y) { return (abs(x - y) < 5); }
 
 void testMap()
 {
-    std::cout << "            _\n";
-    std::cout << "|\\/|  /_\\  |_| \n";
-    std::cout << "|  | /   \\ | \n\n";
+    std::cout << "**       **       *       ********\n";
+    std::cout << "***     ***      ***      **     **\n";
+    std::cout << "****   ****     ** **     **      **\n";
+    std::cout << "** ** ** **    **   **    **     **\n";
+    std::cout << "**  ***  **   *********   *******\n";
+    std::cout << "**   *   **  **       **  **\n";
+    std::cout << "**       ** **         ** **\n\n";
 
     std::cout << "Creating Map A with content \n";
-    ft::Map<int, std::string> mapA;
-    // std::cout << mapA;
+    ft::Map<int, char> mapA;
+    std::cout << mapA;
     // std::cout << "Creating Map B with content (iterators) \n";
     // ft::Map<int, std::string> mapB; 
     // std::cout << mapB;
