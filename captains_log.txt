@@ -12,6 +12,7 @@ DETAILS A REVOIR AVANT DE TERMINER :
         Je ferai mieux d'utiliser plus de polymorphisme dans mes fcts sur dynamic array
         Je fais quoi avec les difference_type ? ca sert a r mais c'est dans la stl domc hmmm.........
         Faire des tests avec autre chose que des ints
+        Je pense que tous les fichiers de templates/ ne doivent pas avoir de default, retravailler VECTOR et DynArr
 
 QUESTIONS :
 --------------

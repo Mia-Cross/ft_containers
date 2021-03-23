@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/13 02:47:53 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:38:16 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ class dynArr {
         T       *array;
         const T nul;
 };
+
+
 
 
 #endif

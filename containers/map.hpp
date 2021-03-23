@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/13 03:58:48 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:34:33 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MAP_H
 
 # include "../templates/myIterator.hpp"
+# include "../templates/binarySearchTree.hpp"
 # include <functional>
 # include <iostream>
 # include <memory>
@@ -46,7 +47,7 @@ namespace ft
             // DEFAULT CONSTRUCTOR
             explicit Map(const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type()) : myAlloc(alloc),
-                myMap(myAlloc.allocate(1)), mySize(0), myComp(comp)
+                myMap(), mySize(0), myComp(comp)
             {}
             // CONSTRUCTOR BY RANGE
             // Map(iterator first, iterator last,
@@ -60,7 +61,7 @@ namespace ft
             ~Map()
             {}
             // ASSIGNATION
-            const Map &operator=(const Map &)
+            const Map &operator=(const Map &);
             {}
 
             // ----- ITERATORS ----- //
@@ -79,10 +80,13 @@ namespace ft
             size_type size() const { return (mySize); }
             size_type max_size() const { return (myAlloc.max_size()); }
 
+            value_compare value_comp() const;
+            key_compare key_comp() const { return (myComp); }
+
         private :
 
             allocator_type      myAlloc;
-            std::pair< Key, T > *myMap;
+            binTree             myMap;
             size_type           mySize;
             key_compare         myComp;
             difference_type     myDiff;
