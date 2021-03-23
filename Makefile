@@ -9,7 +9,7 @@ SRCS = 	main.cpp \
 		testStack.cpp \
 		testVector.cpp \
 		testMap.cpp
-		# testThomas.cpp \
+		# testThomas.cpp
 
 INCLUDES =	-I containers/
 OBJDIR =	.obj

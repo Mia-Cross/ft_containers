@@ -6,12 +6,11 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/13 03:59:15 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:44:00 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../containers/map.hpp"
-#include "../templates/myIterator.hpp"
 #include <cstdlib>
 
 bool isOdd(int x) { return (x % 2 ? true : false); }

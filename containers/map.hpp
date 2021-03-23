@@ -6,14 +6,13 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 01:34:33 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:53:15 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_H
 # define MAP_H
 
-# include "../templates/myIterator.hpp"
 # include "../templates/binarySearchTree.hpp"
 # include <functional>
 # include <iostream>
@@ -37,10 +36,10 @@ namespace ft
             typedef T *                                         pointer;
             typedef const T &	                                const_reference;
             typedef const T *	                                const_pointer;
-            typedef myIterator< T, Map<Key,T,Compare,Alloc> >   iterator;
-            typedef myCIterator< T,Map<Key,T,Compare,Alloc> >   const_iterator;
-            typedef myRIterator< T, Map<Key,T,Compare,Alloc> >  reverse_iterator;
-            typedef myCRIterator< T, Map<Key,T,Compare,Alloc> > const_reverse_iterator;
+            typedef listIter< T, Map<Key,T,Compare,Alloc> >   iterator;
+            typedef cListIter< T,Map<Key,T,Compare,Alloc> >   const_iterator;
+            typedef rListIter< T, Map<Key,T,Compare,Alloc> >  reverse_iterator;
+            typedef crListIter< T, Map<Key,T,Compare,Alloc> > const_reverse_iterator;
             typedef ptrdiff_t                                   difference_type;
             typedef size_t                                      size_type;
 

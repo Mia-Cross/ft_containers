@@ -6,14 +6,14 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/02/26 02:57:32 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:51:12 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define LIST_H
 
-#include "../utils/myIterator.hpp"
+#include "../utils/listIter.hpp"
 #include "../utils/doublyLinkedList-save.hpp"
 #include <memory>
 
@@ -31,10 +31,10 @@ namespace ft
             typedef T *                             pointer;
             typedef const T &	                    const_reference;
             typedef const T *	                    const_pointer;
-            typedef myIterator< T, dLList<T> >      iterator;
-            typedef myCIterator< T, dLList<T> >     const_iterator;
-            typedef myRIterator< T, dLList<T> >     reverse_iterator;
-            typedef myCRIterator< T, dLList<T> >    const_reverse_iterator;
+            typedef listIter< T, dLList<T> >      iterator;
+            typedef cListIter< T, dLList<T> >     const_iterator;
+            typedef rListIter< T, dLList<T> >     reverse_iterator;
+            typedef crListIter< T, dLList<T> >    const_reverse_iterator;
             typedef size_t                          size_type;
             typedef ptrdiff_t                       difference_type;
 

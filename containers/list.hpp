@@ -6,14 +6,13 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 06:45:52 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 02:21:05 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define LIST_H
 
-# include "../templates/myIterator.hpp"
 # include "../templates/doublyLinkedList.hpp"
 # include <memory>
 # include <iostream>
@@ -26,18 +25,18 @@ namespace ft
         public :
 
             //defining every member in my List as in the STL
-            typedef T                                       value_type;
-            typedef Alloc                                   allocator_type;
-            typedef T &                                     reference;
-            typedef T *                                     pointer;
-            typedef const T &	                            const_reference;
-            typedef const T *	                            const_pointer;
-            typedef myIterator< T, dLList<T,Alloc> >        iterator;
-            typedef myCIterator< T, dLList<T,Alloc> >       const_iterator;
-            typedef myRIterator< T, dLList<T,Alloc> >       reverse_iterator;
-            typedef myCRIterator< T, dLList<T,Alloc> >      const_reverse_iterator;
-            typedef size_t                                  size_type;
-            typedef ptrdiff_t                               difference_type;
+            typedef T                       value_type;
+            typedef Alloc                   allocator_type;
+            typedef T &                     reference;
+            typedef T *                     pointer;
+            typedef const T &	            const_reference;
+            typedef const T *	            const_pointer;
+            typedef listIter<T, Alloc>      iterator;
+            typedef cListIter<T, Alloc>     const_iterator;
+            typedef rListIter<T, Alloc>     reverse_iterator;
+            typedef crListIter<T, Alloc>    const_reverse_iterator;
+            typedef size_t                  size_type;
+            typedef ptrdiff_t               difference_type;
 
             // DEFAULT CONSTRUCTOR
             explicit List(const allocator_type& alloc = allocator_type()) :

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 01:24:26 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 01:58:19 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define BINARY_SEARCH_TREE_H
 
 # include <memory>
+# include <cstddef>
 # include <iostream>
 
 template < class Key, class T, class Compare, class Alloc >
@@ -126,8 +127,11 @@ class binTree
             next->extractElement();
             this->insertBefore(next);
         }
+};
 
-
+template < class Key, class T, class Compare, class Alloc >
+class bstIter {
+    
 };
 
 #endif

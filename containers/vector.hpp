@@ -6,14 +6,13 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/13 02:47:43 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/23 02:02:17 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_H
 # define VECTOR_H
 
-# include "../templates/myIterator.hpp"
 # include "../templates/dynamicArray.hpp"
 # include <memory>
 # include <iostream>
@@ -32,10 +31,10 @@ namespace ft
             typedef T *                     pointer;
             typedef const T &	            const_reference;
             typedef const T *	            const_pointer;
-            typedef myAccessIterator<T>     iterator;
-            typedef myCAccessIterator<T>    const_iterator;
-            typedef myRAccessIterator<T>    reverse_iterator;
-            typedef myCRAccessIterator<T>   const_reverse_iterator;
+            typedef vectIter<T,Alloc>     iterator;
+            typedef cVectIter<T,Alloc>    const_iterator;
+            typedef rVectIter<T,Alloc>    reverse_iterator;
+            typedef crVectIter<T,Alloc>   const_reverse_iterator;
             typedef size_t                  size_type;
             typedef ptrdiff_t               difference_type;
 
