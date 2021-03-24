@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 06:32:18 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/24 05:38:12 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ void testMap()
 
     std::cout << "Creating Map A with content \n";
     ft::Map<int, char> mapA;
+    mapA.insert(std::pair<int, char>(0, '&'));
+    std::cout << mapA[0];
+    std::cout << mapA;
+    mapA[0] = '$';
     std::cout << mapA;
     // std::cout << "Creating Map B with content (iterators) \n";
     // ft::Map<int, std::string> mapB; 

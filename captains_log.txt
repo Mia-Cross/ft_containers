@@ -21,6 +21,11 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 Est ce qu'il faut faire la specialisation vector<bool> ?
 
+[24/03]
+J'ai ecrit une fonction d'insert et l'operator[] dans l'espoir de pouvoir ajouter du contenu ou le visualiser
+au moins, j'ai meme fait l'iterateur simple et la surcharge operator<< mais il semblerait que j'aie une boucle
+infinie quelque part, on verra ca demain.
+NEXT TIME : debugger...
 [23/03]
 Je peux creer une map via le constructeur par defaut, maintenant faut se pencher sur l'iterateur et les inserts.
 Par contre je pige rien au coup du value_compare, je vois pas du tout a quel objet ca peut faire reference.
