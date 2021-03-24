@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/24 18:02:20 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:23:07 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ class binTree
         binTree(const Key key) : root(NULL), left(NULL), right(NULL), prev(NULL),
             comp(Compare()), allocBT(Alloc()) {
             // std::cout << "Key Constructor called" << std::endl;
-            pair_t *newKey = new pair_t(key, 42);
-            allocBT.construct(this->value, *newKey);
+            // pair_t *newKey = new pair_t(key, 42);
+            this->value = allocBT.allocate(1);
+            allocBT.construct(this->value, *(new pair_t(key, 42)));
         }
 
         ~binTree() {
@@ -82,7 +83,13 @@ class binTree
             allocBT.construct(this->value, *newKey);
         }
         binTree                 *getRoot() const { return (this->root); }
-        void setRoot(binTree *root) { this->root = root; }
+        void setRootSingle(binTree *newRoot) { this->root = newRoot; }
+        void setRootAll(binTree *newRoot) {
+            binTree *elem = getFarLeft();
+            while (elem != getFarRight())
+                elem->root = newRoot;
+            elem->root = newRoot;
+        }
         binTree                 *getPrev() const { return (this->prev); }
         binTree                 *getLeft() const { return (this->left); }
         binTree                 *getRight() const { return (this->right); }
@@ -145,17 +152,36 @@ class binTree
             }
         }
 
-        // void extractElement() {
-        //     this->left->right = this->right;
-        //     this->right->left = this->left;
-        //     this->root = NULL;
-        //     this->left = NULL;
-        //     this->right = NULL;
-        // }
-        // void deleteElement() {
-        //     this->extractElement();
-        //     delete this;
-        // }
+        void extractElement() {
+            if (this->left)
+            {
+                this->left->prev = this->prev;
+                this->prev->right = this->left;
+                if (this->right)
+                {
+                    this->right->prev = this->left;
+                    this->left->right = this->right;
+                }
+                if (this == root)
+                    setRootAll(this->left);
+            }
+            else if (this->right)
+            {
+                this->left->prev = this->prev;
+                this->prev->right = this->left;
+                if (this->right)
+                {
+                    this->right->prev = this->left;
+                    this->left->right = this->right;
+                }
+                if (this == root)
+                    setRootAll(this->right);
+            }
+        }
+        void deleteElement() {
+            this->extractElement();
+            delete this;
+        }
         // void swapPointers() {
         //     binTree *tmp = this->left;
         //     this->left = this->right;
@@ -233,7 +259,7 @@ class cBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
         cBSTIter  &operator=(const cBSTIter &ref) { this->it = ref.it; return (*this); }
         //----- OPERATORS :  'dereference' -----//
         const_reference_type       operator*() const { return (this->it->getValueRef()); }
-        const_pointer_type         operator->() const { return (this->it->getValuePtr()); }
+        elem_ptr_type         operator->() const { return (this->it); }
 };
 
 template < class Key, class T, class Compare, class Alloc >
@@ -281,7 +307,7 @@ class crBSTIter : public virtual cBSTIter<Key,T,Compare,Alloc>, public virtual r
 
         //----- OPERATORS :  'dereference' -----//
         const_reference_type  operator*() const { return (this->it->getValueRef()); }
-        const_pointer_type    operator->() const { return (this->it->getValuePtr()); }
+        elem_ptr_type         operator->() const { return (this->it); }
 };
 
 #endif

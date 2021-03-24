@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/24 17:49:57 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/24 19:25:38 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ namespace ft
             // DESTRUCTOR
             ~Map()
             {
-                delete myMap;
+                clear();
             }
             // ASSIGNATION
             const Map &operator=(const Map &)
@@ -91,7 +91,7 @@ namespace ft
             mapped_type& operator[] (const key_type &k) {
                 if (!mySize)
                 {
-                    myMap->setRoot(myMap);
+                    myMap->setRootSingle(myMap);
                     myMap->setValue(k);
                     mySize++;
                     return (myMap->getValueRef().second);
@@ -111,7 +111,7 @@ namespace ft
             {
                 if (!mySize)
                 {
-                    myMap->setRoot(myMap);
+                    myMap->setRootSingle(myMap);
                     myMap->setValue(val);
                     mySize++;
                     return (std::pair<iterator,bool>(iterator(myMap), true));
@@ -126,6 +126,24 @@ namespace ft
             }
             // iterator insert(iterator position, const value_type& val);
             // void insert(iterator first, iterator last);
+            
+            void erase(iterator position) {
+                if (mySize)
+                {
+                    binTree *to_del = position.operator->();
+                    to_del->deleteElement();
+                    mySize--;
+                }
+            }
+            // size_type erase(const key_type& k) {}
+            void erase(iterator first, iterator last) {
+                while (first != last)
+                    erase(first++);
+            }
+
+            void clear() {
+                erase(begin(), end());
+            }
 
             // ----- OBSERVERS ----- //
 
