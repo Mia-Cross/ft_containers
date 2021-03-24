@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/24 05:30:52 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/24 18:02:20 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <cstddef>
 
 # include <iostream>
+
 
 template < class Key, class T, class Compare, class Alloc >
 class binTree
@@ -29,20 +30,23 @@ class binTree
         binTree *prev;
         Compare comp;
         Alloc   allocBT;
+        // pair_t *value;
         std::pair<const Key, T> *value;
 
     public :
 
-        //create blank list
-        binTree() : root(this), left(this), right(this), prev(this),
+        typedef std::pair<const Key, T> pair_t;
+        //create element with no content
+        binTree() : root(NULL), left(NULL), right(NULL), prev(NULL),
         comp(Compare()), allocBT(Alloc()) {
-                // std::cout << "Constructor called" << std::endl;
+                // std::cout << "Default Constructor called" << std::endl;
                 this->value = allocBT.allocate(1);
             }
 
         // create new element with a pair of values
-        binTree(std::pair<const Key, T> value) : root(NULL), left(NULL),
+        binTree(pair_t value) : root(NULL), left(NULL),
             right(NULL), prev(NULL), comp(Compare()), allocBT(Alloc()) {
+            // std::cout << "Pair Constructor called" << std::endl;
             this->value = allocBT.allocate(1);
             allocBT.construct(this->value, value);
         }
@@ -50,7 +54,8 @@ class binTree
         // create new element with only a key
         binTree(const Key key) : root(NULL), left(NULL), right(NULL), prev(NULL),
             comp(Compare()), allocBT(Alloc()) {
-            std::pair<const Key, T> *newKey = new std::pair<const Key, T>(key, 42);
+            // std::cout << "Key Constructor called" << std::endl;
+            pair_t *newKey = new pair_t(key, 42);
             allocBT.construct(this->value, *newKey);
         }
 
@@ -71,19 +76,24 @@ class binTree
         }
 
         std::pair<const Key, T> &getValueRef() const { return (*this->value); }
+        void setValue(pair_t value) { allocBT.construct(this->value, value); }
+        void setValue(const Key key) {
+            pair_t *newKey = new pair_t(key, 42);
+            allocBT.construct(this->value, *newKey);
+        }
         binTree                 *getRoot() const { return (this->root); }
+        void setRoot(binTree *root) { this->root = root; }
         binTree                 *getPrev() const { return (this->prev); }
         binTree                 *getLeft() const { return (this->left); }
         binTree                 *getRight() const { return (this->right); }
-        binTree                 *getFarLeft() const {  //a ne lancer que depuis root !
-            binTree *farLeft = this->left;
-            std::cout << farLeft <<std::cout;
-            while (farLeft && farLeft->left != NULL)
+        binTree                 *getFarLeft() const {
+            binTree *farLeft = root;
+            while (farLeft && farLeft->left)
                 farLeft = farLeft->left;
             return (farLeft);
         }
-        binTree                 *getFarRight() const {  //a ne lancer que depuis root !
-            binTree *farRight = this->right;
+        binTree                 *getFarRight() const {
+            binTree *farRight = root;
             while (farRight && farRight->right != NULL)
                 farRight = farRight->right;
             return (farRight);
@@ -204,7 +214,6 @@ class bstIter
     protected :
 
         elem_ptr_type   it;
-        // key_compare     comp;
 };
 
 template < class Key, class T, class Compare, class Alloc >
@@ -218,7 +227,7 @@ class cBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
         
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         cBSTIter() : bstIter<Key,T,Compare,Alloc>() {}
-        cBSTIter(elem_ptr_type p) : bstIter<Key,T,Compare,Alloc>(p) {}
+        cBSTIter(elem_ptr_type p) : bstIter<Key,T,Compare,Alloc>(p) { }
         cBSTIter(const cBSTIter &ref) : bstIter<Key,T,Compare,Alloc>(ref.it) {}
         virtual ~cBSTIter() {}
         cBSTIter  &operator=(const cBSTIter &ref) { this->it = ref.it; return (*this); }
