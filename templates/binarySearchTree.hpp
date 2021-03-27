@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/24 19:23:07 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/27 02:44:13 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ class binTree
         //create element with no content
         binTree() : root(NULL), left(NULL), right(NULL), prev(NULL),
         comp(Compare()), allocBT(Alloc()) {
-                // std::cout << "Default Constructor called" << std::endl;
+                std::cout << "Default Constructor called -> " << this << std::endl;
                 this->value = allocBT.allocate(1);
             }
 
         // create new element with a pair of values
         binTree(pair_t value) : root(NULL), left(NULL),
             right(NULL), prev(NULL), comp(Compare()), allocBT(Alloc()) {
-            // std::cout << "Pair Constructor called" << std::endl;
+            std::cout << "Pair Constructor called -> " << this << std::endl;
             this->value = allocBT.allocate(1);
             allocBT.construct(this->value, value);
         }
@@ -54,7 +54,7 @@ class binTree
         // create new element with only a key
         binTree(const Key key) : root(NULL), left(NULL), right(NULL), prev(NULL),
             comp(Compare()), allocBT(Alloc()) {
-            // std::cout << "Key Constructor called" << std::endl;
+            std::cout << "Key Constructor called -> " << this << std::endl;
             // pair_t *newKey = new pair_t(key, 42);
             this->value = allocBT.allocate(1);
             allocBT.construct(this->value, *(new pair_t(key, 42)));
@@ -151,48 +151,60 @@ class binTree
                 }
             }
         }
+            
+                // std::cout << "this->left\t" << this->left << std::endl;
+                // std::cout << "this->prev\t" << this->prev << std::endl;
+                // std::cout << "this->left->prev\t" << this->left->prev << std::endl;
 
         void extractElement() {
-            if (this->left)
+            binTree *candidate;
+            if (this->right->left)
             {
-                this->left->prev = this->prev;
-                this->prev->right = this->left;
-                if (this->right)
-                {
-                    this->right->prev = this->left;
-                    this->left->right = this->right;
-                }
-                if (this == root)
-                    setRootAll(this->left);
+                candidate = this->right->left;
+                while (candidate->left)
+                    candidate = candidate->left;
             }
-            else if (this->right)
+            else
             {
-                this->left->prev = this->prev;
-                this->prev->right = this->left;
-                if (this->right)
-                {
-                    this->right->prev = this->left;
-                    this->left->right = this->right;
-                }
-                if (this == root)
-                    setRootAll(this->right);
+                candidate = this->left->right;
+                while (candidate->right)
+                    candidate = candidate->right;
             }
+            candidate->right = this->right;
+            candidate->left = this->left;
+            this->left->prev = candidate;
+            this->right->prev = candidate;
+            if (this == root)
+                setRootAll(candidate);
         }
+
+        void extractElement(binTree *child) {
+            child->prev = this->prev;
+            if (this->prev && this->prev->right == this)
+                this->prev->right = child;
+            else if (this->prev && this->prev->left == this)
+                this->prev->left = child;
+            if (this == root)
+                child->root = child;
+        }
+        
         void deleteElement() {
-            this->extractElement();
+            if (this->left && !this->right)
+                this->extractElement(this->left);
+            else if (this->right && !this->left)
+                this->extractElement(this->right);
+            else if (this->right && this->left)
+                this->extractElement();
+            else
+            {
+                if (this->prev && this == this->prev->right)
+                    this->prev->right = NULL;
+                else if (this->prev && this == this->prev->left)
+                    this->prev->left = NULL;
+            }
+            std::cout << "deleting this ->\t" << this << std::endl;
             delete this;
         }
-        // void swapPointers() {
-        //     binTree *tmp = this->left;
-        //     this->left = this->right;
-        //     this->right = tmp;
-        // }  //check si je veux virer
-        // void swapWithNext() {
-        //     binTree *left = this->left;
-        //     this->left = this->left->left;
-        //     left->extractElement();
-        //     this->insertBefore(left);
-        // }
 };
 
 template < class Key, class T, class Compare, class Alloc >

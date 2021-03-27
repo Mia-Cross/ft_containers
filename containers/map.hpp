@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/24 19:25:38 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/27 01:15:44 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,10 +138,15 @@ namespace ft
             // size_type erase(const key_type& k) {}
             void erase(iterator first, iterator last) {
                 while (first != last)
-                    erase(first++);
+                {
+                    iterator to_del = first++;
+                    erase(to_del);
+                }
             }
 
             void clear() {
+                // for (iterator it = begin(); it != end(); it++)
+                //     delete it.operator->();
                 erase(begin(), end());
             }
 
