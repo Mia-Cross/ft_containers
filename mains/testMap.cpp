@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/24 18:08:38 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/30 05:08:10 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,25 @@ void testMap()
     std::cout << "Creating Map A with content \n";
     ft::Map<int, char> mapA;
     std::cout << mapA;
-    mapA.insert(std::pair<int, char>(7, '&'));
-    std::cout << mapA[7] << std::endl;
+    mapA.insert(std::pair<int, char>(7, 's'));
+    std::cout << "map[7] = " << mapA[7] << std::endl;
     std::cout << mapA;
-    mapA[7] = '$';
-    std::cout << mapA[7] << std::endl;
+    mapA[7] = 'S';
+    std::cout << "map[7] = " << mapA[7] << std::endl;
     std::cout << mapA;
-    mapA[4] = '^';
-    std::cout << mapA[4] << std::endl;
+    mapA.insert(std::pair<int, char>(8, 'h'));
+    mapA.insert(std::pair<int, char>(9, 'n'));
+    std::cout << "map[8] = " << mapA[8] << std::endl;
+    std::cout << "map[9] = " << mapA[9] << std::endl;
     std::cout << mapA;
+    mapA[4] = 'q';
+    std::cout << "map[4] = " << mapA[4] << std::endl;
+    std::cout << "map[7] = " << mapA[7] << std::endl;
+    // std::cout << "ye" <<std::endl;
+    std::cout << mapA;
+    // std::cout << "yo" <<std::endl;
+
+    
     // std::cout << "Creating Map B with content (iterators) \n";
     // ft::Map<int, std::string> mapB; 
     // std::cout << mapB;

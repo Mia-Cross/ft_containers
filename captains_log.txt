@@ -21,6 +21,12 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 Est ce qu'il faut faire la specialisation vector<bool> ?
 
+[30/03]
+J'ai un peu tout chamboulé pour faire des fonctions inspirees du code source, plus courtes et plus propres,
+en recursif et tout ! Mais j'ai gros un souci avec insert qui ne set pas le child dans le parent ce qui fait
+que j'ai beau ajouter du contenu, je peux pas y acceder. Aussi l'operateur[]=newValue ne fonctionne pas, j'ai
+toujours le * du default :/
+NEXT TIME : debugger...
 [24/03]
 J'ai ecrit une fonction d'insert et l'operator[] dans l'espoir de pouvoir ajouter du contenu ou le visualiser
 au moins, j'ai meme fait l'iterateur simple et la surcharge operator<< mais il semblerait que j'aie une boucle

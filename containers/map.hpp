@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/27 01:15:44 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/03/30 04:56:37 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ namespace ft
 
             // ----- ITERATORS ----- //
             
-            iterator        begin() { return iterator(myMap->getFarLeft()); }
-            iterator        end() { return iterator(myMap->getFarRight()->getRight()); }
-            const_iterator  begin() const { return const_iterator(myMap->getFarLeft()); }
-            const_iterator  end() const { return const_iterator(myMap->getFarRight()->getRight()); }
+            iterator        begin() { return iterator(myMap->getMostLeft(myMap)); }
+            iterator        end() { return iterator(myMap->getMostRight(myMap)->getRight()); }
+            const_iterator  begin() const { return const_iterator(myMap->getMostLeft(myMap)); }
+            const_iterator  end() const { return const_iterator(myMap->getMostRight(myMap)->getRight()); }
             // reverse_iterator rbegin() { return reverse_iterator(myVect.getArray() + mySize - 1); }
             // reverse_iterator rend() { return reverse_iterator(myVect.getArray() - 1); }
             // const_reverse_iterator rbegin() const { return const_reverse_iterator(myVect.getArray() + mySize - 1); }
@@ -89,41 +89,53 @@ namespace ft
             // ----- ELEMENT ACCESS ----- //
 
             mapped_type& operator[] (const key_type &k) {
-                if (!mySize)
-                {
-                    myMap->setRootSingle(myMap);
-                    myMap->setValue(k);
-                    mySize++;
-                    return (myMap->getValueRef().second);
-                }
-                binTree *branch = myMap->getBranch(k);
-                if (branch->getValueRef().first == k)
-                    return (branch->getValueRef().second);
-                binTree *newBranch = new binTree(k);
-                myMap->insert(newBranch);
+                binTree *node = myMap->getNode(k, myMap->getRoot());
+                if (node)
+                    return (node->getValue());
+                // std::cout <<"pas trouve mon node donc je construis" << std::endl;
+                myMap->insert(myMap->getRoot(), k);
                 mySize++;
-                return (newBranch->getValueRef().second);
+                return (myMap->getValue());
+                // if (!mySize)
+                // {
+                //     myMap->setRootSingle(myMap);
+                //     myMap->setValue(k);
+                //     mySize++;
+                //     return (myMap->getValue().second);
+                // }
+                // binTree *branch = myMap->getBranch(k);
+                // if (branch->getValue().first == k)
+                //     return (branch->getValue().second);
+                // binTree *newBranch = new binTree(k, myMap);
+                // myMap->insert(newBranch);
+                // mySize++;
+                // return (newBranch->getValue().second);
             }
 
             // ----- MODIFIERS ----- //
 
             std::pair<iterator,bool> insert(const value_type& val)
             {
-                if (!mySize)
-                {
-                    myMap->setRootSingle(myMap);
-                    myMap->setValue(val);
-                    mySize++;
-                    return (std::pair<iterator,bool>(iterator(myMap), true));
-                }
-                binTree *branch = myMap->getBranch(val.first);
-                if (branch->getValueRef().first == val.first)
-                    return (std::pair<iterator,bool>(iterator(branch), false));
-                binTree *newBranch = new binTree(val);
-                myMap->insert(newBranch);
+                std::pair<binTree*,bool> ret = myMap->insert(myMap, val.first, const_cast<char &>(val.second));
                 mySize++;
-                return (std::pair<iterator,bool>(iterator(newBranch), true));
+                // std::cout << "ret.first = " <<ret.first << std::endl;
+                return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
+            //     if (!mySize)
+            //     {
+            //         myMap->setRootSingle(myMap);
+            //         myMap->setValue(val);
+            //         mySize++;
+            //         return (std::pair<iterator,bool>(iterator(myMap), true));
+            //     }
+            //     binTree *branch = myMap->getBranch(val.first);
+            //     if (branch->getValue().first == val.first)
+            //         return (std::pair<iterator,bool>(iterator(branch), false));
+            //     binTree *newBranch = new binTree(val);
+            //     myMap->insert(newBranch);
+            //     mySize++;
+            //     return (std::pair<iterator,bool>(iterator(newBranch), true));
             }
+
             // iterator insert(iterator position, const value_type& val);
             // void insert(iterator first, iterator last);
             
@@ -131,7 +143,7 @@ namespace ft
                 if (mySize)
                 {
                     binTree *to_del = position.operator->();
-                    to_del->deleteElement();
+                    myMap->deleteFromTree(to_del->getKey());
                     mySize--;
                 }
             }
@@ -157,7 +169,7 @@ namespace ft
 
             // ----- OPERATIONS ----- //
 
-            // binTree &getMap() const { return (const_cast<binTree &>(myMap)); }
+            binTree *getMapRoot() const { return (myMap->getRoot()); }
 
         private :
 
@@ -185,11 +197,16 @@ namespace ft
     std::ostream &operator<<(std::ostream &out, Map<Key,T,Compare,Alloc> const &map) {
         size_t size = map.size();
         out << "\t>> MAP [" << size << "]\t= { ";
+        const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
+        out << "ROOT->" << root;
+        if (root)
+            out << " = [" << root->getKey() << "] || ";
         for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
         {
             // std::cout << size << std::endl;
             std::pair<const Key, T> pair = *it;
-            // std::cout << "KEY to display = " << pair.first << std::endl;
+            // std::cout << "PAIR to display = " << &(*it) << std::endl;
+            // std::cout << "BINTREE to display = " << it->getNode() << std::endl;
             // std::cout << "\'" << pair.first << "-" << pair.second << "\'" << std::endl;
             out << "\'" << pair.first << "-" << pair.second << "\'";
             if (size)
