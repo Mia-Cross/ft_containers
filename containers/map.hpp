@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/30 04:56:37 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/01 03:45:00 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ namespace ft
                 binTree *node = myMap->getNode(k, myMap->getRoot());
                 if (node)
                     return (node->getValue());
-                // std::cout <<"pas trouve mon node donc je construis" << std::endl;
+                std::cout <<"pas trouve mon node donc je construis" << std::endl;
                 myMap->insert(myMap->getRoot(), k);
                 mySize++;
                 return (myMap->getValue());
@@ -117,8 +117,9 @@ namespace ft
             std::pair<iterator,bool> insert(const value_type& val)
             {
                 std::pair<binTree*,bool> ret = myMap->insert(myMap, val.first, const_cast<char &>(val.second));
+                // std::cout << "root left = " << myMap->getLeft() << std::endl;
+                // std::cout << "root right = " << myMap->getRight() << std::endl;
                 mySize++;
-                // std::cout << "ret.first = " <<ret.first << std::endl;
                 return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
             //     if (!mySize)
             //     {
@@ -200,7 +201,10 @@ namespace ft
         const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
         out << "ROOT->" << root;
         if (root)
-            out << " = [" << root->getKey() << "] || ";
+        {
+            out << " = [" << root->getKey() << "] [L=";
+            out << root->getLeft() << "] [R=" << root->getRight() << "] || ";
+        }
         for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
         {
             // std::cout << size << std::endl;
