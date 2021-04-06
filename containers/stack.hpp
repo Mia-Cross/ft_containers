@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 06:46:26 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/05 21:24:53 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,19 @@ namespace ft
 
             // CONSTRUCTOR BY CONTAINER TYPE
             explicit Stack(const container_type& ctnr = container_type()) :
-                container(ctnr) {}
+                container(ctnr)
+            { }
             // CONSTRUCTOR BY COPY
-            Stack(const Stack &ref) : container(ref.container) {}
+            Stack(const Stack &ref) : container(ref.container)
+            { }
             // DESTRUCTOR
-            ~Stack() {}
+            ~Stack()
+            { }
             // ASSIGNATION
-            const Stack &operator=(const Stack &ref) { container = ref.container; }
+            const Stack &operator=(const Stack &ref) {
+                container = ref.container;
+                return (*this);
+            }
 
             // MEMBER FUNCTIONS
             bool empty() const { return (container.empty()); }

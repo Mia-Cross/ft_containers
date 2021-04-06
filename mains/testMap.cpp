@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/01 03:42:25 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/06 01:20:20 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void testMap()
     std::cout << mapA;
     std::cout << "map[8] = " << mapA[8] << std::endl;
     std::cout << "map[9] = " << mapA[9] << std::endl;
-    std::cout << mapA;
     mapA[4] = 'q';
+    std::cout << mapA;
     std::cout << "map[4] = " << mapA[4] << std::endl;
     std::cout << "map[7] = " << mapA[7] << std::endl;
     mapA[7] = 'S';

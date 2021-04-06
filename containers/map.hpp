@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/01 03:45:00 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/06 02:29:15 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,10 @@ namespace ft
             // ----- ITERATORS ----- //
             
             iterator        begin() { return iterator(myMap->getMostLeft(myMap)); }
-            iterator        end() { return iterator(myMap->getMostRight(myMap)->getRight()); }
+            iterator        end() { return iterator(); }
+            // iterator        end() { return iterator(myMap->getMostRight(myMap)->getRight()); }
             const_iterator  begin() const { return const_iterator(myMap->getMostLeft(myMap)); }
-            const_iterator  end() const { return const_iterator(myMap->getMostRight(myMap)->getRight()); }
+            const_iterator  end() const { return const_iterator(); }
             // reverse_iterator rbegin() { return reverse_iterator(myVect.getArray() + mySize - 1); }
             // reverse_iterator rend() { return reverse_iterator(myVect.getArray() - 1); }
             // const_reverse_iterator rbegin() const { return const_reverse_iterator(myVect.getArray() + mySize - 1); }
@@ -93,9 +94,11 @@ namespace ft
                 if (node)
                     return (node->getValue());
                 std::cout <<"pas trouve mon node donc je construis" << std::endl;
-                myMap->insert(myMap->getRoot(), k);
+                std::pair<iterator,bool> ret = myMap->insert(myMap, k);
                 mySize++;
-                return (myMap->getValue());
+                node = ret.first.operator->();
+                // std::cout << node->getKey() << std::endl;
+                return (node->getValue());
                 // if (!mySize)
                 // {
                 //     myMap->setRootSingle(myMap);
@@ -198,19 +201,17 @@ namespace ft
     std::ostream &operator<<(std::ostream &out, Map<Key,T,Compare,Alloc> const &map) {
         size_t size = map.size();
         out << "\t>> MAP [" << size << "]\t= { ";
-        const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
-        out << "ROOT->" << root;
-        if (root)
-        {
-            out << " = [" << root->getKey() << "] [L=";
-            out << root->getLeft() << "] [R=" << root->getRight() << "] || ";
-        }
+        // const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
+        // out << "ROOT->" << root;
+        // if (root)
+        // {
+        //     out << " = [" << root->getKey() << "] [L=";
+        //     out << root->getLeft() << "] [R=" << root->getRight() << "] || ";
+        // }
         for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
         {
             // std::cout << size << std::endl;
             std::pair<const Key, T> pair = *it;
-            // std::cout << "PAIR to display = " << &(*it) << std::endl;
-            // std::cout << "BINTREE to display = " << it->getNode() << std::endl;
             // std::cout << "\'" << pair.first << "-" << pair.second << "\'" << std::endl;
             out << "\'" << pair.first << "-" << pair.second << "\'";
             if (size)

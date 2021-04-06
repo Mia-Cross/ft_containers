@@ -1,4 +1,103 @@
 
+size_t      getLevel() const {
+            size_t lvl = 0;
+            for (binTree *node = root; node && node != this; lvl++)
+            {
+                if (comp(node->getKey(), this->getKey()))
+                    node = node->right;
+                else
+                    node = node->left;
+            }
+            // std::cout << "LEVEL RETURNED = " << lvl << std::endl;
+            return (lvl);
+        }
+
+insert iteratif :
+    std::pair<binTree*,bool> insert(const Key &key, T &val) {
+if (!root)
+{
+    allocBT.construct(this->value, pair_t(key, val));
+    root = this;
+    return (std::pair<binTree*,bool>(root, true));
+}
+binTree *node = getNode(key, root);
+// std::cout << "node = " << node << std::endl;
+if (!node)
+{
+    node = new binTree(key, val, root);
+    setChildInParent(node, key);
+    // std::cout << "root du new elemnt = " << node->root << std::endl;
+    return (std::pair<binTree*,bool>(node, true));
+}
+if (key == node->getKey())
+{
+    node->value->second = val;
+    return (std::pair<binTree*,bool>(node, false));
+}
+}
+
+        void setChildInParent(binTree *child, const Key &key) {
+ if (comp(parent->getKey(), key))
+            {
+                if (parent->right)
+                    setChildInParent(parent->right, child, key);
+                parent->right = child;
+            }
+            else if (comp(key, parent->getKey()))
+            {
+                if (parent->left)
+                    setChildInParent(parent->left, child, key);
+                parent->left = child;
+            }
+            }
+
+        binTree     *getNextIter(size_t prevLevel) const {
+            if (!(right && left) || prevLevel > this->getLevel())
+            {
+                binTree *next = this->getParent();
+                while (comp(this->getKey(), next->getKey()))
+                    next = next->getParent();
+                return (next);
+            }
+            if (right)
+            {
+                std::cout << " hm " << std::endl;
+                return (right->getMostLeft(right));
+            }
+            else
+                return (NULL);
+                return (this->getParent());
+            if (prevLvl > this->getLevel())
+            {
+                if (comp(this->getKey(), this->getParent()->getKey()))
+                    return (this->getParent());
+                else
+                    return (this->getRight()->getMostLeft());
+            }
+            else
+            {
+                if (comp(this->getKey(), this->getParent()->getKey()))
+                    return (this->getParent());
+                else
+                    return (this->getRight()->getMostLeft());
+            }
+            else if comp(node->getParent()->getKey(), node->getKey()) && prevLvl < level)
+            size_t lvl = this->getLevel();
+            if (!lvl)
+                return (this->right);
+            binTree *parent = this->getParent();
+            if (this->right)
+                return (this->right);
+            if (comp(this->getKey(), parent->getKey()))
+                return (parent);
+            else
+                return (parent->right)
+            else if (this->right)
+                return (this->right);
+            else
+                return (NULL);
+        }
+
 void        setValue(T &val) { allocBT.construct(this->value, val); }
 void        setValue(pair_t value) { allocBT.construct(this->value, value); }
 void        setRootSingle(binTree *newRoot) { this->root = newRoot; }

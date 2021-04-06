@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 06:46:23 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/05 21:25:40 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,19 @@ namespace ft
 
             // CONSTRUCTOR BY CONTAINER TYPE
             explicit Queue(const container_type& ctnr = container_type()) :
-                container(ctnr) {}
+                container(ctnr)
+            { }
             // CONSTRUCTOR BY COPY
-            Queue(const Queue &ref) : container(ref.container) {}
+            Queue(const Queue &ref) : container(ref.container)
+            { }
             // DESTRUCTOR
-            ~Queue() {}
+            ~Queue()
+            { }
             // ASSIGNATION
-            const Queue &operator=(const Queue &ref) { container = ref.container; }
+            const Queue &operator=(const Queue &ref) { 
+                container = ref.container;
+                return (*this);
+            }
 
             // MEMBER FUNCTIONS
             bool empty() const { return (container.empty()); }

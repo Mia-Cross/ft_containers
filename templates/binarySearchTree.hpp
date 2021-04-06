@@ -6,14 +6,14 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/01 04:06:39 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/06 03:26:16 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BINARY_SEARCH_TREE_H
 # define BINARY_SEARCH_TREE_H
 
-# include "../containers/stack.hpp"
+# include "../containers/list.hpp"
 # include <memory>
 # include <cstddef>
 
@@ -84,18 +84,7 @@ class binTree
         pair_t      *getPair() const { return (this->value); }
         binTree     *getLeft() const { return (this->left); }
         binTree     *getRight() const { return (this->right); }
-        size_t      getLevel() const {
-            size_t lvl = 0;
-            for (binTree *node = root; node && node != this; lvl++)
-            {
-                if (comp(node->getKey(), this->getKey()))
-                    node = node->right;
-                else
-                    node = node->left;
-            }
-            std::cout << "LEVEL RETURNED = " << lvl << std::endl;
-            return (lvl);
-        }
+        
         binTree     *getMostRight(binTree *node) const {
             if (node && node->right)
                 return (getMostRight(node->right));
@@ -108,64 +97,22 @@ class binTree
         }
         binTree     *getParent() const {
             binTree *parent = root;
-            while (this != root && parent && parent->left && parent->left != this && parent->right && parent->right != this)
+            // std::cout << "GET PARENT de " << this << " (key = " << this->getKey();
+            while (parent && (parent->left || parent->right) && parent->left != this && parent->right != this)
             {
-                if (comp(parent->getKey(), this->getKey()))
+                if (comp(this->getKey(), parent->getKey()) && parent->left)
+                    parent = parent->left;
+                else if (comp(parent->getKey(), this->getKey()) && parent->right)
                     parent = parent->right;
                 else
-                    parent = parent->left;
+                    break;
             }
+            // std::cout << ") : parent = " << parent << " // key = " << parent->getKey() << std::endl;
             return (parent);
-        }
-        binTree     *getNextIter(size_t prevLevel) const {
-            if (!(right && left) || prevLevel > this->getLevel())
-            {
-                binTree *next = this->getParent();
-                while (comp(this->getKey(), next->getKey()))
-                    next = next->getParent();
-                return (next);
-            }
-            if (right)
-            {
-                std::cout << " hm " << std::endl;
-                return (right->getMostLeft(right));
-            }
-            else
-                return (NULL);
-            //     return (this->getParent());
-            // if (prevLvl > this->getLevel())
-            // {
-                // if (comp(this->getKey(), this->getParent()->getKey()))
-                //     return (this->getParent());
-                // else
-                //     return (this->getRight()->getMostLeft());
-            // }
-            // else
-            // {
-            //     if (comp(this->getKey(), this->getParent()->getKey()))
-            //         return (this->getParent());
-            //     else
-            //         return (this->getRight()->getMostLeft());
-            // }
-            // else if comp(node->getParent()->getKey(), node->getKey()) && prevLvl < level)
-            // size_t lvl = this->getLevel();
-            // if (!lvl)
-            //     return (this->right);
-            // binTree *parent = this->getParent();
-            // if (this->right)
-            //     return (this->right);
-            // if (comp(this->getKey(), parent->getKey()))
-            //     return (parent);
-            // else
-            //     return (parent->right)
-            // else if (this->right)
-            //     return (this->right);
-            // else
-            //     return (NULL);
         }
 
         binTree  *getNode(const Key &to_find, binTree *node) const {
-            std::cout << "GET NODE : node = " << node << " // key = " << node->getKey() << std::endl;
+            // std::cout << "GET NODE : node = " << node << " // key = " << node->getKey() << std::endl;
             if (!node || node->getKey() == to_find)
                 return (node);
             if (comp(to_find, node->getKey()))
@@ -175,17 +122,17 @@ class binTree
         }
 
         std::pair<binTree*,bool> insert(binTree *node, const Key &key, T &val) {
-            // std::cout << "node = " << node << std::endl;
             if (!root)
             {
                 allocBT.construct(this->value, pair_t(key, val));
                 root = this;
                 return (std::pair<binTree*,bool>(root, true));
             }
+            // std::cout << "node = " << node << std::endl;
             if (!node)
             {
                 node = new binTree(key, val, root);
-                setChildInParent(node, key);
+                node->setChildInParent(node, key);
                 // std::cout << "root du new elemnt = " << node->root << std::endl;
                 return (std::pair<binTree*,bool>(node, true));
             }
@@ -210,7 +157,7 @@ class binTree
             if (!node)
             {
                 node = new binTree(key, root);
-                setChildInParent(node, key);
+                node->setChildInParent(node, key);
                 // node->root = this;
                 return (std::pair<binTree*,bool>(node, true));
             }
@@ -222,22 +169,17 @@ class binTree
 
         void setChildInParent(binTree *child, const Key &key) {
             binTree *parent = this->getParent();
+            // std::cout << "SET CHILD IN PARENT = ";
             if (comp(parent->getKey(), key))
+            {
                 parent->right = child;
+                // std::cout << "parent (" << parent << ") -> right = " << child << std::endl;
+            }
             else
+            {
                 parent->left = child;
-            // if (comp(parent->getKey(), key))
-            // {
-            //     if (parent->right)
-            //         setChildInParent(parent->right, child, key);
-            //     parent->right = child;
-            // }
-            // else if (comp(key, parent->getKey()))
-            // {
-            //     if (parent->left)
-            //         setChildInParent(parent->left, child, key);
-            //     parent->left = child;
-            // }
+                // std::cout << "parent (" << parent << ") -> left = " << child << std::endl;
+            }
         }
 
         void replaceInParent(binTree *newChild) {
@@ -298,16 +240,31 @@ class bstIter
         typedef Alloc                           allocator_type;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
-        bstIter() : node(NULL), prevLvl(0) {}
-        bstIter(elem_ptr_type node) : node(node), prevLvl(0) { }
-        bstIter(const bstIter &ref) : node(ref.node), prevLvl(0) {}
+        bstIter() : node(NULL), tree() {}
+        bstIter(elem_ptr_type node) : node(node), tree() {
+            size_t nbLevels = 0;
+            for (elem_ptr_type curr = node->getRoot(); curr != NULL; curr = curr->getLeft())
+            {
+                tree.push_front(curr);
+                nbLevels++;
+            }
+            for (typename ft::List<elem_ptr_type>::iterator it = tree.begin(); nbLevels--; it++)
+            {
+                typename ft::List<elem_ptr_type>::iterator insert_it(it);
+                elem_ptr_type prev = *it;
+                for (elem_ptr_type curr = prev->getRight(); curr != NULL; curr = curr->getLeft())
+                // for (elem_ptr_type curr = *it->getRight(); curr != NULL; curr = curr->getLeft())
+                    insert_it = tree.insert(++insert_it, curr) ;
+                // std::cout << "insert it = " << *insert_it << std::endl;
+            }
+        }
+        bstIter(const bstIter &ref) : node(ref.node), tree(ref.tree) {}
         virtual ~bstIter() {}
 
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         bstIter  &operator=(const bstIter &ref) {
             this->node = ref.node;
-            // this->level = ref.level;
-            // this->prevLvl = ref.prevLvl;
+            this->tree = ref.tree;
             return (*this); }
         bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
         bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
@@ -317,22 +274,27 @@ class bstIter
         
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         bstIter  &operator++() {
+            // std::cout << "tree for incrementation " << tree;
             // std::cout << "node avant increment " << node << std::endl;
-            node = node->getNextIter(prevLvl);
+            typename ft::List<elem_ptr_type>::iterator it = tree.begin(); 
+            while (*it != node)
+                it++;
+            node = *(++it);
             // std::cout << "node apres increment " << node << std::endl;
-            prevLvl = node->getLevel();
             return (*this);
         }
         bstIter  operator++(int) { bstIter tmp(*this); operator++(); return (tmp); }
-        bstIter  &operator--() { this->node = this->node->getRight(); return (*this); }
+        bstIter  &operator--() {
+            return (*this); }
         bstIter  operator--(int) { bstIter tmp(*this); operator--(); return (tmp); }
 
     protected :
 
         elem_ptr_type   node;
+        ft::List<elem_ptr_type>    tree;
+        // ft::List<elem_ptr_type>    history;
         // size_t          level;
-        size_t   prevLvl;
-        // ft::Stack<elem_ptr_type>    stack;
+        // size_t   prevLvl;
         // pointer_type                it;
 };
 
