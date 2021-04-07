@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/06 03:26:16 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/07 03:51:47 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,14 @@ class binTree
         // create element with no content
         binTree() : root(NULL), left(NULL), right(NULL),
         comp(Compare()), allocBT(Alloc()) {
-                std::cout << "Default Constructor called -> " << this << std::endl;
+                // std::cout << "Default Constructor called -> " << this << std::endl;
                 this->value = allocBT.allocate(1);
             }
 
         // create new element with a pair of values
         binTree(const Key &key, T &val, binTree *root) : root(root), left(NULL),
             right(NULL), comp(Compare()), allocBT(Alloc()) {
-            std::cout << "Pair Constructor called -> " << this <<" ~ key=" << key << ",value=" << val << std::endl;
+            // std::cout << "Pair Constructor called -> " << this <<" ~ key=" << key << ",value=" << val << std::endl;
             this->value = allocBT.allocate(1);
             allocBT.construct(this->value, pair_t(key, val));
         }
@@ -54,7 +54,7 @@ class binTree
         // create new element with only a key
         binTree(const Key key, binTree *root) : root(root), left(NULL), right(NULL),
             comp(Compare()), allocBT(Alloc()) {
-            std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
+            // std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
             this->value = allocBT.allocate(1);
             allocBT.construct(this->value, pair_t(key, 42));
         }
@@ -119,6 +119,39 @@ class binTree
                 return (getNode(to_find, node->left));
             else
                 return (getNode(to_find, node->right));
+        }
+
+        binTree *getNextIter(const Key &key) const {
+            std::cout << "/ this = " << this->getKey();
+            if (this == root || (this->right && (comp(this->getKey(), key) || key == this->getKey()) ) )
+                return (getMostLeft(this->right));
+            binTree *parent = this->getParent();
+            if (comp(key, parent->getKey()) || parent == root)// && comp(parent->getKey(), this->getKey())) )
+                return (parent);
+            return (parent->getNextIter(key));
+            // if (comp(key, root->getKey())) // left side of the tree
+            // {
+            //     if (parent->right)
+            //         return (root);
+            //     // return (parent->getNextIter());
+            //     // while (parent != root && comp(parent->getKey(), this->getKey()))
+            //     //     parent = parent->getParent();
+            // }
+            // else if (comp(root->getKey(), key))     // right side of the tree
+            // {
+            //     if (parent == root)
+            //         return (this->right);
+            //     return (parent->getNextIter());
+            // }
+            // else
+            //     return (root->right);
+            
+            // while (parent != root && comp(parent->getKey(), this->getKey()))
+            //     parent = parent->getParent();
+            //     return (parent);
+            // if (parent->right)
+            //     return (getMostLeft(parent->right));
+            // return (parent->getParent()); // attention a pas tourner en boucle si on est root
         }
 
         std::pair<binTree*,bool> insert(binTree *node, const Key &key, T &val) {
@@ -242,21 +275,33 @@ class bstIter
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         bstIter() : node(NULL), tree() {}
         bstIter(elem_ptr_type node) : node(node), tree() {
-            size_t nbLevels = 0;
-            for (elem_ptr_type curr = node->getRoot(); curr != NULL; curr = curr->getLeft())
-            {
-                tree.push_front(curr);
-                nbLevels++;
-            }
-            for (typename ft::List<elem_ptr_type>::iterator it = tree.begin(); nbLevels--; it++)
-            {
-                typename ft::List<elem_ptr_type>::iterator insert_it(it);
-                elem_ptr_type prev = *it;
-                for (elem_ptr_type curr = prev->getRight(); curr != NULL; curr = curr->getLeft())
-                // for (elem_ptr_type curr = *it->getRight(); curr != NULL; curr = curr->getLeft())
-                    insert_it = tree.insert(++insert_it, curr) ;
-                // std::cout << "insert it = " << *insert_it << std::endl;
-            }
+            // size_t nbLevels = 0;
+            
+            // elem_ptr_type curr = node->getMostLeft(node->getRoot());
+            // elem_ptr_type end = node->getMostRight(node->getRoot());
+            // while (curr != end)
+            // {
+            //     tree.push_back(curr);
+            //     elem_ptr_type parent = curr->getParent();
+            //     if (parent != curr)
+            //     {
+            //         tree.push_back(parent);
+            //         curr = curr->getMostLeft(parent->getRight());
+            //     }
+            // }
+            // tree.push_back(end);
+            
+            // for (elem_ptr_type curr = node->getRoot(); curr != NULL; curr = curr->getLeft())
+            //     tree.push_front(curr);
+            // for (typename ft::List<elem_ptr_type>::iterator it = tree.begin(); it != tree.end(); it++)
+            // {
+            //     typename ft::List<elem_ptr_type>::iterator insert_it(it);
+            //     elem_ptr_type prev = *it; 
+            //     for (elem_ptr_type curr = prev->getRight(); curr != NULL; curr = curr->getLeft())
+            //     // for (elem_ptr_type curr = *it->getRight(); curr != NULL; curr = curr->getLeft())
+            //         insert_it = tree.insert(++insert_it, curr) ;
+            //     // std::cout << "insert it = " << *insert_it << std::endl;
+            // }
         }
         bstIter(const bstIter &ref) : node(ref.node), tree(ref.tree) {}
         virtual ~bstIter() {}
@@ -271,15 +316,18 @@ class bstIter
         //----- OPERATORS :  'dereference' -----//
         reference_type  operator*() const { return (*this->node->getPair()); }
         elem_ptr_type   operator->() const { return (this->node); }
+        elem_ptr_type   getNodeM() const { return (this->node); }
         
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         bstIter  &operator++() {
             // std::cout << "tree for incrementation " << tree;
             // std::cout << "node avant increment " << node << std::endl;
-            typename ft::List<elem_ptr_type>::iterator it = tree.begin(); 
-            while (*it != node)
-                it++;
-            node = *(++it);
+
+            this->node = this->node->getNextIter(operator*().first); //return (*this);
+            // typename ft::List<elem_ptr_type>::iterator it = tree.begin(); 
+            // while (*it != node)
+            //     it++;
+            // node = *(++it);
             // std::cout << "node apres increment " << node << std::endl;
             return (*this);
         }

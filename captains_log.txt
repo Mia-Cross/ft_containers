@@ -21,6 +21,9 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 Est ce qu'il faut faire la specialisation vector<bool> ?
 
+[07/04]
+J'etais en plein debug d'iterateur mais la j'ai vraiment trop mal sa race je dois m'arreter pour aujourd'hui.
+NEXT TIME : trouver la condition parfaite pour getNextIter() pour eviter qu'il fasse des aller-retours sur la meme branche.
 [06/04]
 J'ai a peu pres debuggé les soucis de la derniere fois, enfin j'ai surtout tout recommencé au niveau de l'iterateur : maintenant
 je transforme ma map en LIST dans l'ordre de l'iteration. Reste quelques details a regler mais c'est prometteur...

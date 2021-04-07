@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/06 02:29:15 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/07 03:49:17 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ namespace ft
                 binTree *node = myMap->getNode(k, myMap->getRoot());
                 if (node)
                     return (node->getValue());
-                std::cout <<"pas trouve mon node donc je construis" << std::endl;
+                // std::cout <<"pas trouve mon node donc je construis" << std::endl;
                 std::pair<iterator,bool> ret = myMap->insert(myMap, k);
                 mySize++;
                 node = ret.first.operator->();
@@ -122,7 +122,8 @@ namespace ft
                 std::pair<binTree*,bool> ret = myMap->insert(myMap, val.first, const_cast<char &>(val.second));
                 // std::cout << "root left = " << myMap->getLeft() << std::endl;
                 // std::cout << "root right = " << myMap->getRight() << std::endl;
-                mySize++;
+                if (ret.second)
+                    mySize++;
                 return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
             //     if (!mySize)
             //     {
@@ -200,7 +201,7 @@ namespace ft
     template < class Key, class T, class Compare, class Alloc >
     std::ostream &operator<<(std::ostream &out, Map<Key,T,Compare,Alloc> const &map) {
         size_t size = map.size();
-        out << "\t>> MAP [" << size << "]\t= { ";
+        out << "\t>> MAP {" << size << "}\t= { ";
         // const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
         // out << "ROOT->" << root;
         // if (root)
