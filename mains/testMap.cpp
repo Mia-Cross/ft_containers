@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/07 03:06:15 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 00:20:04 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,33 +69,37 @@ void testMap()
     // std::cout << "ye" <<std::endl;
     // std::cout << "yo" <<std::endl;
 
+    std::cout << "\n// ----- ITERATORS ----- //\n\n";
+
+    std::cout << "Displaying MapA with ITERATION :\t\t";
+    std::cout << mapA.begin() << mapA.end() << std::endl;
+    // for (ft::Map<int, char>::iterator it = mapA.begin(); it != mapA.end(); it++)
+    // {
+    //     std::pair<int, char> pair = *it;
+    //         std::cout << "[" << pair.first << "," << pair.second << "] ";
+    // }
     
-    // std::cout << "Creating Map B with content (iterators) \n";
-    // ft::Map<int, std::string> mapB; 
-    // std::cout << mapB;
-    // std::cout << "Creating Map C as a const copy of A\n";
-    // const ft::Map<int, std::string> mapC(mapA);
-    // std::cout << mapC;
-    // std::cout << "Creating Map D as a copy of B by assignation\n";
-    // ft::Map<int, std::string> mapD = mapB;
-    // std::cout << mapD;
-    // std::cout << "Creating Map E empty\n";
-    // ft::Map<int, std::string> mapE;
-    // std::cout << mapE;
+    std::cout << "Creating Map B with content (iterators) \n";
+    ft::Map<int, char> mapB; 
+    std::cout << mapB;
+    std::cout << "Creating Map C as a const copy of A\n";
+    const ft::Map<int, char> mapC(mapA);
+    std::cout << mapC;
+    std::cout << "Creating Map D as a copy of B by assignation\n";
+    ft::Map<int, char> mapD = mapB;
+    std::cout << mapD;
+    std::cout << "Creating Map E empty\n";
+    ft::Map<int, char> mapE;
+    std::cout << mapE;
 
-    // std::cout << "\n// ----- ITERATORS ----- //\n\n";
-
-    // std::cout << "Displaying MapA with ITERATION :\t\t";
-    // for (ft::Map<int, std::string>::iterator it = mapA.begin(); it != mapA.end(); it++)
-    //     std::cout << "[" << *it << "]";
     // std::cout << "\nDisplaying MapA with REVERSE ITERATION :\t";
-    // for (ft::Map<int, std::string>::reverse_iterator rit = mapA.rbegin(); rit != mapA.rend(); rit++)
+    // for (ft::Map<int, char>::reverse_iterator rit = mapA.rbegin(); rit != mapA.rend(); rit++)
     //     std::cout << "[" << *rit << "]";
     // std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
-    // for (ft::Map<int, std::string>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
+    // for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
     //     std::cout << "[" << *it << "]";
     // std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
-    // for (ft::Map<int, std::string>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
+    // for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
     //     std::cout << "[" << *rit << "]";
     // std::cout << std::endl;
     

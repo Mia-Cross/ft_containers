@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/07 03:49:17 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 00:14:42 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,13 @@ namespace ft
                 myMap(new binTree), mySize(0), myComp(comp)
             {}
             // CONSTRUCTOR BY RANGE
-            // Map(iterator first, iterator last,
-            //     const key_compare& comp = key_compare(),
-            //     const allocator_type& alloc = allocator_type())
-            // {}
+            Map(iterator first, iterator last, const key_compare& comp = key_compare(),
+                const allocator_type& alloc = allocator_type()) : myAlloc(alloc),
+                myMap(new binTree), mySize(0), myComp(comp)
+            {
+                while (first != last)
+                    insert(*first++);
+            }
             // CONSTRUCTOR BY COPY
             Map(const Map &ref)
             {
@@ -66,14 +69,20 @@ namespace ft
                 clear();
             }
             // ASSIGNATION
-            const Map &operator=(const Map &)
-            {}
+            const Map &operator=(const Map &ref)
+            {
+                if (mySize)
+                    clear();
+                *myMap = *ref.myMap;
+                for (iterator it = begin(); it != end(); it++)
+                    insert(*it);
+                return (*this);
+            }
 
             // ----- ITERATORS ----- //
             
             iterator        begin() { return iterator(myMap->getMostLeft(myMap)); }
             iterator        end() { return iterator(); }
-            // iterator        end() { return iterator(myMap->getMostRight(myMap)->getRight()); }
             const_iterator  begin() const { return const_iterator(myMap->getMostLeft(myMap)); }
             const_iterator  end() const { return const_iterator(); }
             // reverse_iterator rbegin() { return reverse_iterator(myVect.getArray() + mySize - 1); }
@@ -93,26 +102,10 @@ namespace ft
                 binTree *node = myMap->getNode(k, myMap->getRoot());
                 if (node)
                     return (node->getValue());
-                // std::cout <<"pas trouve mon node donc je construis" << std::endl;
                 std::pair<iterator,bool> ret = myMap->insert(myMap, k);
                 mySize++;
                 node = ret.first.operator->();
-                // std::cout << node->getKey() << std::endl;
                 return (node->getValue());
-                // if (!mySize)
-                // {
-                //     myMap->setRootSingle(myMap);
-                //     myMap->setValue(k);
-                //     mySize++;
-                //     return (myMap->getValue().second);
-                // }
-                // binTree *branch = myMap->getBranch(k);
-                // if (branch->getValue().first == k)
-                //     return (branch->getValue().second);
-                // binTree *newBranch = new binTree(k, myMap);
-                // myMap->insert(newBranch);
-                // mySize++;
-                // return (newBranch->getValue().second);
             }
 
             // ----- MODIFIERS ----- //
