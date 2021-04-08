@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 00:20:04 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 01:54:32 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,6 @@ void testMap()
     std::cout << "INSERT '7-S' : Return = \'" << ret.first.operator*().first << "-";
     std::cout << ret.first.operator*().second << "\'\t" << ret.second << std::endl;
     std::cout << mapA;
-    // std::cout << "map[8] = " << mapA[8] << std::endl;
-    // std::cout << "map[9] = " << mapA[9] << std::endl;
-    // std::cout << "map[7] = " << mapA[7] << std::endl;
-    // std::cout << "map[7] = " << mapA[7] << std::endl;
-    // std::cout << "map[4] = " << mapA[4] << std::endl;
     std::cout << "+ 4" << std::endl;
     mapA[4] = 'q';
     std::cout << mapA;
@@ -66,21 +61,8 @@ void testMap()
     std::cout << "+ 3" << std::endl;
     mapA[3] = 't';
     std::cout << mapA;
-    // std::cout << "ye" <<std::endl;
-    // std::cout << "yo" <<std::endl;
-
-    std::cout << "\n// ----- ITERATORS ----- //\n\n";
-
-    std::cout << "Displaying MapA with ITERATION :\t\t";
-    std::cout << mapA.begin() << mapA.end() << std::endl;
-    // for (ft::Map<int, char>::iterator it = mapA.begin(); it != mapA.end(); it++)
-    // {
-    //     std::pair<int, char> pair = *it;
-    //         std::cout << "[" << pair.first << "," << pair.second << "] ";
-    // }
-    
     std::cout << "Creating Map B with content (iterators) \n";
-    ft::Map<int, char> mapB; 
+    ft::Map<int, char> mapB(mapA.begin(), mapA.end()); 
     std::cout << mapB;
     std::cout << "Creating Map C as a const copy of A\n";
     const ft::Map<int, char> mapC(mapA);
@@ -92,57 +74,75 @@ void testMap()
     ft::Map<int, char> mapE;
     std::cout << mapE;
 
-    // std::cout << "\nDisplaying MapA with REVERSE ITERATION :\t";
-    // for (ft::Map<int, char>::reverse_iterator rit = mapA.rbegin(); rit != mapA.rend(); rit++)
-    //     std::cout << "[" << *rit << "]";
-    // std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
-    // for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
-    //     std::cout << "[" << *it << "]";
-    // std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
-    // for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
-    //     std::cout << "[" << *rit << "]";
-    // std::cout << std::endl;
-    
-    // std::cout << "\n// ----- CAPACITY ----- //\n\n";
-    
-    // std::cout << mapA;
-    // std::cout << "EMPTY (mapA) :\t" << mapA.empty() << std::endl;
-    // std::cout << mapE;
-    // std::cout << "EMPTY (mapE) :\t" << mapE.empty() << std::endl;
-    // std::cout << mapA;
-    // std::cout << "SIZE (mapA) :\t" << mapA.size() << std::endl;
-    // std::cout << mapB;
-    // std::cout << "SIZE (mapB) :\t" << mapB.size() << std::endl;
-    // std::cout << mapE;
-    // std::cout << "SIZE (mapE) :\t" << mapE.size() << std::endl;
-    // std::cout << "MAX_SIZE (mapA) :\t" << mapA.max_size() << std::endl;
-    // std::cout << "MAX_SIZE (mapE) :\t" << mapE.max_size() << std::endl;
+    std::cout << "\n// ----- ITERATORS ----- //\n\n";
 
-    // std::cout << "\n// ----- ELEMENT ACCESS ----- //\n\n";
+    std::cout << "Displaying MapA with ITERATION :\t\t";
+    for (ft::Map<int, char>::iterator it = mapA.begin(); it != mapA.end(); it++)
+    {
+        std::pair<int, char> pair = *it;
+            std::cout << "[" << pair.first << "," << pair.second << "] ";
+    }
+    std::cout << "\nDisplaying MapA with REVERSE ITERATION :\t";
+    for (ft::Map<int, char>::reverse_iterator rit = mapA.rbegin(); rit != mapA.rend(); rit++)
+    {
+        std::pair<int, char> pair = *rit;
+            std::cout << "[" << pair.first << "," << pair.second << "] ";
+    }
+    std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
+    for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
+    {
+        std::pair<int, char> pair = *it;
+            std::cout << "[" << pair.first << "," << pair.second << "] ";
+    }
+    std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
+    for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
+    {
+        std::pair<int, char> pair = *rit;
+            std::cout << "[" << pair.first << "," << pair.second << "] ";
+    }
+    std::cout << std::endl;
+    
+    std::cout << "\n// ----- CAPACITY ----- //\n\n";
+    
+    std::cout << mapA;
+    std::cout << "EMPTY (mapA) :\t" << mapA.empty() << std::endl;
+    std::cout << mapE;
+    std::cout << "EMPTY (mapE) :\t" << mapE.empty() << std::endl;
+    std::cout << mapA;
+    std::cout << "SIZE (mapA) :\t" << mapA.size() << std::endl;
+    std::cout << mapB;
+    std::cout << "SIZE (mapB) :\t" << mapB.size() << std::endl;
+    std::cout << mapE;
+    std::cout << "SIZE (mapE) :\t" << mapE.size() << std::endl;
+    std::cout << "MAX_SIZE (mapA) :\t" << mapA.max_size() << std::endl;
+    std::cout << "MAX_SIZE (mapE) :\t" << mapE.max_size() << std::endl;
 
-    // std::cout << mapA;
-    // std::cout << "FRONT :\t" << mapA.front() << std::endl;
-    // std::cout << "BACK :\t" << mapA.back() << std::endl;
-    // std::cout << mapB;
-    // std::cout << "FRONT :\t" << mapB.front() << std::endl;
-    // std::cout << "BACK :\t" << mapB.back() << std::endl;
-    // std::cout << mapE;
-    // std::cout << "FRONT :\t" << mapE.front() << std::endl;
-    // std::cout << "BACK :\t" << mapE.back() << std::endl;
-    // std::cout << mapC;
-    // std::cout << "FRONT :\t" << mapC.front() << " (const ref)" << std::endl;
+    std::cout << "\n// ----- ELEMENT ACCESS ----- //\n\n";
+
+    std::cout << "Adding content with operator[] :\n" << mapB;
+    mapB[27] = '$';
+    mapB[42] = '*';
+    mapB[11] = '?';
+    mapB[45] = '=';
+    mapB[30] = '+';
+    mapB[20] = '&';
+    std::cout << mapB;
+    std::cout << mapA;
+    std::cout << "mapA[8] = " << mapA[8] << std::endl;
+    std::cout << "mapA[7] = " << mapA[4] << std::endl;
+    std::cout << "mapA[45] = " << mapA[45] << std::endl; /// a voir si il faut regler ca 
+    std::cout << "mapB[45] = " << mapB[45] << std::endl;
     // const int &i = mapC.front();
     // //i++;                      //can't modify value
     // //int &i = mapC.front();   //can't bind to non const
     // (void)i;
-    // std::cout << "BACK :\t" << mapC.back() << " (const ref)" << std::endl;
-
-    // std::cout << "\n// ----- MODIFIERS ----- //\n\n";    
 
     //restoring maps from const copies
     // mapA = mapC;
     // mapB = mapD;
 
+    std::cout << "\n// ----- MODIFIERS ----- //\n\n";    
+    
     // std::cout << "\n/ - INSERT - /\n";
     // std::cout << mapA << mapB << mapE;
     // std::cout << "Placing an iterator at 3rd position of maps A & B, at begin() of map E\n";

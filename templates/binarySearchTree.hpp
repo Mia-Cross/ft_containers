@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 00:07:44 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 01:30:45 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,16 @@ class binTree
         
         // create element with no content
         binTree() : root(NULL), left(NULL), right(NULL),
-        comp(Compare()), allocBT(Alloc()) {
-                // std::cout << "Default Constructor called -> " << this << std::endl;
-                this->value = allocBT.allocate(1);
-            }
+            comp(Compare()), allocBT(Alloc())
+        {
+            // std::cout << "Default Constructor called -> " << this << std::endl;
+            this->value = allocBT.allocate(1);
+        }
 
         // create new element with a pair of values
         binTree(const Key &key, T &val, binTree *root) : root(root), left(NULL),
-            right(NULL), comp(Compare()), allocBT(Alloc()) {
+            right(NULL), comp(Compare()), allocBT(Alloc())
+        {
             // std::cout << "Pair Constructor called -> " << this <<" ~ key=" << key << ",value=" << val << std::endl;
             this->value = allocBT.allocate(1);
             allocBT.construct(this->value, pair_t(key, val));
@@ -53,17 +55,23 @@ class binTree
 
         // create new element with only a key
         binTree(const Key key, binTree *root) : root(root), left(NULL), right(NULL),
-            comp(Compare()), allocBT(Alloc()) {
+            comp(Compare()), allocBT(Alloc())
+        {
             // std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
             this->value = allocBT.allocate(1);
             allocBT.construct(this->value, pair_t(key, 42));
         }
 
+        binTree(const binTree &ref) : root(NULL), left(NULL), right(NULL),
+            comp(Compare()), allocBT(Alloc())
+        { 
+            this->value = allocBT.allocate(1);
+            allocBT.construct(this->value, *ref.value);
+        }
+        
         ~binTree() {
             allocBT.deallocate(this->value, 1);
         }
-        
-        binTree(const binTree &ref) { *this = ref; }
         
         binTree &operator=(const binTree &ref) {
             std::cout << "/!\\ WARNING : BST operator= called -> undefined behavior for now..." << std::endl;
@@ -125,6 +133,8 @@ class binTree
             // else if (comp(root->getKey(), key))     // right side of the tree
             
         binTree *getNextIter(const Key &key) const {
+            if (this == getMostRight(root))
+                return (NULL);
             if (this == root || (this->right && (comp(key, this->getKey()) || key == this->getKey()) ) )
                 return (getMostLeft(this->right));
             binTree *parent = this->getParent();
@@ -132,8 +142,19 @@ class binTree
                 return (parent);
             return (parent->getNextIter(key));
         }
+        
+        binTree *getPrevIter(const Key &key) const {
+            if (this == getMostLeft(root))
+                return (NULL);
+            if (this == root || (this->left && (comp(this->getKey(), key) || key == this->getKey()) ) )
+                return (getMostRight(this->left));
+            binTree *parent = this->getParent();
+            if (comp(parent->getKey(), key) || parent == root)
+                return (parent);
+            return (parent->getPrevIter(key));
+        }
 
-        std::pair<binTree*,bool> insert(binTree *node, const Key &key, T &val) {
+        std::pair<binTree*,bool> insertElement(binTree *node, const Key &key, T &val) {
             if (!root)
             {
                 allocBT.construct(this->value, pair_t(key, val));
@@ -152,12 +173,12 @@ class binTree
                 return (std::pair<binTree*,bool>(node, false));
             }
             if (comp(key, node->getKey()))
-                return (insert(node->left, key, val));
+                return (insertElement(node->left, key, val));
             else
-                return (insert(node->right, key, val));
+                return (insertElement(node->right, key, val));
         }
 
-        std::pair<binTree*,bool> insert(binTree *node, const Key &key) {
+        std::pair<binTree*,bool> insertElement(binTree *node, const Key &key) {
             if (!root)
             {
                 allocBT.construct(this->value, pair_t(key, 42));
@@ -171,9 +192,9 @@ class binTree
                 return (std::pair<binTree*,bool>(node, true));
             }
             if (comp(key, node->getKey()))
-                return (insert(node->left, key));
+                return (insertElement(node->left, key));
             else
-                return (insert(node->right, key));
+                return (insertElement(node->right, key));
         }
 
         void setChildInParent(binTree *child, const Key &key) {
@@ -264,13 +285,12 @@ class bstIter
         //----- OPERATORS :  'dereference' -----//
         reference_type  operator*() const { return (*this->node->getPair()); }
         elem_ptr_type   operator->() const { return (this->node); }
-        elem_ptr_type   getNodeM() const { return (this->node); }
+        // elem_ptr_type   getNodeM() const { return (this->node); }
         
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         bstIter  &operator++() { this->node = this->node->getNextIter(operator*().first); return (*this); }
         bstIter  operator++(int) { bstIter tmp(*this); operator++(); return (tmp); }
-        bstIter  &operator--() {
-            return (*this); }
+        bstIter  &operator--() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
         bstIter  operator--(int) { bstIter tmp(*this); operator--(); return (tmp); }
 
     protected :
@@ -304,6 +324,7 @@ class rBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
 {
     public :
         
+        typedef std::pair< const Key, T > &     reference_type;
         typedef binTree<Key,T,Compare,Alloc> *   elem_ptr_type;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
@@ -314,10 +335,14 @@ class rBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
         rBSTIter  &operator=(const rBSTIter &ref) { this->node = ref.node; return (*this); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
-        rBSTIter  &operator++() { this->node = this->node->getRight(); return (*this); }
+        rBSTIter  &operator++() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
         rBSTIter  operator++(int) { rBSTIter tmp(*this); operator++(); return (tmp); }
-        rBSTIter  &operator--() { this->node = this->node->getLeft(); return (*this); }
+        rBSTIter  &operator--() { this->node = this->node->getNextIter(operator*().first); return (*this); }
         rBSTIter  operator--(int) { rBSTIter tmp(*this); operator--(); return (tmp); }
+        
+        //----- OPERATORS :  'dereference' -----//
+        reference_type  operator*() const { return (*this->node->getPair()); }
+        elem_ptr_type   operator->() const { return (this->node); }
 };
 
 template < class Key, class T, class Compare, class Alloc >
@@ -337,13 +362,13 @@ class crBSTIter : public virtual cBSTIter<Key,T,Compare,Alloc>, public virtual r
         crBSTIter  &operator=(const crBSTIter &ref) { this->node = ref.node; return (*this); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
-        crBSTIter  &operator++() { this->node = this->node->getRight(); return (*this); }
+        crBSTIter  &operator++() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
         crBSTIter  operator++(int) { crBSTIter tmp(*this); operator++(); return (tmp); }
-        crBSTIter  &operator--() { this->node = this->node->getLeft(); return (*this);  }
+        crBSTIter  &operator--() { this->node = this->node->getNextIter(operator*().first); return (*this); }
         crBSTIter  operator--(int) { crBSTIter tmp(*this); operator--(); return (tmp); }
 
         //----- OPERATORS :  'dereference' -----//
-        const_reference_type    operator*() const { return (*this->it); }
+        const_reference_type    operator*() const { return (*this->node->getPair()); }
         elem_ptr_type           operator->() const { return (this->node); }
 };
 

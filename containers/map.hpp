@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 00:14:42 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 01:53:50 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ namespace ft
                     insert(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Map(const Map &ref)
+            Map(const Map &ref) : myAlloc(ref.myAlloc), myMap(new binTree(*ref.myMap)),
+                mySize(0), myComp(ref.myComp)
             {
                 *this = ref;
             }
@@ -73,8 +74,8 @@ namespace ft
             {
                 if (mySize)
                     clear();
-                *myMap = *ref.myMap;
-                for (iterator it = begin(); it != end(); it++)
+                // *myMap = *ref.myMap;
+                for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
                 return (*this);
             }
@@ -85,10 +86,10 @@ namespace ft
             iterator        end() { return iterator(); }
             const_iterator  begin() const { return const_iterator(myMap->getMostLeft(myMap)); }
             const_iterator  end() const { return const_iterator(); }
-            // reverse_iterator rbegin() { return reverse_iterator(myVect.getArray() + mySize - 1); }
-            // reverse_iterator rend() { return reverse_iterator(myVect.getArray() - 1); }
-            // const_reverse_iterator rbegin() const { return const_reverse_iterator(myVect.getArray() + mySize - 1); }
-            // const_reverse_iterator rend() const { return const_reverse_iterator(myVect.getArray() - 1); }
+            reverse_iterator rbegin() { return reverse_iterator(myMap->getMostRight(myMap)); }
+            reverse_iterator rend() { return reverse_iterator(); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(myMap->getMostRight(myMap)); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(); }
             
             // ----- CAPACITY ----- //
             
@@ -102,7 +103,7 @@ namespace ft
                 binTree *node = myMap->getNode(k, myMap->getRoot());
                 if (node)
                     return (node->getValue());
-                std::pair<iterator,bool> ret = myMap->insert(myMap, k);
+                std::pair<iterator,bool> ret = myMap->insertElement(myMap, k);
                 mySize++;
                 node = ret.first.operator->();
                 return (node->getValue());
@@ -112,26 +113,10 @@ namespace ft
 
             std::pair<iterator,bool> insert(const value_type& val)
             {
-                std::pair<binTree*,bool> ret = myMap->insert(myMap, val.first, const_cast<char &>(val.second));
-                // std::cout << "root left = " << myMap->getLeft() << std::endl;
-                // std::cout << "root right = " << myMap->getRight() << std::endl;
+                std::pair<binTree*,bool> ret = myMap->insertElement(myMap, val.first, const_cast<char &>(val.second));
                 if (ret.second)
                     mySize++;
                 return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
-            //     if (!mySize)
-            //     {
-            //         myMap->setRootSingle(myMap);
-            //         myMap->setValue(val);
-            //         mySize++;
-            //         return (std::pair<iterator,bool>(iterator(myMap), true));
-            //     }
-            //     binTree *branch = myMap->getBranch(val.first);
-            //     if (branch->getValue().first == val.first)
-            //         return (std::pair<iterator,bool>(iterator(branch), false));
-            //     binTree *newBranch = new binTree(val);
-            //     myMap->insert(newBranch);
-            //     mySize++;
-            //     return (std::pair<iterator,bool>(iterator(newBranch), true));
             }
 
             // iterator insert(iterator position, const value_type& val);
@@ -153,6 +138,10 @@ namespace ft
                     erase(to_del);
                 }
             }
+            
+            void swap(Map &x) {
+                (void)x;
+            }
 
             void clear() {
                 // for (iterator it = begin(); it != end(); it++)
@@ -167,7 +156,8 @@ namespace ft
 
             // ----- OPERATIONS ----- //
 
-            binTree *getMapRoot() const { return (myMap->getRoot()); }
+            
+            // binTree *getMapRoot() const { return (myMap->getRoot()); }
 
         private :
 
