@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 01:54:32 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 03:32:29 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,18 @@ void testMap()
     // std::cout << "Return = " << *it << mapA;
     // std::cout << "Return = " << *it2 << mapB;
     // std::cout << "Return = " << *it3 << mapE;
+
+    std::cout << "\n/ - SWAP - /\n";
+    std::cout << "Before :\tmap A -> " << &mapA << mapA << "\t\tmap B -> " << &mapB << mapB;
+    mapA.swap(mapB);
+    std::cout << "After :\t\tmap A -> " << &mapA << mapA << "\t\tmap B -> " << &mapB << mapB;
+    std::cout << "Before :\tmap A -> " << &mapA << mapA << "\t\tmap E -> " << &mapE << mapE;
+    mapA.swap(mapE);
+    std::cout << "After :\t\tmap A -> " << &mapA << mapA << "\t\tmap E -> " << &mapE << mapE;
+    //restoring maps from const copies
+    mapA = mapC;
+    mapB = mapD;
+    mapE.clear();
     
     // std::cout << "\n/ - CLEAR - /\n";
     // mapA.clear();

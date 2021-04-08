@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 02:02:17 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 04:30:58 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,27 @@ namespace ft
 
             // DEFAULT CONSTRUCTOR
             explicit Vector(const allocator_type& alloc = allocator_type()) :
-                myVect(), mySize(0), myAlloc(alloc)
+                _array(), _size(0), _alloc(alloc)
             { }
             // CONSTRUCTOR BY FILLING
             explicit Vector(size_type n, const value_type &val = value_type(),
                 const allocator_type& alloc = allocator_type()) :
-                myVect(n), mySize(n), myAlloc(alloc)
+                _array(n), _size(n), _alloc(alloc)
             {
                 for (size_t i = 0; i < n; i++)
-                    myVect.addElement(val);
+                    _array.addElement(val);
             }
             // CONSTRUCTOR BY RANGE
             Vector(iterator first, iterator last,
                 const allocator_type& alloc = allocator_type()) :
-                myVect(), mySize(0), myAlloc(alloc)
+                _array(), _size(0), _alloc(alloc)
             {
                 while (first != last)
                     push_back(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Vector(const Vector &ref) : myVect(ref.mySize),
-                mySize(ref.mySize), myAlloc(ref.myAlloc)
+            Vector(const Vector &ref) : _array(ref._size),
+                _size(ref._size), _alloc(ref._alloc)
             {
                 *this = ref;
             }
@@ -70,76 +70,76 @@ namespace ft
             // ASSIGNATION
             const Vector &operator=(const Vector &ref)
             {
-                this->myVect = ref.myVect;
-                this->mySize = ref.mySize;
+                this->_array = ref._array;
+                this->_size = ref._size;
                 return (*this);
             }
 
             // ----- ITERATORS ----- //
             
-            iterator        begin() { return iterator(myVect.getArray()); }
-            iterator        end() { return iterator(myVect.getArray() + mySize); }
-            const_iterator  begin() const { return const_iterator(myVect.getArray()); }
-            const_iterator  end() const { return const_iterator(myVect.getArray() + mySize); }
-            reverse_iterator rbegin() { return reverse_iterator(myVect.getArray() + mySize - 1); }
-            reverse_iterator rend() { return reverse_iterator(myVect.getArray() - 1); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(myVect.getArray() + mySize - 1); }
-            const_reverse_iterator rend() const { return const_reverse_iterator(myVect.getArray() - 1); }
+            iterator        begin() { return iterator(_array.getArray()); }
+            iterator        end() { return iterator(_array.getArray() + _size); }
+            const_iterator  begin() const { return const_iterator(_array.getArray()); }
+            const_iterator  end() const { return const_iterator(_array.getArray() + _size); }
+            reverse_iterator rbegin() { return reverse_iterator(_array.getArray() + _size - 1); }
+            reverse_iterator rend() { return reverse_iterator(_array.getArray() - 1); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(_array.getArray() + _size - 1); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(_array.getArray() - 1); }
 
             // ----- CAPACITY ----- //
             
-            size_type size() const { return (mySize); }
-            size_type max_size() const { return (myAlloc.max_size()); }
+            size_type size() const { return (_size); }
+            size_type max_size() const { return (_alloc.max_size()); }
             void resize(size_type n, value_type val = value_type()) {
-                while (mySize < n)
+                while (_size < n)
                     this->push_back(val);
-                while (mySize > n)
+                while (_size > n)
                     this->pop_back();
             }
-            size_type capacity() const { return (myVect.getCapacity()); }
-            bool empty() const { return (mySize == 0); }
+            size_type capacity() const { return (_array.getCapacity()); }
+            bool empty() const { return (_size == 0); }
             void reserve(size_type n) {
                 if (capacity() < n)
-                    myVect.reallocateArray(n);
+                    _array.reallocateArray(n);
             }
             
             // ----- ELEMENT ACCESS ----- //
             
             reference front() {
-                if (mySize)
-                    return (*(myVect.getArray()));
-                return (myVect.throwNulRef());
+                if (_size)
+                    return (*(_array.getArray()));
+                return (_array.throwNulRef());
             }
             const_reference front() const { 
-                 if (mySize)
-                    return (*(myVect.getArray()));
-                return (myVect.throwNulRef());
+                 if (_size)
+                    return (*(_array.getArray()));
+                return (_array.throwNulRef());
             }
             reference back() {
-                if (mySize)
-                    return (*(myVect.getArray() + mySize - 1));
-                return (myVect.throwNulRef());
+                if (_size)
+                    return (*(_array.getArray() + _size - 1));
+                return (_array.throwNulRef());
             }
             const_reference back() const {
-                if (mySize)
-                    return (*(myVect.getArray() + mySize - 1));
-                return (myVect.throwNulRef());
+                if (_size)
+                    return (*(_array.getArray() + _size - 1));
+                return (_array.throwNulRef());
             }
             reference operator[](size_type n) {
-                return (*(myVect.getArray() + n));
+                return (*(_array.getArray() + n));
             }
             const_reference operator[] (size_type n) const {
-                return (*(myVect.getArray() + n));
+                return (*(_array.getArray() + n));
             }
             reference at (size_type n) {
-                if (n < mySize)
-                    return (*(myVect.getArray() + n));
-                return (myVect.throwNulRef());
+                if (n < _size)
+                    return (*(_array.getArray() + n));
+                return (_array.throwNulRef());
             }
             const_reference at (size_type n) const {
-                if (n < mySize)
-                    return (*(myVect.getArray() + n));
-                return (myVect.throwNulRef());
+                if (n < _size)
+                    return (*(_array.getArray() + n));
+                return (_array.throwNulRef());
             }
             
             // ----- MODIFIERS ----- //
@@ -149,57 +149,57 @@ namespace ft
                     push_back(*first++);
             }
             void assign(size_type n, const value_type &val) {
-                while (mySize < n)
+                while (_size < n)
                     push_back(val);
             }
             void push_back(const value_type &val) {
-                myVect.addElement(val);
-                mySize++;
+                _array.addElement(val);
+                _size++;
             }
             void pop_back() {
-                if (mySize)
-                    myVect.deleteElements(--mySize, 1);
+                if (_size)
+                    _array.deleteElements(--_size, 1);
             }
             iterator insert(iterator position, const value_type &val) {
                 size_t index = position.distanceBetween(begin(), position);
-                if (capacity() <= mySize + 1)
-                    myVect.reallocateSplitArray(index, 1);
-                myVect.constructValue(index, val);
-                myVect.incrementSize(1);
-                mySize++;
+                if (capacity() <= _size + 1)
+                    _array.reallocateSplitArray(index, 1);
+                _array.constructValue(index, val);
+                _array.incrementSize(1);
+                _size++;
                 return (position);
             }
             void insert(iterator position, size_type n, const value_type &val) {
                 size_t index = position.distanceBetween(begin(), position);
-                if (capacity() <= mySize + n)
-                    myVect.reallocateSplitArray(index, n);
+                if (capacity() <= _size + n)
+                    _array.reallocateSplitArray(index, n);
                 for (size_t i = 0; i < n; i++)
-                    myVect.constructValue(index + i, val);
-                myVect.incrementSize(n);
-                mySize += n;
+                    _array.constructValue(index + i, val);
+                _array.incrementSize(n);
+                _size += n;
             }
             void insert(iterator position, iterator first, iterator last) {
                 size_t index = position.distanceBetween(begin(), position);
                 size_t dist = first.distanceBetween(first, last);
-                if (capacity() <= mySize + dist)
-                    myVect.reallocateSplitArray(index, dist);
-                while (index < mySize + dist && first != last)
-                    myVect.constructValue(index++, *first++);
-                mySize += dist;
+                if (capacity() <= _size + dist)
+                    _array.reallocateSplitArray(index, dist);
+                while (index < _size + dist && first != last)
+                    _array.constructValue(index++, *first++);
+                _size += dist;
             }
             iterator erase(iterator position) {
-                if (mySize)
+                if (_size)
                 {
                     iterator to_erase = position--;
-                    myVect.deleteElements(position.distanceBetween(begin(), to_erase), 1);
-                    mySize--;
+                    _array.deleteElements(position.distanceBetween(begin(), to_erase), 1);
+                    _size--;
                 }
                 return (position);
             }
             iterator erase(iterator first, iterator last) {
                 size_t dist = first.distanceBetween(first, last);
-                myVect.deleteElements(first.distanceBetween(begin(), first), dist);
-                mySize -= dist;
+                _array.deleteElements(first.distanceBetween(begin(), first), dist);
+                _size -= dist;
                 return (last);
             }
             void swap(Vector &x) {
@@ -211,10 +211,10 @@ namespace ft
 
         private :
 
-            dynArr<T,Alloc> myVect;
-            size_type       mySize;
-            allocator_type  myAlloc;
-            difference_type myDiff;
+            dynArr<T,Alloc> _array;
+            size_type       _size;
+            allocator_type  _alloc;
+            difference_type _diff;
 
     };
 

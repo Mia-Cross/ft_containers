@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/05 21:25:40 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 04:32:59 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,36 +31,36 @@ namespace ft
 
             // CONSTRUCTOR BY CONTAINER TYPE
             explicit Queue(const container_type& ctnr = container_type()) :
-                container(ctnr)
+                _container(ctnr)
             { }
             // CONSTRUCTOR BY COPY
-            Queue(const Queue &ref) : container(ref.container)
+            Queue(const Queue &ref) : _container(ref._container)
             { }
             // DESTRUCTOR
             ~Queue()
             { }
             // ASSIGNATION
             const Queue &operator=(const Queue &ref) { 
-                container = ref.container;
+                _container = ref._container;
                 return (*this);
             }
 
             // MEMBER FUNCTIONS
-            bool empty() const { return (container.empty()); }
-            size_type size() const { return (container.size()); }
-            value_type &front() { return (container.front()); }
-            const value_type &front() const { return (container.front()); }
-            value_type &back() { return (container.back()); }
-            const value_type &back() const { return (container.back()); }
-            void push(const value_type &val) { container.push_back(val); }
-            void pop() { container.pop_back(); }
+            bool empty() const { return (_container.empty()); }
+            size_type size() const { return (_container.size()); }
+            value_type &front() { return (_container.front()); }
+            const value_type &front() const { return (_container.front()); }
+            value_type &back() { return (_container.back()); }
+            const value_type &back() const { return (_container.back()); }
+            void push(const value_type &val) { _container.push_back(val); }
+            void pop() { _container.pop_back(); }
             
             // ADDITION ( ONLY FOR DISPLAY )
-            C &getContainer() const { return (const_cast<C&>(container)); }
+            C &getContainer() const { return (const_cast<C&>(_container)); }
 
         private :
 
-            container_type  container;
+            container_type  _container;
 
     };
 

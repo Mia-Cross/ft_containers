@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 01:51:12 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 04:29:56 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ namespace ft
             dLList<T, Alloc>    *myList;
             allocator_type      myAlloc;
             size_type           mySize;
-            difference_type     myDiff;
+            difference_type     _diff;
 
     };
 

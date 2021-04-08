@@ -21,6 +21,13 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 Est ce qu'il faut faire la specialisation vector<bool> ?
 
+[08/04]
+Enorme avancée aujourd'hui, ca fait plaisir putain ! J'ai terminé les iterateurs (end, decrementation et reverse), j'ai fait les
+autres constructeurs et l'operateur = du coup j'en suis aux modifiers, sachant que insert() est deja parfaite, erase() me parait
+pas mal mais j'ai 2 leaks (mais plus de double free de root), reste les polymorphes. Ensuite swap() c'est ok, et j'ai massivement
+renommé mes variables sur tout le projet.
+NEXT TIME :     terminer les modifiers
+                ou attaquer les operations, jviens de check ca a l'air eazyyy avec ce que j'ai deja fait)
 [07/04]
 J'etais en plein debug d'iterateur mais la j'ai vraiment trop mal sa race je dois m'arreter pour aujourd'hui.
 NEXT TIME : trouver la condition parfaite pour getNextIter() pour eviter qu'il fasse des aller-retours sur la meme branche.

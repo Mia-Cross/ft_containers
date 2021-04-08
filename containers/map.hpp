@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 01:53:50 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/08 04:52:03 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,20 @@ namespace ft
 
             // DEFAULT CONSTRUCTOR
             explicit Map(const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()) : myAlloc(alloc),
-                myMap(new binTree), mySize(0), myComp(comp)
+                const allocator_type& alloc = allocator_type()) : _alloc(alloc),
+                _tree(new binTree), _size(0), _comp(comp)
             {}
             // CONSTRUCTOR BY RANGE
             Map(iterator first, iterator last, const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()) : myAlloc(alloc),
-                myMap(new binTree), mySize(0), myComp(comp)
+                const allocator_type& alloc = allocator_type()) : _alloc(alloc),
+                _tree(new binTree), _size(0), _comp(comp)
             {
                 while (first != last)
                     insert(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Map(const Map &ref) : myAlloc(ref.myAlloc), myMap(new binTree(*ref.myMap)),
-                mySize(0), myComp(ref.myComp)
+            Map(const Map &ref) : _alloc(ref._alloc), _tree(new binTree(*ref._tree)),
+                _size(0), _comp(ref._comp)
             {
                 *this = ref;
             }
@@ -68,13 +68,14 @@ namespace ft
             ~Map()
             {
                 clear();
+                delete _tree;
             }
             // ASSIGNATION
             const Map &operator=(const Map &ref)
             {
-                if (mySize)
+                if (_size)
                     clear();
-                // *myMap = *ref.myMap;
+                // *_tree = *ref._tree;
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
                 return (*this);
@@ -82,29 +83,29 @@ namespace ft
 
             // ----- ITERATORS ----- //
             
-            iterator        begin() { return iterator(myMap->getMostLeft(myMap)); }
+            iterator        begin() { return iterator(_tree->getMostLeft(_tree)); }
             iterator        end() { return iterator(); }
-            const_iterator  begin() const { return const_iterator(myMap->getMostLeft(myMap)); }
+            const_iterator  begin() const { return const_iterator(_tree->getMostLeft(_tree)); }
             const_iterator  end() const { return const_iterator(); }
-            reverse_iterator rbegin() { return reverse_iterator(myMap->getMostRight(myMap)); }
+            reverse_iterator rbegin() { return reverse_iterator(_tree->getMostRight(_tree)); }
             reverse_iterator rend() { return reverse_iterator(); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(myMap->getMostRight(myMap)); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->getMostRight(_tree)); }
             const_reverse_iterator rend() const { return const_reverse_iterator(); }
             
             // ----- CAPACITY ----- //
             
-            bool empty() const { return (mySize == 0); }
-            size_type size() const { return (mySize); }
-            size_type max_size() const { return (myAlloc.max_size()); }
+            bool empty() const { return (_size == 0); }
+            size_type size() const { return (_size); }
+            size_type max_size() const { return (_alloc.max_size()); }
 
             // ----- ELEMENT ACCESS ----- //
 
             mapped_type& operator[] (const key_type &k) {
-                binTree *node = myMap->getNode(k, myMap->getRoot());
+                binTree *node = _tree->getNode(k, _tree->getRoot());
                 if (node)
                     return (node->getValue());
-                std::pair<iterator,bool> ret = myMap->insertElement(myMap, k);
-                mySize++;
+                std::pair<iterator,bool> ret = _tree->insertElement(_tree, k);
+                _size++;
                 node = ret.first.operator->();
                 return (node->getValue());
             }
@@ -113,9 +114,9 @@ namespace ft
 
             std::pair<iterator,bool> insert(const value_type& val)
             {
-                std::pair<binTree*,bool> ret = myMap->insertElement(myMap, val.first, const_cast<char &>(val.second));
+                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, val.first, const_cast<char &>(val.second));
                 if (ret.second)
-                    mySize++;
+                    _size++;
                 return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
             }
 
@@ -123,11 +124,11 @@ namespace ft
             // void insert(iterator first, iterator last);
             
             void erase(iterator position) {
-                if (mySize)
+                if (_size)
                 {
                     binTree *to_del = position.operator->();
-                    myMap->deleteFromTree(to_del->getKey());
-                    mySize--;
+                    _tree->deleteFromTree(to_del->getKey());
+                    _size--;
                 }
             }
             // size_type erase(const key_type& k) {}
@@ -140,7 +141,12 @@ namespace ft
             }
             
             void swap(Map &x) {
-                (void)x;
+                binTree *tmp = x._tree;
+                size_t tmpSize = x._size;
+                x._tree = this->_tree;
+                x._size = this->_size;
+                this->_tree = tmp;
+                this->_size = tmpSize;
             }
 
             void clear() {
@@ -152,20 +158,28 @@ namespace ft
             // ----- OBSERVERS ----- //
 
             // value_compare value_comp() const;
-            key_compare key_comp() const { return (myComp); }
+            key_compare key_comp() const { return (_comp); }
 
             // ----- OPERATIONS ----- //
 
-            
-            // binTree *getMapRoot() const { return (myMap->getRoot()); }
+            iterator        find (const key_type& k);
+            const_iterator  find (const key_type& k) const;
+            size_type       count (const key_type& k) const;
+            iterator        lower_bound (const key_type& k);
+            const_iterator  lower_bound (const key_type& k) const;
+            iterator        upper_bound (const key_type& k);
+            const_iterator  upper_bound (const key_type& k) const;
+            std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
+            std::pair<iterator,iterator>             equal_range (const key_type& k);
+            // binTree *getMapRoot() const { return (_tree->getRoot()); }
 
         private :
 
-            allocator_type  myAlloc;
-            binTree         *myMap;
-            size_type       mySize;
-            key_compare     myComp;
-            difference_type myDiff;
+            allocator_type  _alloc;
+            binTree         *_tree;
+            size_type       _size;
+            key_compare     _comp;
+            difference_type _diff;
     };
     
     template < class Key, class T, class Compare, class Alloc >

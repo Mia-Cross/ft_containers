@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   binarySearchTree.hpp                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
+/*   Updated: 2021/04/08 04:00:49 by lemarabe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef BINARY_SEARCH_TREE_H
 # define BINARY_SEARCH_TREE_H
 
@@ -50,7 +62,7 @@ class binTree
             allocBT.construct(this->value, pair_t(key, 42));
         }
 
-        binTree(const binTree &ref) : root(NULL), left(NULL), right(NULL),
+        binTree(const binTree &ref) : root(this), left(ref.left), right(ref.right),
             comp(Compare()), allocBT(Alloc())
         { 
             this->value = allocBT.allocate(1);
@@ -62,18 +74,16 @@ class binTree
         }
         
         binTree &operator=(const binTree &ref) {
-            std::cout << "/!\\ WARNING : BST operator= called -> undefined behavior for now..." << std::endl;
+            // std::cout << "/!\\ WARNING : BST operator= called -> undefined behavior for now..." << std::endl;
             allocBT.destroy(this->value);
             allocBT.construct(this->value, *ref.value);
-            // *this->value = ref.value;
             // this->root = ref.root;
-            // this->left = ref.left;
-            // this->right = ref.right;
-            // this->comp = ref.comp;
-            // this->allocBT = ref.allocBT;
+            this->left = ref.left;
+            this->right = ref.right;
             return (*this);
         }
 
+        void        setRoot(binTree *root) { this->root = root; }
         binTree     *getRoot() const { return (this->root); }
         const Key   &getKey() const { return (this->value->first); }
         T           &getValue() const { return (this->value->second); }
@@ -237,9 +247,15 @@ class binTree
                 this->replaceInParent(this->right);
             else
                 this->replaceInParent(NULL);  // This node has no children
-            if (this != root)
-                delete this;
+            delete this;
         }
+
+        // void swapElements(binTree *node) {
+        //     binTree tmp(*node);
+        //     *node = *this;
+        //     *this = tmp;
+        //     this->root = this;
+        // }
 
 };
 
@@ -259,13 +275,16 @@ class bstIter
         typedef Alloc                           allocator_type;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
-        bstIter() : node(NULL) {}
-        bstIter(elem_ptr_type node) : node(node) { }
-        bstIter(const bstIter &ref) : node(ref.node) {}
+        bstIter() : node(NULL), tree() {}
+        bstIter(elem_ptr_type node) : node(node), tree() { }
+        bstIter(const bstIter &ref) : node(ref.node), tree(ref.tree) {}
         virtual ~bstIter() {}
 
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
-        bstIter  &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
+        bstIter  &operator=(const bstIter &ref) {
+            this->node = ref.node;
+            this->tree = ref.tree;
+            return (*this); }
         bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
         bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
         //----- OPERATORS :  'dereference' -----//
@@ -282,6 +301,7 @@ class bstIter
     protected :
 
         elem_ptr_type   node;
+        ft::List<elem_ptr_type>    tree;
 };
 
 template < class Key, class T, class Compare, class Alloc >
