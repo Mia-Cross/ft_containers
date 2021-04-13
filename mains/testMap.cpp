@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/13 01:19:41 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/13 06:39:28 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void testMap()
     std::cout << "Creating Map B with content (iterators) \n";
     ft::Map<int, char> mapB(mapA.begin(), mapA.end()); 
     std::cout << mapB;
-    {
-        std::cout << "Creating Map C as a const copy of A\n";
-        const ft::Map<int, char> mapC(mapA);
-        std::cout << mapC;
-    }
+    // {
+    //     std::cout << "Creating Map C as a const copy of A\n";
+    //     const ft::Map<int, char> mapC(mapA);
+    //     std::cout << mapC;
+    // }
     std::cout << "Creating Map D as a copy of B by assignation\n";
     ft::Map<int, char> mapD = mapB;
     std::cout << mapD;
@@ -91,21 +91,21 @@ void testMap()
         std::pair<int, char> pair = *rit;
             std::cout << "[" << pair.first << "," << pair.second << "] ";
     }
-    {
-        std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
-        const ft::Map<int, char> mapC(mapA);
-        for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
-        {
-            std::pair<int, char> pair = *it;
-                std::cout << "[" << pair.first << "," << pair.second << "] ";
-        }
-        std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
-        for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
-        {
-            std::pair<int, char> pair = *rit;
-                std::cout << "[" << pair.first << "," << pair.second << "] ";
-        }
-    }
+    // {
+    //     std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
+    //     const ft::Map<int, char> mapC(mapA);
+    //     for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
+    //     {
+    //         std::pair<int, char> pair = *it;
+    //             std::cout << "[" << pair.first << "," << pair.second << "] ";
+    //     }
+    //     std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
+    //     for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
+    //     {
+    //         std::pair<int, char> pair = *rit;
+    //             std::cout << "[" << pair.first << "," << pair.second << "] ";
+    //     }
+    // }
     std::cout << std::endl;
     
     std::cout << "\n// ----- CAPACITY ----- //\n\n";

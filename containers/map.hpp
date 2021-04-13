@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/13 01:18:16 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/13 06:03:36 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,18 @@ namespace ft
             // DEFAULT CONSTRUCTOR
             explicit Map(const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type()) : _alloc(alloc),
-                _tree(new binTree), _size(0), _comp(comp)
+                _size(0), _comp(comp)
             {}
             // CONSTRUCTOR BY RANGE
             Map(iterator first, iterator last, const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type()) : _alloc(alloc),
-                _tree(new binTree), _size(0), _comp(comp)
+                _size(0), _comp(comp)
             {
                 while (first != last)
                     insert(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Map(const Map &ref) : _alloc(ref._alloc), _tree(new binTree(*ref._tree)),
+            Map(const Map &ref) : _alloc(ref._alloc),
                 _size(0), _comp(ref._comp)
             {
                 *this = ref;
@@ -68,14 +68,14 @@ namespace ft
             ~Map()
             {
                 clear();
-                delete _tree;
+                // delete _tree;
             }
             // ASSIGNATION
             const Map &operator=(const Map &ref)
             {
                 if (_size)
                     clear();
-                // insert(*ref._tree->getPair());
+                insert(*ref._tree.getRoot()->getPair());
                 // _size++;
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
@@ -84,13 +84,13 @@ namespace ft
 
             // ----- ITERATORS ----- //
             
-            iterator        begin() { return iterator(_tree->getMostLeft(_tree)); }
+            iterator        begin() { return iterator(_tree.getMostLeft(_tree.getRoot())); }
             iterator        end() { return iterator(); }
-            const_iterator  begin() const { return const_iterator(_tree->getMostLeft(_tree)); }
+            const_iterator  begin() const { return const_iterator(_tree.getMostLeft(_tree.getRoot())); }
             const_iterator  end() const { return const_iterator(); }
-            reverse_iterator rbegin() { return reverse_iterator(_tree->getMostRight(_tree)); }
+            reverse_iterator rbegin() { return reverse_iterator(_tree.getMostRight(_tree.getRoot())); }
             reverse_iterator rend() { return reverse_iterator(); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->getMostRight(_tree)); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree.getMostRight(_tree.getRoot())); }
             const_reverse_iterator rend() const { return const_reverse_iterator(); }
             
             // ----- CAPACITY ----- //
@@ -102,11 +102,11 @@ namespace ft
             // ----- ELEMENT ACCESS ----- //
 
             mapped_type& operator[] (const key_type &k) {
-                binTree *node = _tree->getNode(k, _tree->getRoot());
+                binTree *node = _tree.getNode(k, _tree.getRoot());
                 if (node)
                     return (node->getValue());
                 // const value_type *content(k, 0);
-                std::pair<iterator,bool> ret = _tree->insertElement(_tree, *(new value_type(k, 0)));
+                std::pair<iterator,bool> ret = _tree.insertElement(_tree.getRoot(), *(new value_type(k, 0)));
                 _size++;
                 node = ret.first.operator->();
                 return (node->getValue());
@@ -116,9 +116,11 @@ namespace ft
 
             std::pair<iterator,bool> insert(const value_type &val)
             {
-                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, val);
+                std::pair<binTree*,bool> ret = _tree.insertElement(_tree.getRoot(), val);
                 if (ret.second)
                     _size++;
+                if (!_tree.getRoot())
+                    _tree.setRoot(ret.first);
                 return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
             }
 
@@ -151,10 +153,10 @@ namespace ft
                 }
             }
             size_type erase(const key_type& k) {
-                binTree *to_del = _tree->getNode(k, _tree);
+                binTree *to_del = _tree.getNode(k, _tree.getRoot());
                 if (!to_del)
                     return (0);
-                _tree->deleteKey(k);
+                _tree.deleteKey(k);  //->getRoot() ?
                 _size--;
                 return (1);
             }
@@ -172,14 +174,15 @@ namespace ft
                 x._tree = this->_tree;
                 x._size = this->_size;
                 this->_tree = tmp;
-                this->_size = tmpSize;
+                this->_size = tmpSize; //
             }
 
             void clear() {
                 // for (iterator it = begin(); it != end(); it++)
                 //     delete it.operator->();
-                if (_size)
-                    erase(begin(), end());
+                // if (_size)
+                erase(begin(), end());
+                _tree.setRoot(NULL);
             }
 
             // ----- OBSERVERS ----- //
@@ -204,12 +207,12 @@ namespace ft
             // ----- OPERATIONS ----- //
 
             iterator        find(const key_type& k) {
-                return (iterator(_tree->getNode(k, _tree))); }
+                return (iterator(_tree.getNode(k, _tree.getRoot()))); }
             const_iterator  find (const key_type& k) const {
-                return (const_iterator(_tree->getNode(k, _tree))); }
+                return (const_iterator(_tree.getNode(k, _tree.getRoot()))); }
             size_type       count(const key_type& k) const {
-                return (_tree->getNode(k, _tree) ? 1 : 0); }
-            iterator        lower_bound(const key_type& k) {
+                return (_tree.getNode(k, _tree.getRoot()) ? 1 : 0); }
+            iterator        lower_bound(const key_type &k) {
                 iterator it = begin();
                 while (it != end())
                 {
@@ -220,7 +223,7 @@ namespace ft
                 }
                 return (it);
             }
-            const_iterator  lower_bound(const key_type& k) const {
+            const_iterator  lower_bound(const key_type &k) const {
                 const_iterator it = begin();
                 while (it != end())
                 {
@@ -231,7 +234,7 @@ namespace ft
                 }
                 return (it);
             }
-            iterator        upper_bound(const key_type& k) {
+            iterator        upper_bound(const key_type &k) {
                 iterator it = begin();
                 while (it != end())
                 {
@@ -242,7 +245,7 @@ namespace ft
                 }
                 return (it);
             }
-            const_iterator  upper_bound(const key_type& k) const {
+            const_iterator  upper_bound(const key_type &k) const {
                 const_iterator it = begin();
                 while (it != end())
                 {
@@ -253,18 +256,18 @@ namespace ft
                 }
                 return (it);
             }
-            std::pair<const_iterator,const_iterator> equal_range(const key_type& k) const {
+            std::pair<const_iterator,const_iterator> equal_range(const key_type &k) const {
                 return (std::pair<const_iterator,const_iterator>(lower_bound(k), upper_bound(k)));
             }
-            std::pair<iterator,iterator>             equal_range(const key_type& k) {
+            std::pair<iterator,iterator>             equal_range(const key_type &k) {
                 return (std::pair<iterator,iterator>(lower_bound(k), upper_bound(k)));
             }
-            // binTree *getMapRoot() const { return (_tree->getRoot()); }
+            // binTree *getMapRoot() const { return (_tree.getRoot()); }
 
         private :
 
             allocator_type  _alloc;
-            binTree         *_tree;
+            binTree         _tree;
             size_type       _size;
             key_compare     _comp;
             difference_type _diff;

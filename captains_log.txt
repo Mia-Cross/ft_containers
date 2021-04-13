@@ -25,6 +25,12 @@ Left to do :
         insert(position, value);
         value_comp();
 
+[13/04]
+Bon en vrai je crois que je vais juste reformer pour mettre un systeme de parent, ca me simplifiera ENORMEMENT la tache et je sais
+meme pas si j'ai raison de me l'interdire depuis le debut. Parce que la je suis a bout, toutes les fonctions sont quasi terminées
+mais j'ai changé un mini truc quelque part qui a été recouvert par les autres changements du coup j'arrive pas a retrouver ce que
+c'est et j'ai vraiment l'impression que je le fixerai jamais, y'a plus qu'a rm rf a ce stade la.
+NEXT TIME : tenter encore de changer l'archi -> sinon rm -rf * !!!!
 [08/04]
 Enorme avancée aujourd'hui, ca fait plaisir putain ! J'ai terminé les iterateurs (end, decrementation et reverse), j'ai fait les
 autres constructeurs et l'operateur = du coup j'en suis aux modifiers, sachant que insert() est deja parfaite, erase() me parait

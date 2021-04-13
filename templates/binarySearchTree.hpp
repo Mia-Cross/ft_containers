@@ -14,8 +14,8 @@ class binTree
     private:
 
         std::pair<const Key, T> *_value;
-        const Key *_key;
-        T       *_mapped;
+        // const Key *_key;
+        // T       *_mapped;
         binTree *_root;
         binTree *_left;
         binTree *_right;
@@ -28,14 +28,11 @@ class binTree
         typedef std::pair<const Key, T> pair_t;
         
         // create element with no content
-        binTree() : _root(NULL), _left(NULL), _right(NULL),
+        binTree() : _value(NULL), _root(NULL), _left(NULL), _right(NULL),
             _comp(Compare()), _allocBT(Alloc())
         {
             // std::cout << "Default Constructor called -> " << this << std::endl;
-            _value = _allocBT.allocate(1);
-            // memset(_value, 0, sizeof(pair_t));
-            // _key = &_value->first;
-            // _mapped = &_value->second;
+            // _value = _allocBT.allocate(1);
         }
 
         // create new element with a pair of values
@@ -45,20 +42,25 @@ class binTree
             // std::cout << "Pair Constructor called -> " << this <<" ~ key=" << key << ",_value=" << val << std::endl;
             _value = _allocBT.allocate(1);
             _allocBT.construct(this->_value, pair);
+            if (!_root)
+                _root = this;
         }
 
         // create new element with only a key
-        binTree(const Key key, binTree *root) : _root(root), _left(NULL), _right(NULL),
-            _comp(Compare()), _allocBT(Alloc())
-        {
-            // std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
-            _value = _allocBT.allocate(1);
-            _allocBT.construct(_value, pair_t(key, 0));
-        }
+        // binTree(const Key key, binTree *root) : _root(root), _left(NULL), _right(NULL),
+        //     _comp(Compare()), _allocBT(Alloc())
+        // {
+        //     // std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
+        //     _value = _allocBT.allocate(1);
+        //     _allocBT.construct(_value, pair_t(key, 0));
+        //     if (!_root)
+        //         _root = this;
+        // }
 
         binTree(const binTree &ref) : _root(NULL), _left(NULL), _right(NULL),
             _comp(Compare()), _allocBT(Alloc())
         { 
+            std::cout << "[BST] Copy constructor called" << std::endl;
             _value = _allocBT.allocate(1);
             _allocBT.construct(_value, *ref._value);
         }
@@ -73,8 +75,8 @@ class binTree
             _allocBT.construct(_value, *ref._value);
             // *this->_value = ref._value;
             // this->_root = ref._root;
-            this->_left = ref._left;
-            this->_right = ref._right;
+            // this->_left = ref._left;
+            // this->_right = ref._right;
             // this->comp = ref.comp;
             // this->_allocBT = ref._allocBT;
             return (*this);
@@ -86,6 +88,7 @@ class binTree
         pair_t      *getPair() const { return (this->_value); }
         binTree     *getLeft() const { return (this->_left); }
         binTree     *getRight() const { return (this->_right); }
+        void        setRoot(binTree *newRoot) { this->_root = newRoot; }
         
         binTree     *getMostRight(binTree *node) const {
             if (node && node->_right)
@@ -152,22 +155,33 @@ class binTree
             return (parent->getPrevIter(key));
         }
 
-        void updateRoot(binTree *newRoot) {
+        void updateRoot(binTree *newRoot, binTree *node) {
             // _root = newRoot;
-            for (binTree *node = this->getMostLeft(_root); node; node = getNextIter(node->getKey()))
+            static binTree *lastChecked = NULL;
+            if (node == newRoot && lastChecked == newRoot)
+                return ;
+            if (node)
             {
                 node->_root = newRoot;
-                std::cout << node << std::endl;
+                lastChecked = node;
+                if (node->_left && node->_left->_root != newRoot)
+                    updateRoot(newRoot, node->_left);
+                else if (node->_right && node->_right->_root != newRoot)
+                    updateRoot(newRoot, node->_right);
+                else
+                    updateRoot(newRoot, lastChecked);
+
+                // std::cout << node << std::endl;
             }
         }
 
         std::pair<binTree*,bool> insertElement(binTree *node, const pair_t &pair) {
-            if (!_root)
-            {
-                _allocBT.construct(this->_value, pair);
-                _root = this;
-                return (std::pair<binTree*,bool>(_root, true));
-            }
+            // if (!_root)
+            // {
+            //     _allocBT.construct(this->_value, pair);
+            //     _root = this;
+            //     return (std::pair<binTree*,bool>(_root, true));
+            // }
             if (!node)
             {
                 node = new binTree(pair, _root);
@@ -187,22 +201,30 @@ class binTree
 
         void setChildInParent(binTree *child, const Key &key) {
             binTree *parent = this->getParent();
-            if (_comp(parent->getKey(), key))
-                parent->_right = child;
-            else
-                parent->_left = child;
+            if (parent && parent != this)
+            {
+                if (_comp(parent->getKey(), key))
+                    parent->_right = child;
+                else
+                    parent->_left = child;
+            }
         }
 
         void replaceInParent(binTree *newChild) {
             binTree *parent = this->getParent();
-            if (parent)
+            if (parent && parent != this)
             {
                 if (this == _root)
-                    updateRoot(newChild);
+                    updateRoot(newChild, _root);
                 if (this == parent->_left)
                     parent->_left = newChild;
                 else
                     parent->_right = newChild;
+            }
+            else if (parent == this)
+            {
+                *this = *newChild;
+                this->_root = newChild;
             }
         }
 
@@ -210,11 +232,16 @@ class binTree
             if (this->_left && this->_right)  // If both children are present
             {
                 binTree *successor = getMostLeft(this->_right);
-                // pair_t newContent(successor->getKey(), this->_value->second);
+                // if (this == _root)
+                //     updateRoot(newChild);
                 *this = *successor;
+                // pair_t newContent(successor->getKey(), this->_value->second);
                 // this->getKey() = successor->getKey();
-                // successor->deleteElement();
-                successor->deleteKey(successor->getKey());
+                successor->deleteElement();
+                // successor->deleteKey(successor->getKey());
+
+                // probleme ici : si c'etait root qu'on a delete, rien ne fait le lien entre _tree et la nouvelle root\
+                // et on peut plus check apres pour eviter puisqu'elle a ete changee entre temps
             }
             else if (this->_left)  // If the node has only a *_left* child
                 this->replaceInParent(this->_left);
@@ -222,13 +249,15 @@ class binTree
                 this->replaceInParent(this->_right);
             else                    // This node has no children
                 this->replaceInParent(NULL);
-            if (this == _root)
-            {
-                _allocBT.destroy(this->_value);
-                this->_root = NULL;
-                return ;
-            }
             delete this;
+            // if (this != _root)
+            // else
+            //     updateRoot();
+            // {
+            //     _allocBT.destroy(this->_value);
+            //     this->_root = NULL;
+            //     return ;
+            // }
         }
 
         void deleteKey(const Key &key) {
