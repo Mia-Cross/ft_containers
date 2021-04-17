@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/17 01:54:06 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/17 01:44:05 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,26 @@ namespace ft
 
             // DEFAULT CONSTRUCTOR
             explicit Map(const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(new binTree),
-                _size(0), _comp(comp)
-            {}
-            // CONSTRUCTOR BY RANGE
-            Map(iterator first, iterator last, const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(new binTree),
+                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(NULL),
                 _size(0), _comp(comp)
             {
+                binTree *root = new binTree;
+                _tree = &root;
+            }
+            // CONSTRUCTOR BY RANGE
+            Map(iterator first, iterator last, const key_compare& comp = key_compare(),
+                const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(NULL),
+                _size(0), _comp(comp)
+            {
+                *_tree = new binTree;
                 while (first != last)
                     insert(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Map(const Map &ref) : _alloc(ref._alloc), _tree(new binTree(*ref._tree)),
+            Map(const Map &ref) : _alloc(ref._alloc), _tree(NULL),
                 _size(0), _comp(ref._comp)
             {
+                *_tree = new binTree(**ref._tree);
                 *this = ref;
             }
             // DESTRUCTOR
@@ -77,7 +82,8 @@ namespace ft
                     clear();
                 // if (_ref.)
                 // insert(*ref._tree->getRoot()->getPair());
-                // _size++;
+                **_tree = **ref._tree;
+                _size++;
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
                 return (*this);
@@ -85,13 +91,13 @@ namespace ft
 
             // ----- ITERATORS ----- //
             
-            iterator        begin() { return iterator(_tree->getMostLeft(_tree)); }
+            iterator        begin() { return iterator((*_tree)->getMostLeft(*_tree)); }
             iterator        end() { return iterator(); }
-            const_iterator  begin() const { return const_iterator(_tree->getMostLeft(_tree)); }
+            const_iterator  begin() const { return const_iterator((*_tree)->getMostLeft(*_tree)); }
             const_iterator  end() const { return const_iterator(); }
-            reverse_iterator rbegin() { return reverse_iterator(_tree->getMostRight(_tree)); }
+            reverse_iterator rbegin() { return reverse_iterator((*_tree)->getMostRight(*_tree)); }
             reverse_iterator rend() { return reverse_iterator(); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->getMostRight(_tree)); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator((*_tree)->getMostRight(*_tree)); }
             const_reverse_iterator rend() const { return const_reverse_iterator(); }
             
             // ----- CAPACITY ----- //
@@ -103,10 +109,10 @@ namespace ft
             // ----- ELEMENT ACCESS ----- //
 
             mapped_type& operator[] (const key_type &k) {
-                binTree *node = _tree->getNode(k, _tree);
+                binTree *node = (*_tree)->getNode(k, *_tree);
                 if (node)
                     return (node->getValue());
-                std::pair<iterator,bool> ret = _tree->insertElement(_tree, *(new value_type(k, 0)));
+                std::pair<iterator,bool> ret = (*_tree)->insertElement(*_tree, *(new value_type(k, 0)));
                 _size++;
                 node = ret.first.operator->();
                 return (node->getValue());
@@ -116,7 +122,7 @@ namespace ft
 
             std::pair<iterator,bool> insert(const value_type &val)
             {
-                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, val);
+                std::pair<binTree*,bool> ret = (*_tree)->insertElement(*_tree, val);
                 if (ret.second)
                     _size++;
                 // if (!_tree->getRoot())
@@ -153,19 +159,19 @@ namespace ft
                 }
             }
             size_type erase(const key_type &k) {
-                binTree *to_del = _tree->getNode(k, _tree);
+                binTree *to_del = (*_tree)->getNode(k, *_tree);
                 if (!to_del)
                     return (0);
-                _tree->deleteKey(k);  //->getRoot() ?
+                (*_tree)->deleteKey(k);  //->getRoot() ?
                 _size--;
-                // std::cout << "* Tree == root ?? " << (_tree == _tree->getRoot()) <<std::endl;
-                // if (_tree != _tree->getRoot())
-                // {
-                //     to_del = _tree;
-                //     _tree = _tree->getRoot();
-                //     _tree->setRoot(_tree);
-                // }
-                // delete to_del;
+                std::cout << "* Tree == root ?? " << (*_tree == (*_tree)->getRoot()) <<std::endl;
+                if (*_tree != (*_tree)->getRoot())
+                {
+                    to_del = *_tree;
+                    *_tree = (*_tree)->getRoot();
+                    // _tree->setRoot(_tree);
+                }
+                delete to_del;
                 return (1);
             }
             void erase(iterator first, iterator last) {
@@ -214,14 +220,14 @@ namespace ft
 
             // ----- OPERATIONS ----- //
 
-            iterator        find(const key_type& k) {
-                return (iterator(_tree->getNode(k, _tree))); }
+            iterator        find(const key_type &k) {
+                return (iterator((*_tree)->getNode(k, *_tree))); }
                 // return (iterator(_tree->getNode(k, _tree->getRoot()))); }
-            const_iterator  find (const key_type& k) const {
-                return (const_iterator(_tree->getNode(k, _tree))); }
+            const_iterator  find (const key_type &k) const {
+                return (const_iterator((*_tree)->getNode(k, *_tree))); }
                 // return (const_iterator(_tree->getNode(k, _tree->getRoot()))); }
-            size_type       count(const key_type& k) const {
-                return (_tree->getNode(k, _tree) ? 1 : 0); }
+            size_type       count(const key_type &k) const {
+                return ((*_tree)->getNode(k, *_tree) ? 1 : 0); }
             iterator        lower_bound(const key_type &k) {
                 iterator it = begin();
                 while (it != end())
@@ -277,7 +283,7 @@ namespace ft
         private :
 
             allocator_type  _alloc;
-            binTree         *_tree;
+            binTree         **_tree;
             size_type       _size;
             key_compare     _comp;
             difference_type _diff;

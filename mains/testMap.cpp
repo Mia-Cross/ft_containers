@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/13 06:39:28 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/16 21:49:46 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,9 +157,10 @@ void testMap()
     std::cout << mapA << mapB << mapE;
     std::cout << " * Insert value '65-#' with hint :\n";
     std::cout << mapA.insert(mapA.begin(), std::pair<int, char>(65, '#')) << std::endl;
-    std::cout << mapA << mapB << mapE;
     std::cout << mapB.insert(mapB.begin(), std::pair<int, char>(65, '#')) << std::endl;
     // std::cout << mapE.insert(mapE.begin(), std::pair<int, char>(65, '#')) << std::endl;
+    std::cout << mapA << mapB << mapE;
+    std::cout << "Find 65 in map B -> " << mapB.find(65) << std::endl;
     // mapE.clear();
     // mapB.clear();
     std::cout << " * Insert using iterators\n";
