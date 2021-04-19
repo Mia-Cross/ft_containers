@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/17 01:54:06 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/19 02:14:36 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ namespace ft
                     insert(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Map(const Map &ref) : _alloc(ref._alloc), _tree(new binTree(*ref._tree)),
+            Map(const Map &ref) : _alloc(ref._alloc), _tree(new binTree),
                 _size(0), _comp(ref._comp)
             {
                 *this = ref;
@@ -68,6 +68,7 @@ namespace ft
             ~Map()
             {
                 clear();
+                delete _tree->getRoot();
                 delete _tree;
             }
             // ASSIGNATION
@@ -75,8 +76,10 @@ namespace ft
             {
                 if (_size)
                     clear();
-                // if (_ref.)
-                // insert(*ref._tree->getRoot()->getPair());
+                // if (this->_tree->getPair())
+                //     _size++;
+                if (ref._tree->getRoot()->getPair())
+                    insert(*ref._tree->getRoot()->getPair());
                 // _size++;
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
@@ -85,14 +88,14 @@ namespace ft
 
             // ----- ITERATORS ----- //
             
-            iterator        begin() { return iterator(_tree->getMostLeft(_tree)); }
-            iterator        end() { return iterator(); }
-            const_iterator  begin() const { return const_iterator(_tree->getMostLeft(_tree)); }
-            const_iterator  end() const { return const_iterator(); }
-            reverse_iterator rbegin() { return reverse_iterator(_tree->getMostRight(_tree)); }
-            reverse_iterator rend() { return reverse_iterator(); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->getMostRight(_tree)); }
-            const_reverse_iterator rend() const { return const_reverse_iterator(); }
+            iterator        begin() { return iterator(_tree->getMostLeft(_tree->getRoot())); }
+            iterator        end() { return iterator(_tree); }
+            const_iterator  begin() const { return const_iterator(_tree->getMostLeft(_tree->getRoot())); }
+            const_iterator  end() const { return const_iterator(_tree); }
+            reverse_iterator rbegin() { return reverse_iterator(_tree->getMostRight(_tree->getRoot())); }
+            reverse_iterator rend() { return reverse_iterator(_tree); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->getMostRight(_tree->getRoot())); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(_tree); }
             
             // ----- CAPACITY ----- //
             
@@ -169,11 +172,22 @@ namespace ft
                 return (1);
             }
             void erase(iterator first, iterator last) {
-                while (first != last)
+                // while (iter != last)
+                key_type nextKey = first.operator->()->getKey();
+                --last;
+                // binTree *node = --last.operator->();
+                key_type lastKey = last.operator->()->getKey();
+                while (nextKey != lastKey)
                 {
-                    iterator to_del = first++;
+                    // std::cout << "- First before incr" << first.operator->() << std::endl;
+                    iterator to_del = find(nextKey);
+                    first++;
+                    nextKey = first.operator->()->getKey();
                     erase(to_del);
+                    // std::cout << "First after incr" << first.operator->() << std::endl;
                 }
+                iterator to_del = find(lastKey);
+                erase(to_del);
             }
             
             void swap(Map &x) {

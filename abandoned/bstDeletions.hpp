@@ -1,4 +1,13 @@
-
+        // create new element with only a key
+        // binTree(const Key key, binTree *root) : _root(root), _left(NULL), _right(NULL),
+        //     _comp(Compare()), _allocBT(Alloc())
+        // {
+        //     // std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
+        //     _pair = _allocBT.allocate(1);
+        //     _allocBT.construct(_pair, pair_t(key, 0));
+        //     if (!_root)
+        //         _root = this;
+        // }
 size_t      getLevel() const {
             size_t lvl = 0;
             for (binTree *node = root; node && node != this; lvl++)

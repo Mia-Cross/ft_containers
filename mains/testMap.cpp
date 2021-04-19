@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/16 21:49:46 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/18 21:20:37 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void testMap()
     std::cout << "Creating Map B with content (iterators) \n";
     ft::Map<int, char> mapB(mapA.begin(), mapA.end()); 
     std::cout << mapB;
-    // {
-    //     std::cout << "Creating Map C as a const copy of A\n";
-    //     const ft::Map<int, char> mapC(mapA);
-    //     std::cout << mapC;
-    // }
+    {
+        std::cout << "Creating Map C as a const copy of A\n";
+        const ft::Map<int, char> mapC(mapA);
+        std::cout << mapC;
+    }
     std::cout << "Creating Map D as a copy of B by assignation\n";
     ft::Map<int, char> mapD = mapB;
     std::cout << mapD;
@@ -91,21 +91,21 @@ void testMap()
         std::pair<int, char> pair = *rit;
             std::cout << "[" << pair.first << "," << pair.second << "] ";
     }
-    // {
-    //     std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
-    //     const ft::Map<int, char> mapC(mapA);
-    //     for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
-    //     {
-    //         std::pair<int, char> pair = *it;
-    //             std::cout << "[" << pair.first << "," << pair.second << "] ";
-    //     }
-    //     std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
-    //     for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
-    //     {
-    //         std::pair<int, char> pair = *rit;
-    //             std::cout << "[" << pair.first << "," << pair.second << "] ";
-    //     }
-    // }
+    {
+        std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
+        const ft::Map<int, char> mapC(mapA);
+        for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
+        {
+            std::pair<int, char> pair = *it;
+                std::cout << "[" << pair.first << "," << pair.second << "] ";
+        }
+        std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
+        for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
+        {
+            std::pair<int, char> pair = *rit;
+                std::cout << "[" << pair.first << "," << pair.second << "] ";
+        }
+    }
     std::cout << std::endl;
     
     std::cout << "\n// ----- CAPACITY ----- //\n\n";
@@ -136,7 +136,7 @@ void testMap()
     std::cout << mapA;
     std::cout << "mapA[8] = " << mapA[8] << std::endl;
     std::cout << "mapA[7] = " << mapA[4] << std::endl;
-    std::cout << "mapA[45] = " << mapA[45] << std::endl; /// a voir si il faut regler ca 
+    std::cout << "mapA[45] = " << mapA[45] << std::endl;
     std::cout << "mapB[45] = " << mapB[45] << std::endl;
     // const int &i = mapC.front();
     // //i++;                      //can't modify value
@@ -147,7 +147,7 @@ void testMap()
     mapB.erase(3);
     mapB.erase(1);
     mapB.erase(9);
-    // mapA.erase(7);
+    mapA.erase(7);
     const ft::Map<int, char> mapC(mapA);
     mapD = mapB;
 
@@ -268,9 +268,14 @@ void testMap()
     std::cout << "[expected] Lower_bound for 42 in map A -> " << pair.first << "-" << pair.second << std::endl;
     std::cout << "Lower_bound for 5 in map A -> " << mapA.lower_bound(5) << std::endl;
     std::cout << "Lower_bound for 20 in map B -> " << mapB.lower_bound(20) << std::endl;
-    // std::cout << "Lower_bound for 20 in map E -> " << mapE.lower_bound(20) << std::endl;
-    // std::cout << "Lower_bound for 42 in map A -> " << mapA.lower_bound(42) << std::endl;
+    std::cout << "Lower_bound for 20 in map E -> " << mapE.lower_bound(20) << std::endl;
+    std::cout << "Lower_bound for 42 in map A -> " << mapA.lower_bound(42) << std::endl;
 
+    // iter = stdMapA.end();
+    // iter--;
+    // pair = *iter;
+    // std::cout << "[expected] Decrement end -> " << pair.first << "-" << pair.second << std::endl;
+    
     std::cout << "\n/ - UPPER_BOUND - /\n";
     std::cout << mapA << mapB << mapE;
     iter = stdMapA.upper_bound(5); pair = *iter;

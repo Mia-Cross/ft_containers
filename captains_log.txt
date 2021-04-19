@@ -25,6 +25,13 @@ Left to do :
         insert(position, value);
         value_comp();
 
+[19/04]
+Okéééé bon ben mettre un _parent a ce stade ca change absolument R parce que j'avais déjà trouvé une solution a tous les problemes
+que ca causait, du coup j'ai une fois de plus perdu mon temps. J'ai encore essayé pleiiin d'architectures differentes et je finis
+toujours par tomber sur un os. Du coup ma conclusion de ces 2 jours c'est qu'il faut que _tree soit un maillon vide avec juste
+_root qui est defini, et qu'il serve de borne (min->_left = _tree && max->_right = _tree) comme ca il se mord la queue et il fait
+pas chier.
+NEXT TIME : mettre en place ce systeme (pour la 3 ou 4eme fois)
 [17/04]
 Bon nique sa mere j'ai tout essayé : repecher mes precedents commits, avec des references (je tenais un truc mais je l'ai encore
 perdu et impossible de retourner au moment ou ca marchait >.<), avec des doubles pointeurs (j'y ai cru mais "&this c'est pas un
