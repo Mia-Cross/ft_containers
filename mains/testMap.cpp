@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/18 21:20:37 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/27 01:14:15 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void testMap()
     std::cout << "Creating Map B with content (iterators) \n";
     ft::Map<int, char> mapB(mapA.begin(), mapA.end()); 
     std::cout << mapB;
-    {
-        std::cout << "Creating Map C as a const copy of A\n";
-        const ft::Map<int, char> mapC(mapA);
-        std::cout << mapC;
-    }
+    // {
+    //     std::cout << "Creating Map C as a const copy of A\n";
+    //     const ft::Map<int, char> mapC(mapA);
+    //     std::cout << mapC;
+    // }
     std::cout << "Creating Map D as a copy of B by assignation\n";
     ft::Map<int, char> mapD = mapB;
     std::cout << mapD;
@@ -91,21 +91,21 @@ void testMap()
         std::pair<int, char> pair = *rit;
             std::cout << "[" << pair.first << "," << pair.second << "] ";
     }
-    {
-        std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
-        const ft::Map<int, char> mapC(mapA);
-        for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
-        {
-            std::pair<int, char> pair = *it;
-                std::cout << "[" << pair.first << "," << pair.second << "] ";
-        }
-        std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
-        for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
-        {
-            std::pair<int, char> pair = *rit;
-                std::cout << "[" << pair.first << "," << pair.second << "] ";
-        }
-    }
+    // {
+    //     std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
+    //     const ft::Map<int, char> mapC(mapA);
+    //     for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
+    //     {
+    //         std::pair<int, char> pair = *it;
+    //             std::cout << "[" << pair.first << "," << pair.second << "] ";
+    //     }
+    //     std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
+    //     for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
+    //     {
+    //         std::pair<int, char> pair = *rit;
+    //             std::cout << "[" << pair.first << "," << pair.second << "] ";
+    //     }
+    // }
     std::cout << std::endl;
     
     std::cout << "\n// ----- CAPACITY ----- //\n\n";
@@ -149,16 +149,28 @@ void testMap()
     mapB.erase(9);
     mapA.erase(7);
     const ft::Map<int, char> mapC(mapA);
-    mapD = mapB;
+    // mapD = mapB;
 
     std::cout << "\n// ----- MODIFIERS ----- //\n\n";    
+    
+    std::cout << "\n/ - SWAP - /\n";
+    std::cout << "Before :\tmap A -> " << &mapA << mapA << "\t\tmap B -> " << &mapB << mapB;
+    mapA.swap(mapB);
+    std::cout << "After :\t\tmap A -> " << &mapA << mapA << "\t\tmap B -> " << &mapB << mapB;
+    std::cout << "Before :\tmap A -> " << &mapA << mapA << "\t\tmap E -> " << &mapE << mapE;
+    mapA.swap(mapE);
+    std::cout << "After :\t\tmap A -> " << &mapA << mapA << "\t\tmap E -> " << &mapE << mapE;
+    // //restoring maps from const copies
+    // mapA = mapC;
+    // mapB = mapD;
+    // mapE.clear();
     
     std::cout << "\n/ - INSERT - /\n";
     std::cout << mapA << mapB << mapE;
     std::cout << " * Insert value '65-#' with hint :\n";
     std::cout << mapA.insert(mapA.begin(), std::pair<int, char>(65, '#')) << std::endl;
     std::cout << mapB.insert(mapB.begin(), std::pair<int, char>(65, '#')) << std::endl;
-    // std::cout << mapE.insert(mapE.begin(), std::pair<int, char>(65, '#')) << std::endl;
+    std::cout << mapE.insert(mapE.begin(), std::pair<int, char>(65, '#')) << std::endl;
     std::cout << mapA << mapB << mapE;
     std::cout << "Find 65 in map B -> " << mapB.find(65) << std::endl;
     // mapE.clear();
@@ -166,52 +178,14 @@ void testMap()
     std::cout << " * Insert using iterators\n";
     mapA.insert(mapC.begin(), mapC.end());
     mapB.insert(mapC.begin(), mapC.end());
-    // mapE.insert(mapC.begin(), mapC.end());
+    mapE.insert(mapC.begin(), mapC.end());
     std::cout << mapA << mapB << mapE;
     //restoring maps from const copies
-    mapA = mapC;
-    mapB = mapD;
-    // mapE.clear();
-
-    std::cout << "\n/ - ERASE - /\n";
-    std::cout << " * Erase single value '2-d'\n";
-    std::cout << "MapA -> " << mapA.erase(2) << std::endl;
-    std::cout << "MapB -> " << mapB.erase(2) << std::endl;
-    // std::cout << "MapE -> " << mapE.erase(45) << std::endl;
-    std::cout << mapA << mapB << mapE;
-    std::cout << " * Erase using iterator (begin)\n";
-    mapA.erase(mapA.begin());
-    mapA.erase(mapB.begin());
-    // mapA.erase(mapE.begin());
-    std::cout << mapA << mapB << mapE;
-    //restoring maps from const copies
-    mapA = mapC;
-    mapB = mapD;
-    // mapE.clear();
-
-    // std::cout << "\n/ - SWAP - /\n";
-    // std::cout << "Before :\tmap A -> " << &mapA << mapA << "\t\tmap B -> " << &mapB << mapB;
-    // mapA.swap(mapB);
-    // std::cout << "After :\t\tmap A -> " << &mapA << mapA << "\t\tmap B -> " << &mapB << mapB;
-    // std::cout << "Before :\tmap A -> " << &mapA << mapA << "\t\tmap E -> " << &mapE << mapE;
-    // mapA.swap(mapE);
-    // std::cout << "After :\t\tmap A -> " << &mapA << mapA << "\t\tmap E -> " << &mapE << mapE;
-    // //restoring maps from const copies
     // mapA = mapC;
     // mapB = mapD;
     // mapE.clear();
-    
-    // std::cout << "\n/ - CLEAR - /\n";
-    // mapA.clear();
-    // mapB.clear();
-    // mapE.clear();
-    // std::cout << mapA << mapB << mapE;
-    // //restoring maps from const copies
-    // mapA = mapC;
-    // mapB = mapD;
 
     std::cout << "\n// ----- OPERATIONS ----- //\n\n";
-
 
     std::cout << "\n/ - FIND - /\n";
     std::cout << mapA << mapB << mapE;
@@ -290,4 +264,29 @@ void testMap()
     std::cout << "Upper_bound for 20 in map B -> " << mapB.upper_bound(20) << std::endl;
     // std::cout << "Upper_bound for 20 in map E -> " << mapE.upper_bound(20) << std::endl;
     std::cout << "Upper_bound for 42 in map A -> " << mapA.upper_bound(42) << std::endl;
+
+    std::cout << "\n/ - ERASE - /\n";
+    std::cout << " * Erase single value '2-d'\n";
+    std::cout << "MapA -> " << mapA.erase(2) << std::endl;
+    std::cout << "MapB -> " << mapB.erase(2) << std::endl;
+    std::cout << "MapE -> " << mapE.erase(45) << std::endl;
+    std::cout << mapA << mapB << mapE;
+    std::cout << " * Erase using iterator (begin)\n";
+    mapA.erase(mapA.begin());
+    mapA.erase(mapB.begin());
+    mapA.erase(mapE.begin());
+    std::cout << mapA << mapB << mapE;
+    //restoring maps from const copies
+    mapA = mapC;
+    mapB = mapD;
+    // mapE.clear();
+
+    // std::cout << "\n/ - CLEAR - /\n";
+    // mapA.clear();
+    // mapB.clear();
+    // mapE.clear();
+    // std::cout << mapA << mapB << mapE;
+    // //restoring maps from const copies
+    // mapA = mapC;
+    // mapB = mapD;
 }

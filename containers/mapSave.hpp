@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/27 00:51:57 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/19 02:14:36 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ namespace ft
             ~Map()
             {
                 clear();
-                delete _tree->getEnd();
+                delete _tree->getRoot();
                 delete _tree;
             }
             // ASSIGNATION
@@ -78,8 +78,8 @@ namespace ft
                     clear();
                 // if (this->_tree->getPair())
                 //     _size++;
-                // if (ref._tree->getRoot()->getPair())
-                //     insert(*ref._tree->getRoot()->getPair());
+                if (ref._tree->getRoot()->getPair())
+                    insert(*ref._tree->getRoot()->getPair());
                 // _size++;
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
@@ -88,14 +88,14 @@ namespace ft
 
             // ----- ITERATORS ----- //
             
-            iterator        begin() { return iterator(_tree->getMostLeft(_tree)); }
-            iterator        end() { return iterator(_tree->getEnd()); }
-            const_iterator  begin() const { return const_iterator(_tree->getMostLeft(_tree)); }
-            const_iterator  end() const { return const_iterator(_tree->getEnd()); }
-            reverse_iterator rbegin() { return reverse_iterator(_tree->getMostRight(_tree)); }
-            reverse_iterator rend() { return reverse_iterator(_tree->getEnd()); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->getMostRight(_tree)); }
-            const_reverse_iterator rend() const { return const_reverse_iterator(_tree->getEnd()); }
+            iterator        begin() { return iterator(_tree->getMostLeft(_tree->getRoot())); }
+            iterator        end() { return iterator(_tree); }
+            const_iterator  begin() const { return const_iterator(_tree->getMostLeft(_tree->getRoot())); }
+            const_iterator  end() const { return const_iterator(_tree); }
+            reverse_iterator rbegin() { return reverse_iterator(_tree->getMostRight(_tree->getRoot())); }
+            reverse_iterator rend() { return reverse_iterator(_tree); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(_tree->getMostRight(_tree->getRoot())); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(_tree); }
             
             // ----- CAPACITY ----- //
             
@@ -109,9 +109,10 @@ namespace ft
                 binTree *node = _tree->getNode(k, _tree);
                 if (node)
                     return (node->getValue());
-                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, *(new value_type(k, 0)));
+                std::pair<iterator,bool> ret = _tree->insertElement(_tree, *(new value_type(k, 0)));
                 _size++;
-                return (ret.first->getValue());
+                node = ret.first.operator->();
+                return (node->getValue());
             }
 
             // ----- MODIFIERS ----- //
@@ -121,6 +122,8 @@ namespace ft
                 std::pair<binTree*,bool> ret = _tree->insertElement(_tree, val);
                 if (ret.second)
                     _size++;
+                // if (!_tree->getRoot())
+                //     _tree->setRoot(ret.first);
                 return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
             }
 
@@ -193,7 +196,7 @@ namespace ft
                 x._tree = this->_tree;
                 x._size = this->_size;
                 this->_tree = tmp;
-                this->_size = tmpSize;
+                this->_size = tmpSize; //
             }
 
             void clear() {
@@ -226,11 +229,11 @@ namespace ft
             // ----- OPERATIONS ----- //
 
             iterator        find(const key_type& k) {
-                // return (iterator(_tree->getNode(k, _tree))); }
                 return (iterator(_tree->getNode(k, _tree))); }
+                // return (iterator(_tree->getNode(k, _tree->getRoot()))); }
             const_iterator  find (const key_type& k) const {
-                // return (const_iterator(_tree->getNode(k, _tree->getRoot()))); }
                 return (const_iterator(_tree->getNode(k, _tree))); }
+                // return (const_iterator(_tree->getNode(k, _tree->getRoot()))); }
             size_type       count(const key_type& k) const {
                 return (_tree->getNode(k, _tree) ? 1 : 0); }
             iterator        lower_bound(const key_type &k) {
