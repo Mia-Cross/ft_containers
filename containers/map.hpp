@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/27 00:51:57 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/04/30 20:52:42 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,6 @@ namespace ft
             {
                 if (_size)
                     clear();
-                // if (this->_tree->getPair())
-                //     _size++;
-                // if (ref._tree->getRoot()->getPair())
-                //     insert(*ref._tree->getRoot()->getPair());
-                // _size++;
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
                 return (*this);
@@ -145,6 +140,7 @@ namespace ft
             }
             
             void erase(iterator position) {
+                // std::cout << "size =" << _size << std::endl;
                 if (_size)
                 {
                     binTree *to_del = position.operator->();
@@ -154,37 +150,29 @@ namespace ft
             }
             size_type erase(const key_type &k) {
                 binTree *to_del = _tree->getNode(k, _tree);
-                if (!to_del)
+                if (!to_del || !_size)
                     return (0);
-                _tree->deleteKey(k);  //->getRoot() ?
+                _tree->deleteKey(k);
                 _size--;
-                // std::cout << "* Tree == root ?? " << (_tree == _tree->getRoot()) <<std::endl;
-                // if (_tree != _tree->getRoot())
-                // {
-                //     to_del = _tree;
-                //     _tree = _tree->getRoot();
-                //     _tree->setRoot(_tree);
-                // }
-                // delete to_del;
                 return (1);
             }
             void erase(iterator first, iterator last) {
-                // while (iter != last)
-                key_type nextKey = first.operator->()->getKey();
-                --last;
-                // binTree *node = --last.operator->();
-                key_type lastKey = last.operator->()->getKey();
-                while (nextKey != lastKey)
+                iterator iter = first;
+                key_type lastKey;
+                while (iter != last)
+                    lastKey = iter++.operator->()->getKey();
+                key_type key = first.operator->()->getKey();
+                while (key != lastKey)
                 {
-                    // std::cout << "- First before incr" << first.operator->() << std::endl;
-                    iterator to_del = find(nextKey);
-                    first++;
-                    nextKey = first.operator->()->getKey();
-                    erase(to_del);
-                    // std::cout << "First after incr" << first.operator->() << std::endl;
+                    // std::cout << "-> key to del = " << key << std::endl;
+                    key_type nextKey = upper_bound(key).operator->()->getKey();
+                    iter = find(key);
+                    erase(iter);
+                    key = nextKey;
+                    // std::cout << "next key = " << key << std::endl;
                 }
-                iterator to_del = find(lastKey);
-                erase(to_del);
+                iter = find(lastKey);
+                erase(iter);
             }
             
             void swap(Map &x) {
@@ -197,11 +185,7 @@ namespace ft
             }
 
             void clear() {
-                // for (iterator it = begin(); it != end(); it++)
-                //     delete it.operator->();
-                // if (_size)
                 erase(begin(), end());
-                // _tree->setRoot(NULL);
             }
 
             // ----- OBSERVERS ----- //
@@ -226,10 +210,8 @@ namespace ft
             // ----- OPERATIONS ----- //
 
             iterator        find(const key_type& k) {
-                // return (iterator(_tree->getNode(k, _tree))); }
                 return (iterator(_tree->getNode(k, _tree))); }
             const_iterator  find (const key_type& k) const {
-                // return (const_iterator(_tree->getNode(k, _tree->getRoot()))); }
                 return (const_iterator(_tree->getNode(k, _tree))); }
             size_type       count(const key_type& k) const {
                 return (_tree->getNode(k, _tree) ? 1 : 0); }
@@ -283,7 +265,7 @@ namespace ft
             std::pair<iterator,iterator>             equal_range(const key_type &k) {
                 return (std::pair<iterator,iterator>(lower_bound(k), upper_bound(k)));
             }
-            // binTree *getMapRoot() const { return (_tree->getRoot()); }
+            binTree *getMapRoot() const { return (_tree->getRoot()); }
 
         private :
 
@@ -314,16 +296,21 @@ namespace ft
         out << "\t>> MAP {" << size << "}\t= { ";
         // const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
         // out << "ROOT->" << root;
-        // if (root)
+        // if (root && size)
         // {
         //     out << " = [" << root->getKey() << "] [L=";
         //     out << root->getLeft() << "] [R=" << root->getRight() << "] || ";
         // }
-        for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
+        // for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
+        if (size)
         {
-            out << it;
-            if (size)
-                out << ", ";
+            for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
+            {
+                out << it;
+                // if (size)
+                if (--size)
+                    out << ", ";
+            }
         }
         out << " }" << std::endl;
         return (out);

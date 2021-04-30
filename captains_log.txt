@@ -25,6 +25,12 @@ Left to do :
         insert(position, value);
         value_comp();
 
+[30/04]
+Le truc majeur que j'ai changé : avant, l'operator= du BST ne copiait que le contenu/la paire, maintenant je copie aussi les liens
+left et right, du coup dans deleteElement() pour enlever le maillon dont j'ai copié le contenu je refais plus appel a deleteElement
+mais a delete directement.
+>> eh ben j'ai fait un dessin et en fait non c'est pas une super idee...
+J'ai a mort de leaks mais il a l'air gueri !
 [27/04]
 Serait-ce la fin de ma souffrance et le debut de la remontada ?? J'ai presque reussi a le soigner, il run parfaitement jusqu'a erase,
 mais ca se complique quand je supprime root (donc je peux pas utiliser clear, ni operator= ni le destructeur pour l'instant). Les

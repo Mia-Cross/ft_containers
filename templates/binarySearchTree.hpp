@@ -120,7 +120,7 @@ class binTree
         /////////////////////
 
         binTree *getNextIter(const Key &key) const {
-            if (this == getMostRight(_root))
+            if (this == getMostRight(_root) || !_root->_pair)
                 return (_end);
             if (this == _root || (this->_right && (_comp(key, this->getKey()) || key == this->getKey()) ) )
                 return (getMostLeft(this->_right));
@@ -131,7 +131,7 @@ class binTree
         }
         
         binTree *getPrevIter(const Key &key) const {
-            if (this == getMostLeft(_root))
+            if (this == getMostLeft(_root) || !_root->_pair)
                 return (_end);
             if (this == _root || (this->_left && (_comp(this->getKey(), key) || key == this->getKey()) ) )
                 return (getMostRight(this->_left));
@@ -182,6 +182,78 @@ class binTree
         //     DELETION    //
         /////////////////////
 
+        // new version
+
+        void replaceInParent(binTree *newChild) {
+            binTree *parent = this->getParent();
+            if (parent)
+            {
+                if (this == parent->_left)
+                    parent->_left = newChild;
+                else if (this == parent->_right)
+                    parent->_right = newChild;
+            }
+        }
+
+        void deleteElement() {
+            if (this == _root)
+                return (deleteRoot());
+            if (this->_left && this->_right)  // If both children are present
+            {
+                binTree *successor = getMostLeft(this->_right);
+                *this = *successor;
+                successor->deleteElement();
+            }
+            else if (this->_left)  // If the node has only a *_left* child
+                this->replaceInParent(this->_left);
+            else if (this->_right) // If the node has only a *_right* child
+                this->replaceInParent(this->_right);
+            else                    // This node has no children
+                this->replaceInParent(NULL);
+            delete this;
+        }
+
+        void deleteRoot() {
+            if (this->_left && this->_right)  // If both children are present
+            {
+                binTree *successor = getMostLeft(this->_right);
+                *this = *successor;
+                successor->deleteElement();
+            }
+            else if (this->_left)  // If root has only a *_left* child
+            {
+                *this = *this->_left;
+                // this->_left->deleteElement();
+            }
+            else if (this->_right) // If root has only a *_right* child
+            {
+                *this = *this->_right;
+                // this->_right->deleteElement();
+            }
+            else                    // Root has no children
+            {
+                _allocBT.destroy(this->_pair);
+                this->_pair = NULL;
+            }
+        }
+
+        void deleteKey(const Key &key) {
+            binTree *to_del = getNode(key, _root);
+            if (to_del)
+                to_del->deleteElement();
+        }
+
+    private:
+
+        pair_t  *_pair;
+        binTree *_root;
+        binTree *_left;
+        binTree *_right;
+        binTree *_end;
+        Compare _comp;
+        Alloc   _allocBT;
+};
+
         // original version
 
         // void replaceInParent(binTree *newChild) {
@@ -224,76 +296,6 @@ class binTree
         //     if (this != _root)
         //         delete this;
         // }
-
-        // new version
-
-            void replaceInParent(binTree *newChild) {
-            if (this == _root)
-            {
-                if (newChild)
-                {
-                    *this = *newChild;
-                    newChild->deleteElement();
-                }
-                else
-                {
-                    _allocBT.destroy(this->_pair);
-                    this->_pair = NULL;
-                }
-                return;
-            }
-            binTree *parent = this->getParent();
-            if (parent)
-            {
-                if (this == parent->_left)
-                    parent->_left = newChild;
-                else if (this == parent->_right)
-                    parent->_right = newChild;
-            }
-        }
-
-        void deleteElement() {
-            if (this->_left && this->_right)  // If both children are present
-            {
-                binTree *successor = getMostLeft(this->_right);
-                *this = *successor;
-                if (this == _root)
-                    *_root = *successor;
-                successor->deleteElement();
-            }
-            else if (this->_left)  // If the node has only a *_left* child
-                this->replaceInParent(this->_left);
-            else if (this->_right) // If the node has only a *_right* child
-                this->replaceInParent(this->_right);
-            else                    // This node has no children
-                this->replaceInParent(NULL);
-            if (this != _root)
-                delete this;
-            // else
-            // {
-            //     _allocBT.destroy(this->_pair);
-            //     this->_pair = NULL;
-            // }
-            //      _root = getMostLeft(this->_right);
-
-        }
-
-        void deleteKey(const Key &key) {
-            binTree *to_del = getNode(key, _root);
-            if (to_del)
-                to_del->deleteElement();
-        }
-
-    private:
-
-        pair_t  *_pair;
-        binTree *_root;
-        binTree *_left;
-        binTree *_right;
-        binTree *_end;
-        Compare _comp;
-        Alloc   _allocBT;
-};
 
 template < class Key, class T, class Compare, class Alloc >
 class bstIter
