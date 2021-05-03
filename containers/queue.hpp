@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 04:32:59 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:52:23 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,28 @@
 
 namespace ft
 {
-    template < typename T, class C = ft::List<T> >
-    class Queue {
+    template < typename T, class C = ft::list<T> >
+    class queue {
 
         public :
 
-            //defining every member in my List as in the STL
+            //defining every member in my list as in the STL
             typedef T                                   value_type;
             typedef C                                   container_type;
             typedef typename container_type::size_type  size_type;
 
             // CONSTRUCTOR BY CONTAINER TYPE
-            explicit Queue(const container_type& ctnr = container_type()) :
+            explicit queue(const container_type& ctnr = container_type()) :
                 _container(ctnr)
             { }
             // CONSTRUCTOR BY COPY
-            Queue(const Queue &ref) : _container(ref._container)
+            queue(const queue &ref) : _container(ref._container)
             { }
             // DESTRUCTOR
-            ~Queue()
+            ~queue()
             { }
             // ASSIGNATION
-            const Queue &operator=(const Queue &ref) { 
+            const queue &operator=(const queue &ref) { 
                 _container = ref._container;
                 return (*this);
             }
@@ -65,25 +65,25 @@ namespace ft
     };
 
     template < typename T, class Alloc >
-    bool operator==(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs == rhs); }
+    bool operator==(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator!=(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs != rhs); }
+    bool operator!=(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs != rhs); }
     template < typename T, class Alloc >
-    bool operator<(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs < rhs); }
+    bool operator<(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs < rhs); }
     template < typename T, class Alloc >
-    bool operator<=(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs <= rhs); }
+    bool operator<=(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs <= rhs); }
     template < typename T, class Alloc >
-    bool operator>(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs > rhs); }
+    bool operator>(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs > rhs); }
     template < typename T, class Alloc >
-    bool operator>=(const Queue<T, Alloc> &lhs, const Queue<T, Alloc> &rhs) { return (lhs >= rhs); }
+    bool operator>=(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs >= rhs); }
 
     template < typename T >
-    std::ostream &operator<<(std::ostream &out, Queue<T> const &queue) {
+    std::ostream &operator<<(std::ostream &out, queue<T> const &queue) {
         size_t size = queue.size();
         out << "\t>> QUEUE [" << size << "]\t= { ";
         if (size)
         {
-            for (typename List<T>::iterator it = queue.getContainer().begin(); size-- > 0; it++)
+            for (typename list<T>::iterator it = queue.getContainer().begin(); size-- > 0; it++)
             {
                 out << *it;
                 if (size)

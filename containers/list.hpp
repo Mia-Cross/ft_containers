@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 04:53:43 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:59:14 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 namespace ft
 {
     template < typename T, class Alloc = std::allocator<T> >
-    class List {
+    class list {
 
         public :
 
-            //defining every member in my List as in the STL
+            //defining every member in my list as in the STL
             typedef T                       value_type;
             typedef Alloc                   allocator_type;
             typedef T &                     reference;
@@ -39,11 +39,11 @@ namespace ft
             typedef ptrdiff_t               difference_type;
 
             // DEFAULT CONSTRUCTOR
-            explicit List(const allocator_type& alloc = allocator_type()) :
+            explicit list(const allocator_type& alloc = allocator_type()) :
                 _list(new dLList<T, Alloc>), _size(0), _alloc(alloc)
             { }
             // CONSTRUCTOR BY FILLING
-            explicit List(size_type n, const value_type& val = value_type(),
+            explicit list(size_type n, const value_type& val = value_type(),
                 const allocator_type& alloc = allocator_type()) : 
                 _list(new dLList<T, Alloc>), _size(0), _alloc(alloc)
             {
@@ -51,7 +51,7 @@ namespace ft
                     push_front(val);
             }
             // CONSTRUCTOR BY RANGE
-            List(iterator first, iterator last,
+            list(iterator first, iterator last,
                 const allocator_type& alloc = allocator_type()) :
                 _list(new dLList<T, Alloc>), _size(0), _alloc(alloc)
             {
@@ -59,19 +59,19 @@ namespace ft
                     push_back(*first++);
             }
             // CONSTRUCTOR BY COPY
-            List(const List &ref) : _list(new dLList<T, Alloc>),
+            list(const list &ref) : _list(new dLList<T, Alloc>),
                 _size(0), _alloc(ref._alloc)
             {
                 *this = ref;
             }
             // DESTRUCTOR
-            ~List()
+            ~list()
             {
                 this->clear();
                 delete _list;
             }
             // ASSIGNATION
-            List &operator=(const List &ref)
+            list &operator=(const list &ref)
             {
                 resize(0);
                 assign(ref.begin(), ref.end());
@@ -168,8 +168,8 @@ namespace ft
                     last = this->erase(last);
                 return (last);
             }
-            void swap(List &x) {
-                List tmp(x);
+            void swap(list &x) {
+                list tmp(x);
                 x = *this;
                 *this = tmp;
             }
@@ -187,10 +187,10 @@ namespace ft
             
             // ----- SPLICE ----- //
             
-            void splice(iterator position, List& x) {
+            void splice(iterator position, list& x) {
                 splice(position, x, x.begin(), x.end());
             }
-            void splice(iterator position, List& x, iterator i) {
+            void splice(iterator position, list& x, iterator i) {
                 dLList<T, Alloc> *dest = position.operator->();
                 dLList<T, Alloc> *src = i.operator->();
                 if (dest && src && x._size)
@@ -201,7 +201,7 @@ namespace ft
                     x._size--;
                 }
             }
-            void splice(iterator position, List& x, iterator first, iterator last) {
+            void splice(iterator position, list& x, iterator first, iterator last) {
                 --last;
                 while (last != NULL && last != first)
                     splice(position, x, last--);
@@ -274,7 +274,7 @@ namespace ft
 
             // ----- MERGE ----- //
             
-            void merge(List &x) {
+            void merge(list &x) {
                 iterator itx = x.begin();
                 iterator ity = this->begin();
                 while (itx != x.end())
@@ -286,7 +286,7 @@ namespace ft
                 }
             }
             template < class Compare >
-            void merge(List &x, Compare comp) {
+            void merge(list &x, Compare comp) {
                 iterator itx = x.begin();
                 iterator ity = this->begin();
                 while (itx != x.end())
@@ -350,33 +350,33 @@ namespace ft
     };
 
     template < typename T, class Alloc >
-    bool operator==(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs == rhs); }
+    bool operator==(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator!=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs != rhs); }
+    bool operator!=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs != rhs); }
     template < typename T, class Alloc >
-    bool operator<(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs < rhs); }
+    bool operator<(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs < rhs); }
     template < typename T, class Alloc >
-    bool operator<=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs <= rhs); }
+    bool operator<=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs <= rhs); }
     template < typename T, class Alloc >
-    bool operator>(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs > rhs); }
+    bool operator>(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs > rhs); }
     template < typename T, class Alloc >
-    bool operator>=(const List<T, Alloc> &lhs, const List<T, Alloc> &rhs) { return (lhs >= rhs); }
+    bool operator>=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs >= rhs); }
     
     template < typename T >
-    void swap(List<T> &x, List<T> &y) {
-        List<T> tmp;
+    void swap(list<T> &x, list<T> &y) {
+        list<T> tmp;
         tmp = x;
         x = y;
         y = tmp;
     }
     
     template < typename T >
-    std::ostream &operator<<(std::ostream &out, List<T> const &list) {
+    std::ostream &operator<<(std::ostream &out, list<T> const &list) {
         size_t size = list.size();
         out << "\t>> LIST [" << size << "]\t= { ";
         if (size)
         {
-            for (typename List<T>::const_iterator it = list.begin(); size-- > 0; it++)
+            for (typename ft::list<T>::const_iterator it = list.begin(); size-- > 0; it++)
             {
                 out << *it;
                 if (size)

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 04:05:34 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:51:29 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ namespace ft
 {
     template < class Key, class T, class Compare = std::less<Key>,
         class Alloc = std::allocator< std::pair<const Key, T> > >
-    class Map {
+    class map {
 
         public :
 
-             //defining every member in my List as in the STL
+            //defining every member in my map as in the STL
             typedef Key                                 key_type;
             typedef T                                   mapped_type;
             typedef std::pair< const Key, T >           value_type;
@@ -46,12 +46,12 @@ namespace ft
 
 
             // DEFAULT CONSTRUCTOR
-            explicit Map(const key_compare& comp = key_compare(),
+            explicit map(const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(new binTree),
                 _size(0), _comp(comp)
             {}
             // CONSTRUCTOR BY RANGE
-            Map(iterator first, iterator last, const key_compare& comp = key_compare(),
+            map(iterator first, iterator last, const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(new binTree),
                 _size(0), _comp(comp)
             {
@@ -59,26 +59,25 @@ namespace ft
                     insert(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Map(const Map &ref) : _alloc(ref._alloc), _tree(new binTree),
+            map(const map &ref) : _alloc(ref._alloc), _tree(new binTree),
                 _size(0), _comp(ref._comp)
             {
                 *this = ref;
             }
             // DESTRUCTOR
-            ~Map()
+            ~map()
             {
                 clear();
                 delete _tree->getEnd();
                 delete _tree;
             }
             // ASSIGNATION
-            const Map &operator=(const Map &ref)
+            const map &operator=(const map &ref)
             {
                 if (_size)
                     clear();
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
-                // _tree->setEnd(ref._tree->getEnd());
                 return (*this);
             }
 
@@ -105,7 +104,9 @@ namespace ft
                 binTree *node = _tree->getNode(k, _tree);
                 if (node)
                     return (node->getValue());
-                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, *(new value_type(k, 0)));
+                value_type *val = new value_type(k, 0);
+                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, *val);
+                delete val;
                 _size++;
                 return (ret.first->getValue());
             }
@@ -178,7 +179,7 @@ namespace ft
                 // std::cout << "ERASE by iterators -> END" << std::endl;
             }
             
-            void swap(Map &x) {
+            void swap(map &x) {
                 binTree *tmpRoot = x._tree;
                 binTree *tmpEnd = x._tree->getEnd();
                 size_t tmpSize = x._size;
@@ -311,21 +312,21 @@ namespace ft
     };
     
     template < class Key, class T, class Compare, class Alloc >
-    bool operator==(const Map<Key,T,Compare,Alloc> &lhs, const Map<Key,T,Compare,Alloc> &rhs) { return (lhs == rhs); }
+    bool operator==(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs == rhs); }
     template < class Key, class T, class Compare, class Alloc >
-    bool operator!=(const Map<Key,T,Compare,Alloc> &lhs, const Map<Key,T,Compare,Alloc> &rhs) { return (lhs != rhs); }
+    bool operator!=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs != rhs); }
     template < class Key, class T, class Compare, class Alloc >
-    bool operator<(const Map<Key,T,Compare,Alloc> &lhs, const Map<Key,T,Compare,Alloc> &rhs) { return (lhs < rhs); }
+    bool operator<(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs < rhs); }
     template < class Key, class T, class Compare, class Alloc >
-    bool operator<=(const Map<Key,T,Compare,Alloc> &lhs, const Map<Key,T,Compare,Alloc> &rhs) { return (lhs <= rhs); }
+    bool operator<=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs <= rhs); }
     template < class Key, class T, class Compare, class Alloc >
-    bool operator>(const Map<Key,T,Compare,Alloc> &lhs, const Map<Key,T,Compare,Alloc> &rhs) { return (lhs > rhs); }
+    bool operator>(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs > rhs); }
     template < class Key, class T, class Compare, class Alloc >
-    bool operator>=(const Map<Key,T,Compare,Alloc> &lhs, const Map<Key,T,Compare,Alloc> &rhs) { return (lhs >= rhs); }
+    bool operator>=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs >= rhs); }
     
     // THIS IS NOT PART OF THE STL CONTAINER
     template < class Key, class T, class Compare, class Alloc >
-    std::ostream &operator<<(std::ostream &out, Map<Key,T,Compare,Alloc> const &map) {
+    std::ostream &operator<<(std::ostream &out, map<Key,T,Compare,Alloc> const &map) {
         size_t size = map.size();
         out << "\t>> MAP {" << size << "}\t= { ";
         // const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
@@ -335,10 +336,10 @@ namespace ft
         //     out << " = [" << root->getKey() << "] [L=";
         //     out << root->getLeft() << "] [R=" << root->getRight() << "] || ";
         // }
-        // for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
+        // for (typename map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
         if (size)
         {
-            for (typename Map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
+            for (typename map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
             {
                 out << it;
                 // if (size)

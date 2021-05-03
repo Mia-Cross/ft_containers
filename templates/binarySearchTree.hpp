@@ -32,7 +32,8 @@ class binTree
             _allocBT.construct(_pair, pair);
         }
 
-        binTree(const binTree &ref) : _root(this), _left(NULL), _right(NULL), _end(new binTree(this)),
+        // create temporary element with same content
+        binTree(const binTree &ref) : _root(NULL), _left(NULL), _right(NULL), _end(NULL),
             _comp(Compare()), _allocBT(Alloc())
         { 
             _pair = _allocBT.allocate(1);
@@ -58,11 +59,11 @@ class binTree
         }
 
         binTree     *getRoot() const { return (this->_root); }
+        pair_t      *getPair() const { return (this->_pair); }
         const Key   &getKey() const { return (this->_pair->first); }
         T           &getValue() const { return (this->_pair->second); }
-        pair_t      *getPair() const { return (this->_pair); }
-        binTree     *getLeft() const { return (this->_left); }
-        binTree     *getRight() const { return (this->_right); }
+        // binTree     *getLeft() const { return (this->_left); }
+        // binTree     *getRight() const { return (this->_right); }
         binTree     *getEnd() const { return (this->_end); }
         void        setEnd(binTree *end) { this->_end = end; }
         
@@ -78,7 +79,6 @@ class binTree
         }
         binTree     *getParent() const {
             binTree *parent = _root;
-            // std::cout << "GET PARENT de " << this << " (key = " << this->getKey();
             while (parent && parent->_pair && parent->_left != this && parent->_right != this)
             // while (parent && (parent->_left || parent->_right) && parent->_left != this && parent->_right != this)
             {
@@ -89,7 +89,6 @@ class binTree
                 else
                     break;
             }
-            // std::cout << ") : parent = " << parent << " // key = " << parent->getKey() << std::endl;
             return (parent);
         }
         bool couldBeParent(const Key &key) const {
@@ -103,7 +102,6 @@ class binTree
         }
 
         binTree  *getNode(const Key &to_find, binTree *node) const {
-            // std::cout << "GET NODE : node = " << node << " // key = " << node->getKey() << std::endl;
             if (!node || !node->_pair)
                 return (NULL);
             if (node->getKey() == to_find)
@@ -119,7 +117,7 @@ class binTree
         /////////////////////
 
         binTree *getNextIter(const Key &key) const {
-            if (this == getMostRight(_root) || !_root->_pair)
+            if (!_root->_pair || this == getMostRight(_root))
                 return (_end);
             if (this == _root || (this->_right && (_comp(key, this->getKey()) || key == this->getKey()) ) )
                 return (getMostLeft(this->_right));
@@ -130,7 +128,9 @@ class binTree
         }
         
         binTree *getPrevIter(const Key &key) const {
-            if (this == getMostLeft(_root) || !_root->_pair)
+            if (this == _end)
+                return (getMostRight(_root));
+            if (!_root->_pair || this == getMostLeft(_root))
                 return (_end);
             if (this == _root || (this->_left && (_comp(this->getKey(), key) || key == this->getKey()) ) )
                 return (getMostRight(this->_left));
@@ -144,11 +144,37 @@ class binTree
         //    INSERTION    //
         /////////////////////
 
+        // std::pair<binTree*,bool> insertElement(binTree *node, const pair_t *pair) {
+        //     if (!_pair)
+        //     {
+        //         _pair = _allocBT.allocate(1);
+        //         _allocBT.construct(_pair, *pair);
+        //         return (std::pair<binTree*,bool>(_root, true));
+        //     }
+        //     if (!node)
+        //     {
+        //         node = new binTree(*pair, _root);
+        //         node->setChildInParent(node, pair->first);
+        //         return (std::pair<binTree*,bool>(node, true));
+        //     }
+        //     if (node->getKey() == pair->first)
+        //     {
+        //         node->_pair->second = pair->second;
+        //         // delete pair;
+        //         return (std::pair<binTree*,bool>(node, false));
+        //     }
+        //     if (_comp(pair->first, node->getKey()))
+        //         return (insertElement(node->_left, pair));
+        //     else
+        //         return (insertElement(node->_right, pair));
+        // }
+
         std::pair<binTree*,bool> insertElement(binTree *node, const pair_t &pair) {
             if (!_pair)
             {
                 _pair = _allocBT.allocate(1);
-                _allocBT.construct(_pair, pair_t(pair.first, pair.second));
+                // _allocBT.construct(_pair, pair_t(pair.first, pair.second));
+                _allocBT.construct(_pair, pair);
                 return (std::pair<binTree*,bool>(_root, true));
             }
             if (!node)
@@ -259,7 +285,7 @@ class bstIter
         typedef std::pair< const Key, T > &     reference_type;
         typedef binTree<Key,T,Compare,Alloc>    element_type;
         typedef binTree<Key,T,Compare,Alloc> *  elem_ptr_type;
-        // typedef ptrdiff_t                    difference_type;
+        typedef ptrdiff_t                       difference_type;
         typedef Compare                         key_compare;
         //typedef ___                           value_compare;
         typedef Alloc                           allocator_type;

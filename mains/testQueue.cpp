@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:20:50 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 05:38:11 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:52:24 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,26 @@ void testQueue()
    std::cout << "| | | | |_ | | |_\n";
    std::cout << "|_|\\|_| |_ |_| |_\n\n";
 
-   std::cout << "Creating Queue A with content \n";
-   ft::Queue<int> QueueA;
+   std::cout << "Creating queue A with content \n";
+   ft::queue<int> QueueA;
    QueueA.push(0);
    QueueA.push(1);
    QueueA.push(2);
    QueueA.push(3);
    QueueA.push(4);
    std::cout << QueueA;
-   std::cout << "Creating Queue B with content\n";
-   ft::Queue<int> QueueB;
+   std::cout << "Creating queue B with content\n";
+   ft::queue<int> QueueB;
    QueueB.push(1000);
    std::cout << QueueB;
-   std::cout << "Creating Queue C as a const copy of A\n";
-   const ft::Queue<int> QueueC(QueueA);
+   std::cout << "Creating queue C as a const copy of A\n";
+   const ft::queue<int> QueueC(QueueA);
    std::cout << QueueC;
-   std::cout << "Creating Queue D as a copy of B by assignation\n";
-   ft::Queue<int> QueueD = QueueB;
+   std::cout << "Creating queue D as a copy of B by assignation\n";
+   ft::queue<int> QueueD = QueueB;
    std::cout << QueueD;
-   std::cout << "Creating Queue E empty\n";
-   ft::Queue<int> QueueE;
+   std::cout << "Creating queue E empty\n";
+   ft::queue<int> QueueE;
    std::cout << QueueE;
 
    std::cout << "\n// ----- CAPACITY ----- //\n\n";

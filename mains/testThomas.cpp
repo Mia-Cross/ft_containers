@@ -10,17 +10,17 @@ bool comp(int first, int second) { return (first > second); }
 bool is_odd (const int& value) { return (value % 2) == 1; }
 
 template <class T>
-void	print_content(ft::List<T> lst)
+void	print_content(ft::list<T> lst)
 {
-	for (typename ft::List<T>::iterator it = lst.begin(); it != lst.end(); it++)
+	for (typename ft::list<T>::iterator it = lst.begin(); it != lst.end(); it++)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 }
 
 template <class T>
-void	print_reverse(ft::List<T> lst)
+void	print_reverse(ft::list<T> lst)
 {
-	for (typename ft::List<T>::reverse_iterator it = lst.rbegin(); it != lst.rend(); it++)
+	for (typename ft::list<T>::reverse_iterator it = lst.rbegin(); it != lst.rend(); it++)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 }
@@ -29,9 +29,9 @@ void test(void)
 {
 	std::cout << "################# TESTS MY LIST #################" << std::endl;
 
-	ft::List<int> lst;
-	ft::List<int>::iterator it = lst.begin();
-	ft::List<int>::iterator it2 = lst.begin();
+	ft::list<int> lst;
+	ft::list<int>::iterator it = lst.begin();
+	ft::list<int>::iterator it2 = lst.begin();
 
 	print_content(lst);
 
@@ -81,13 +81,13 @@ void test(void)
 	std::cout << "return value of erase range: " << *lst.erase(it, it2) << std::endl;
 	print_content(lst);
 
-	ft::List<int> lst2(lst);
+	ft::list<int> lst2(lst);
 	std::cout << "print lst2: " << std::endl;
 	lst2.push_front(1010101);
 	lst2.push_back(949494902);
 	print_content(lst2);
 
-	ft::List<int> lst3;
+	ft::list<int> lst3;
 	lst3 = lst2;
 	std::cout << "print lst3: " << std::endl;
 	print_content(lst3);
@@ -101,7 +101,7 @@ void test(void)
 	print_content(lst2);
 
 	std::cout << "print lst4(lst.begin(), lst.end()): " << std::endl;
-	ft::List<int> lst4(lst.begin(), lst.end());
+	ft::list<int> lst4(lst.begin(), lst.end());
 	print_content(lst4);
 
 	std::cout << "lst4.resize(9, 654321): " << std::endl;
@@ -196,7 +196,7 @@ void test(void)
 	std::cout << "********** LST **********\n";
 	print_content(lst);
 
-	ft::List<int>::reverse_iterator rit = lst.rbegin();
+	ft::list<int>::reverse_iterator rit = lst.rbegin();
 	std::cout << "rit: " << *rit << std::endl;
 	std::cout << std::endl;
 
@@ -329,7 +329,7 @@ void test(void)
 	std::cout << "********** LST2 **********\n";
 	print_content(lst2);
 
-	ft::List<int> lst5(lst);
+	ft::list<int> lst5(lst);
 	std::cout << "********** LST5 **********\n";
 	print_content(lst5);
 
@@ -355,8 +355,8 @@ void test(void)
 
 	std::cout << "\n\n\n******************** TESTS RELATIONAL OPERATORS ********************\n";
 
-	ft::List<int> foo ((size_t)3,100);
-	ft::List<int> bar ((size_t)2,200);
+	ft::list<int> foo ((size_t)3,100);
+	ft::list<int> bar ((size_t)2,200);
 
 	if (foo == bar) std::cout << "foo and bar are equal\n";
 	if (foo != bar) std::cout << "foo and bar are not equal\n";
@@ -367,19 +367,19 @@ void test(void)
 
 	std::cout << std::endl;
 
-	ft::List<int> a;
+	ft::list<int> a;
 	a.push_back(10);
 	a.push_back(20);
 	a.push_back(30);
-  	ft::List<int> b;
+  	ft::list<int> b;
 	b.push_back(10);
 	b.push_back(20);
 	b.push_back(30);
-  	ft::List<int> c;
+  	ft::list<int> c;
 	c.push_back(30);
 	c.push_back(20);
 	c.push_back(10);
-	ft::List<int> d;
+	ft::list<int> d;
 	d.push_back(30);
 	d.push_back(20);
 

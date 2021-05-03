@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:19 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 01:43:33 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:50:49 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void testList()
     std::cout << "|  | |_  | \n";
     std::cout << "|_ |  _| | \n\n";
 
-    std::cout << "Creating List A with content \n";
-    ft::List<int> listA;
+    std::cout << "Creating list A with content \n";
+    ft::list<int> listA;
     listA.resize(2, 0);
     listA.resize(4, 2);
     listA.resize(6, 1);
@@ -33,33 +33,33 @@ void testList()
     listA.push_front(42);
     listA.push_back(-42);
     std::cout << listA;
-    std::cout << "Creating List B with content \n";
-    ft::List<int> listB(4, 667);
+    std::cout << "Creating list B with content \n";
+    ft::list<int> listB(4, 667);
     listB.push_back(1000);
     std::cout << listB;
-    std::cout << "Creating List C as a const copy of A\n";
-    const ft::List<int> listC(listA);
+    std::cout << "Creating list C as a const copy of A\n";
+    const ft::list<int> listC(listA);
     std::cout << listC;
-    std::cout << "Creating List D as a copy of B by assignation\n";
-    ft::List<int> listD = listB;
+    std::cout << "Creating list D as a copy of B by assignation\n";
+    ft::list<int> listD = listB;
     std::cout << listD;
-    std::cout << "Creating List E empty\n";
-    ft::List<int> listE;
+    std::cout << "Creating list E empty\n";
+    ft::list<int> listE;
     std::cout << listE;
 
     std::cout << "\n// ----- ITERATORS ----- //\n\n";
 
     std::cout << "Displaying ListA with ITERATION :\t\t";
-    for (ft::List<int>::iterator it = listA.begin(); it != listA.end(); it++)
+    for (ft::list<int>::iterator it = listA.begin(); it != listA.end(); it++)
         std::cout << "[" << *it << "]";
     std::cout << "\nDisplaying ListA with REVERSE ITERATION :\t";
-    for (ft::List<int>::reverse_iterator rit = listA.rbegin(); rit != listA.rend(); rit++)
+    for (ft::list<int>::reverse_iterator rit = listA.rbegin(); rit != listA.rend(); rit++)
         std::cout << "[" << *rit << "]";
     std::cout << "\nDisplaying ListC with CONST ITERATION :\t\t";
-    for (ft::List<int>::const_iterator it = listC.begin(); it != listC.end(); it++)
+    for (ft::list<int>::const_iterator it = listC.begin(); it != listC.end(); it++)
         std::cout << "[" << *it << "]";
     std::cout << "\nDisplaying ListC with CONST REVERSE ITERATION :\t";
-    for (ft::List<int>::const_reverse_iterator rit = listC.rbegin(); rit != listC.rend(); rit++)
+    for (ft::list<int>::const_reverse_iterator rit = listC.rbegin(); rit != listC.rend(); rit++)
         std::cout << "[" << *rit << "]";
     std::cout << std::endl;
     
@@ -148,9 +148,9 @@ void testList()
     std::cout << "\n/ - INSERT - /\n";
     std::cout << listA << listB << listE;
     std::cout << "Placing an iterator at 3rd position of lists A & B, at begin() of list E\n";
-    ft::List<int>::iterator it = listA.begin(); it++; it++;
-    ft::List<int>::iterator it2 = listB.begin(); it2++; it2++;
-    ft::List<int>::iterator it3 = listE.begin();
+    ft::list<int>::iterator it = listA.begin(); it++; it++;
+    ft::list<int>::iterator it2 = listB.begin(); it2++; it2++;
+    ft::list<int>::iterator it3 = listE.begin();
     it = listA.insert(it, 123);
     it2 = listB.insert(it2, 123);
     it3 = listE.insert(it3, 123);

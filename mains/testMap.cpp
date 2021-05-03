@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 04:06:37 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:51:34 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void testMap()
     std::cout << "**   *   **  **       **  **\n";
     std::cout << "**       ** **         ** **\n\n";
 
-    std::cout << "Creating Map A with content \n";
-    ft::Map<int, char> mapA;
+    std::cout << "Creating map A with content \n";
+    ft::map<int, char> mapA;
     std::cout << mapA;
-    std::pair<ft::Map<int, char>::iterator,bool> ret = mapA.insert(std::pair<int, char>(7, 's'));
+    std::pair<ft::map<int, char>::iterator,bool> ret = mapA.insert(std::pair<int, char>(7, 's'));
     std::cout << "INSERT '7-s' : Return = \'" << ret.first.operator*().first << "-";
     std::cout << ret.first.operator*().second << "\'\t" << ret.second << std::endl;
     std::cout << mapA;
@@ -57,45 +57,46 @@ void testMap()
     std::cout << "+ 3" << std::endl;
     mapA[3] = 't';
     std::cout << mapA;
-    std::cout << "Creating Map B with content (iterators) \n";
-    ft::Map<int, char> mapB(mapA.begin(), mapA.end()); 
+    std::cout << "Creating map B with content (iterators) \n";
+    ft::map<int, char> mapB(mapA.begin(), mapA.end());   //leak
     std::cout << mapB;
     {
-        std::cout << "Creating Map C as a const copy of A\n";
-        const ft::Map<int, char> mapC(mapA);
+        std::cout << "Creating map C as a const copy of A\n";
+        const ft::map<int, char> mapC(mapA);        //leak
         std::cout << mapC;
     }
-    std::cout << "Creating Map D as a copy of B by assignation\n";
-    ft::Map<int, char> mapD = mapB;
+    std::cout << "Creating map D as a copy of B by assignation\n";
+    ft::map<int, char> mapD;
+    mapD = mapB;      // leak
     std::cout << mapD;
-    std::cout << "Creating Map E empty\n";
-    ft::Map<int, char> mapE;
+    std::cout << "Creating map E empty\n";
+    ft::map<int, char> mapE;
     std::cout << mapE;
 
     std::cout << "\n// ----- ITERATORS ----- //\n\n";
 
     std::cout << "Displaying MapA with ITERATION :\t\t";
-    for (ft::Map<int, char>::iterator it = mapA.begin(); it != mapA.end(); it++)
+    for (ft::map<int, char>::iterator it = mapA.begin(); it != mapA.end(); it++)
     {
         std::pair<int, char> pair = *it;
             std::cout << "[" << pair.first << "," << pair.second << "] ";
     }
     std::cout << "\nDisplaying MapA with REVERSE ITERATION :\t";
-    for (ft::Map<int, char>::reverse_iterator rit = mapA.rbegin(); rit != mapA.rend(); rit++)
+    for (ft::map<int, char>::reverse_iterator rit = mapA.rbegin(); rit != mapA.rend(); rit++)
     {
         std::pair<int, char> pair = *rit;
             std::cout << "[" << pair.first << "," << pair.second << "] ";
     }
     {
         std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
-        const ft::Map<int, char> mapC(mapA);
-        for (ft::Map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
+        const ft::map<int, char> mapC(mapA);
+        for (ft::map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
         {
             std::pair<int, char> pair = *it;
                 std::cout << "[" << pair.first << "," << pair.second << "] ";
         }
         std::cout << "\nDisplaying MapC with CONST REVERSE ITERATION :\t";
-        for (ft::Map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
+        for (ft::map<int, char>::const_reverse_iterator rit = mapC.rbegin(); rit != mapC.rend(); rit++)
         {
             std::pair<int, char> pair = *rit;
                 std::cout << "[" << pair.first << "," << pair.second << "] ";
@@ -144,7 +145,7 @@ void testMap()
     mapB.erase(1);
     mapB.erase(9);
     mapA.erase(7);
-    const ft::Map<int, char> mapC(mapA);
+    const ft::map<int, char> mapC(mapA);
     mapD = mapB;
 
     std::cout << "\n// ----- MODIFIERS ----- //\n\n";    
@@ -208,11 +209,11 @@ void testMap()
 
     std::cout << "\n/ - FIND - /\n";
     std::cout << mapA << mapB << mapE;
-    ft::Map<int, char>::iterator it = mapA.find(3);
+    ft::map<int, char>::iterator it = mapA.find(3);
     std::cout << "Find 3 in map A -> " << it << std::endl;
     it = mapB.find(3);
     std::cout << "Find 3 in map B -> " << (it != mapB.end()) << std::endl;
-    ft::Map<int, char>::const_iterator itc = mapC.find(3);
+    ft::map<int, char>::const_iterator itc = mapC.find(3);
     std::cout << "Find 3 in map C -> " << itc << std::endl;
     it = mapE.find(3);
     std::cout << "Find 3 in map E -> " << (it != mapE.end()) << std::endl;

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 04:33:00 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:52:14 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,28 @@
 
 namespace ft
 {
-    template < typename T, class C = ft::List<T> >
-    class Stack {
+    template < typename T, class C = ft::list<T> >
+    class stack {
 
         public :
 
-            //defining every member in my List as in the STL
+            //defining every member in my list as in the STL
             typedef T                                   value_type;
             typedef C                                   container_type;
             typedef typename container_type::size_type  size_type;
 
             // CONSTRUCTOR BY CONTAINER TYPE
-            explicit Stack(const container_type& ctnr = container_type()) :
+            explicit stack(const container_type& ctnr = container_type()) :
                 _container(ctnr)
             { }
             // CONSTRUCTOR BY COPY
-            Stack(const Stack &ref) : _container(ref._container)
+            stack(const stack &ref) : _container(ref._container)
             { }
             // DESTRUCTOR
-            ~Stack()
+            ~stack()
             { }
             // ASSIGNATION
-            const Stack &operator=(const Stack &ref) {
+            const stack &operator=(const stack &ref) {
                 _container = ref._container;
                 return (*this);
             }
@@ -63,25 +63,25 @@ namespace ft
     };
 
     template < typename T, class Alloc >
-    bool operator==(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs == rhs); }
+    bool operator==(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator!=(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs != rhs); }
+    bool operator!=(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs != rhs); }
     template < typename T, class Alloc >
-    bool operator<(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs < rhs); }
+    bool operator<(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs < rhs); }
     template < typename T, class Alloc >
-    bool operator<=(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs <= rhs); }
+    bool operator<=(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs <= rhs); }
     template < typename T, class Alloc >
-    bool operator>(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs > rhs); }
+    bool operator>(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs > rhs); }
     template < typename T, class Alloc >
-    bool operator>=(const Stack<T, Alloc> &lhs, const Stack<T, Alloc> &rhs) { return (lhs >= rhs); }
+    bool operator>=(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs >= rhs); }
     
     template < typename T >
-    std::ostream &operator<<(std::ostream &out, Stack<T> const &Stack) {
-        size_t size = Stack.size();
+    std::ostream &operator<<(std::ostream &out, stack<T> const &stack) {
+        size_t size = stack.size();
         out << "\t>> STACK [" << size << "]\t= { ";
         if (size)
         {
-            for (typename List<T>::reverse_iterator it = Stack.getContainer().rbegin(); size-- > 0; it++)
+            for (typename list<T>::reverse_iterator it = stack.getContainer().rbegin(); size-- > 0; it++)
             {
                 out << *it;
                 if (size)

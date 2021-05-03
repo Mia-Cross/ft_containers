@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:22:30 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/06 06:03:38 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:52:15 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void testStack()
    std::cout << " _| | /   \\|_ |\\\n\n";
 
    std::cout << "Creating stack A with content \n";
-   ft::Stack<int> stackA;
+   ft::stack<int> stackA;
    stackA.push(4);
    stackA.push(3);
    stackA.push(2);
@@ -27,17 +27,17 @@ void testStack()
    stackA.push(0);
    std::cout << stackA;
    std::cout << "Creating stack B with content\n";
-   ft::Stack<int> stackB;
+   ft::stack<int> stackB;
    stackB.push(1000);
    std::cout << stackB;
    std::cout << "Creating stack C as a const copy of A\n";
-   const ft::Stack<int> stackC(stackA);
+   const ft::stack<int> stackC(stackA);
    std::cout << stackC;
    std::cout << "Creating stack D as a copy of B by assignation\n";
-   ft::Stack<int> stackD = stackB;
+   ft::stack<int> stackD = stackB;
    std::cout << stackD;
    std::cout << "Creating stack E empty\n";
-   ft::Stack<int> stackE;
+   ft::stack<int> stackE;
    std::cout << stackE;
 
    std::cout << "\n// ----- CAPACITY ----- //\n\n";

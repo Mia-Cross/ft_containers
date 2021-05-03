@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/08 04:30:58 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 23:11:48 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 namespace ft
 {
     template < typename T, class Alloc = std::allocator<T> >
-    class Vector {
+    class vector {
 
         public :
 
-            //defining every member in my Vector as in the STL
+            //defining every member in my vector as in the STL
             typedef T                       value_type;
             typedef Alloc                   allocator_type;
             typedef T &                     reference;
@@ -39,11 +39,11 @@ namespace ft
             typedef ptrdiff_t               difference_type;
 
             // DEFAULT CONSTRUCTOR
-            explicit Vector(const allocator_type& alloc = allocator_type()) :
+            explicit vector(const allocator_type& alloc = allocator_type()) :
                 _array(), _size(0), _alloc(alloc)
             { }
             // CONSTRUCTOR BY FILLING
-            explicit Vector(size_type n, const value_type &val = value_type(),
+            explicit vector(size_type n, const value_type &val = value_type(),
                 const allocator_type& alloc = allocator_type()) :
                 _array(n), _size(n), _alloc(alloc)
             {
@@ -51,7 +51,7 @@ namespace ft
                     _array.addElement(val);
             }
             // CONSTRUCTOR BY RANGE
-            Vector(iterator first, iterator last,
+            vector(iterator first, iterator last,
                 const allocator_type& alloc = allocator_type()) :
                 _array(), _size(0), _alloc(alloc)
             {
@@ -59,16 +59,16 @@ namespace ft
                     push_back(*first++);
             }
             // CONSTRUCTOR BY COPY
-            Vector(const Vector &ref) : _array(ref._size),
+            vector(const vector &ref) : _array(ref._size),
                 _size(ref._size), _alloc(ref._alloc)
             {
                 *this = ref;
             }
             // DESTRUCTOR
-            ~Vector()
+            ~vector()
             { }
             // ASSIGNATION
-            const Vector &operator=(const Vector &ref)
+            const vector &operator=(const vector &ref)
             {
                 this->_array = ref._array;
                 this->_size = ref._size;
@@ -170,13 +170,16 @@ namespace ft
                 return (position);
             }
             void insert(iterator position, size_type n, const value_type &val) {
+                // std::cout << "insert - begin" << std::endl;
                 size_t index = position.distanceBetween(begin(), position);
+                // std::cout << "nyaaaa" << std::endl;
                 if (capacity() <= _size + n)
                     _array.reallocateSplitArray(index, n);
                 for (size_t i = 0; i < n; i++)
                     _array.constructValue(index + i, val);
                 _array.incrementSize(n);
                 _size += n;
+                // std::cout << "insert - end" << std::endl;
             }
             void insert(iterator position, iterator first, iterator last) {
                 size_t index = position.distanceBetween(begin(), position);
@@ -202,8 +205,8 @@ namespace ft
                 _size -= dist;
                 return (last);
             }
-            void swap(Vector &x) {
-                Vector tmp(x);
+            void swap(vector &x) {
+                vector tmp(x);
                 x = *this;
                 *this = tmp;
             }
@@ -219,31 +222,31 @@ namespace ft
     };
 
     template < typename T, class Alloc >
-    bool operator==(const Vector<T, Alloc> &lhs, const Vector<T, Alloc> &rhs) { return (lhs == rhs); }
+    bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator!=(const Vector<T, Alloc> &lhs, const Vector<T, Alloc> &rhs) { return (lhs != rhs); }
+    bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs != rhs); }
     template < typename T, class Alloc >
-    bool operator<(const Vector<T, Alloc> &lhs, const Vector<T, Alloc> &rhs) { return (lhs < rhs); }
+    bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs < rhs); }
     template < typename T, class Alloc >
-    bool operator<=(const Vector<T, Alloc> &lhs, const Vector<T, Alloc> &rhs) { return (lhs <= rhs); }
+    bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs <= rhs); }
     template < typename T, class Alloc >
-    bool operator>(const Vector<T, Alloc> &lhs, const Vector<T, Alloc> &rhs) { return (lhs > rhs); }
+    bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs > rhs); }
     template < typename T, class Alloc >
-    bool operator>=(const Vector<T, Alloc> &lhs, const Vector<T, Alloc> &rhs) { return (lhs >= rhs); }
+    bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs >= rhs); }
     
     template < typename T >
-    void swap(Vector<T> &x, Vector<T> &y) {
-        Vector<T> tmp;
+    void swap(vector<T> &x, vector<T> &y) {
+        vector<T> tmp;
         tmp = x;
         x = y;
         y = tmp;
     }
     
     template < typename T >
-    std::ostream &operator<<(std::ostream &out, Vector<T> const &vect) {
+    std::ostream &operator<<(std::ostream &out, vector<T> const &vect) {
         size_t size = vect.size();
         out << "\t>> VECTOR [" << size << "]\t= { ";
-        for (typename Vector<T>::const_iterator it = vect.begin(); size-- > 0; it++)
+        for (typename vector<T>::const_iterator it = vect.begin(); size-- > 0; it++)
         {
             out << *it;
             if (size)

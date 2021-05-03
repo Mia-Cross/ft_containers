@@ -1,3 +1,5 @@
+# Executables
+*/a.out
 ft_containers
 # Prerequisites
 *.d
@@ -6,6 +8,3 @@ ft_containers
 *.obj
 # Precompiled Headers
 *.gch
-
-
-

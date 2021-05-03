@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/03/23 02:02:36 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 22:53:21 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,6 +308,5 @@ class crVectIter : public virtual cVectIter<T,Alloc>, public virtual rVectIter<T
             return (dist);
         }
 };
-
 
 #endif
