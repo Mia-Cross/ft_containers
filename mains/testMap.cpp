@@ -6,18 +6,13 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/30 20:51:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 04:06:37 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../containers/map.hpp"
 #include <cstdlib>
 #include <map>
-
-// bool isOdd(int x) { return (x % 2 ? true : false); }
-// bool isDigit(int x) { return (x < 10 && x > -1 ? true : false); }
-// bool compareAbs(int x, int y){ return ( abs(x) < abs(y) ? true : false);}
-// bool isNear(int x, int y) { return (abs(x - y) < 5); }
 
 void testMap()
 {
@@ -173,9 +168,7 @@ void testMap()
     std::cout << mapB.insert(mapB.begin(), std::pair<int, char>(65, '#')) << std::endl;
     std::cout << mapE.insert(mapE.begin(), std::pair<int, char>(65, '#')) << std::endl;
     std::cout << mapA << mapB << mapE;
-    std::cout << "Find 65 in map B -> " << mapB.find(65) << std::endl;
     mapE.clear();
-    mapB.clear();
     std::cout << " * Insert using iterators\n";
     mapA.insert(mapC.begin(), mapC.end());
     mapB.insert(mapC.begin(), mapC.end());
@@ -187,27 +180,27 @@ void testMap()
     mapE.clear();
 
     std::cout << "\n/ - ERASE - /\n";
+    std::cout << mapA << mapB << mapE;
     std::cout << " * Erase single value '2-d'\n";
     std::cout << "MapA -> " << mapA.erase(2) << std::endl;
     std::cout << "MapB -> " << mapB.erase(2) << std::endl;
-    std::cout << "MapE -> " << mapE.erase(45) << std::endl;
+    std::cout << "MapE -> " << mapE.erase(2) << std::endl;
     std::cout << mapA << mapB << mapE;
     std::cout << " * Erase using iterator (begin)\n";
     mapA.erase(mapA.begin());
-    mapA.erase(mapB.begin());
-    mapA.erase(mapE.begin());
+    mapB.erase(mapB.begin());
+    mapE.erase(mapE.begin());
     std::cout << mapA << mapB << mapE;
     //restoring maps from const copies
     mapA = mapC;
     mapB = mapD;
-    mapE.clear();
 
     std::cout << "\n/ - CLEAR - /\n";
     mapA.clear();
     mapB.clear();
     mapE.clear();
     std::cout << mapA << mapB << mapE;
-    // //restoring maps from const copies
+    //restoring maps from const copies
     mapA = mapC;
     mapB = mapD;
 
@@ -215,13 +208,14 @@ void testMap()
 
     std::cout << "\n/ - FIND - /\n";
     std::cout << mapA << mapB << mapE;
-    std::cout << "Find 4 in map A -> " << mapA.find(4) << std::endl;
-    std::cout << "Find 4 in map C -> " << mapC.find(4) << std::endl;
-    ft::Map<int, char>::iterator it = mapE.find(4);
-    std::cout << "Find 4 in map E -> " << (it != mapE.end()) << std::endl;
-    std::cout << "Find 42 in map B -> " << mapB.find(42) << std::endl;
-    it = mapA.find(42);
-    std::cout << "Find 42 in map A -> " << (it != mapA.end()) << std::endl;
+    ft::Map<int, char>::iterator it = mapA.find(3);
+    std::cout << "Find 3 in map A -> " << it << std::endl;
+    it = mapB.find(3);
+    std::cout << "Find 3 in map B -> " << (it != mapB.end()) << std::endl;
+    ft::Map<int, char>::const_iterator itc = mapC.find(3);
+    std::cout << "Find 3 in map C -> " << itc << std::endl;
+    it = mapE.find(3);
+    std::cout << "Find 3 in map E -> " << (it != mapE.end()) << std::endl;
 
     std::cout << "\n/ - COUNT - /\n";
     std::cout << mapA << mapB << mapE;
@@ -229,33 +223,28 @@ void testMap()
     std::cout << "Count 9 in map B -> " << mapB.count(9) << std::endl;
     std::cout << "Count 9 in map E -> " << mapE.count(9) << std::endl;
 
-    std::cout << "\n/ - LOWER_BOUND - /\n";
-    std::cout << mapA << mapB << mapE;
-    std::map<int, char> stdMapE;
-    
+    //creating identical maps with the STL
     std::map<int, char> stdMapA;
     stdMapA[1] = 'u';
     stdMapA[2] = 'd';
     stdMapA[3] = 't';
     stdMapA[4] = 'q';
     stdMapA[5] = 'c';
-    // stdMapA[7] = 'S';
     stdMapA[8] = 'h';
     stdMapA[9] = 'n';
     std::cout << stdMapA[45] << std::endl;
-    
-    std::map<int, char> stdMapB;
-    stdMapB[2] = 'd';
-    stdMapB[4] = 'q';
-    stdMapB[5] = 'c';
+    std::map<int, char> stdMapB(stdMapA);
     stdMapB[7] = 'S';
-    stdMapB[8] = 'h';
     stdMapB[11] = '?';
     stdMapB[20] = '&';
     stdMapB[27] = '$';
     stdMapB[30] = '+';
     stdMapB[42] = '*';
     stdMapB[45] = '=';
+    std::map<int, char> stdMapE;
+
+    std::cout << "\n/ - LOWER_BOUND - /\n";
+    std::cout << mapA << mapB << mapE;
     std::map<int,char>::iterator iter = stdMapA.lower_bound(5);
     std::pair<int,char> pair = *iter;
     std::cout << "[expected] Lower_bound for 5 in map A -> " << pair.first << "-" << pair.second << std::endl;
@@ -269,6 +258,7 @@ void testMap()
     std::cout << "Lower_bound for 20 in map B -> " << mapB.lower_bound(20) << std::endl;
     std::cout << "Lower_bound for 20 in map E -> " << mapE.lower_bound(20) << std::endl;
     std::cout << "Lower_bound for 42 in map A -> " << mapA.lower_bound(42) << std::endl;
+    mapE.clear();
 
     std::cout << "\n/ - UPPER_BOUND - /\n";
     std::cout << mapA << mapB << mapE;
@@ -284,9 +274,4 @@ void testMap()
     std::cout << "Upper_bound for 20 in map B -> " << mapB.upper_bound(20) << std::endl;
     std::cout << "Upper_bound for 20 in map E -> " << mapE.upper_bound(20) << std::endl;
     std::cout << "Upper_bound for 42 in map A -> " << mapA.upper_bound(42) << std::endl;
-    
-    // iter = stdMapA.end();
-    // iter--;
-    // pair = *iter;
-    // std::cout << "[expected] Decrement end -> " << pair.first << "-" << pair.second << std::endl;
 }

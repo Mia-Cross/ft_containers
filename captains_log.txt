@@ -25,6 +25,10 @@ Left to do :
         insert(position, value);
         value_comp();
 
+[03/05]
+J'avais crié victoire un peu trop tot vendredi mais la ça m'a vraiment l'air pas mal : tous les tests run jusqu'a la fin avec les
+résultats attendus, j'ai enfin fix les deletions qui restaient un peu aléatoires. Cependant...... je leake 52ko en 164 allocs.
+NEXT TIME : Fix leaks
 [30/04]
 Le truc majeur que j'ai changé : avant, l'operator= du BST ne copiait que le contenu/la paire, maintenant je copie aussi les liens
 left et right, du coup dans deleteElement() pour enlever le maillon dont j'ai copié le contenu je refais plus appel a deleteElement

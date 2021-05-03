@@ -1,13 +1,56 @@
         // create new element with only a key
-        // binTree(const Key key, binTree *root) : _root(root), _left(NULL), _right(NULL),
-        //     _comp(Compare()), _allocBT(Alloc())
-        // {
-        //     // std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
-        //     _pair = _allocBT.allocate(1);
-        //     _allocBT.construct(_pair, pair_t(key, 0));
-        //     if (!_root)
-        //         _root = this;
-        // }
+        binTree(const Key key, binTree *root) : _root(root), _left(NULL), _right(NULL),
+            _comp(Compare()), _allocBT(Alloc())
+        {
+            // std::cout << "Key Constructor called -> " << this << " ~ key=" << key << std::endl;
+            _pair = _allocBT.allocate(1);
+            _allocBT.construct(_pair, pair_t(key, 0));
+            if (!_root)
+                _root = this;
+        }
+
+// original version
+
+        void replaceInParent(binTree *newChild) {
+            binTree *parent = this->getParent();
+            if (parent)
+            {
+                if (this == parent->_left)
+                    parent->_left = newChild;
+                else
+                    parent->_right = newChild;
+            }
+        }
+
+        void deleteFromTree(const Key &to_del) {
+            if (_comp(to_del, this->getKey()))
+            {
+                this->_left->deleteFromTree(to_del);
+                return;
+            }
+            if (_comp(this->getKey(), to_del))
+            {
+                this->_right->deleteFromTree(to_del);
+                return;
+            }
+            // Delete the key here
+            if (this->_left && this->_right)  // If both children are present
+            {
+                binTree *successor = getMostLeft(this->_right);
+                // pair_t newContent(successor->getKey(), this->_pair->second);
+                *this = *successor;
+                // this->getKey() = successor->getKey();
+                successor->deleteFromTree(successor->getKey());
+            }
+            else if (this->_left)  // If the node has only a *_left* child
+                this->replaceInParent(this->_left);
+            else if (this->_right) // If the node has only a *_right* child
+                this->replaceInParent(this->_right);
+            else
+                this->replaceInParent(NULL);  // This node has no children
+            if (this != _root)
+                delete this;
+        }
 size_t      getLevel() const {
             size_t lvl = 0;
             for (binTree *node = root; node && node != this; lvl++)

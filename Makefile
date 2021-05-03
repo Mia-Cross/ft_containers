@@ -1,7 +1,7 @@
 NAME = ft_containers
 
 CXX = clang++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 #-g -fsanitize=address
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 SRCDIR =	mains
 SRCS = 	main.cpp \
 		testList.cpp \

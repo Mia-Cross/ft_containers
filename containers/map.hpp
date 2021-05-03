@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/04/30 20:52:42 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/03 04:05:34 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ namespace ft
                     clear();
                 for (iterator it = ref.begin(); it != ref.end(); it++)
                     insert(*it);
+                // _tree->setEnd(ref._tree->getEnd());
                 return (*this);
             }
 
@@ -140,13 +141,11 @@ namespace ft
             }
             
             void erase(iterator position) {
-                // std::cout << "size =" << _size << std::endl;
-                if (_size)
-                {
-                    binTree *to_del = position.operator->();
-                    to_del->deleteElement();
-                    _size--;
-                }
+                if (!_size)
+                    return ;
+                binTree *to_del = position.operator->();
+                to_del->deleteElement();
+                _size--;
             }
             size_type erase(const key_type &k) {
                 binTree *to_del = _tree->getNode(k, _tree);
@@ -157,6 +156,9 @@ namespace ft
                 return (1);
             }
             void erase(iterator first, iterator last) {
+                if (!_size)
+                    return ;
+                // std::cout << "ERASE by iterators -> BEGIN" << std::endl;
                 iterator iter = first;
                 key_type lastKey;
                 while (iter != last)
@@ -164,24 +166,28 @@ namespace ft
                 key_type key = first.operator->()->getKey();
                 while (key != lastKey)
                 {
-                    // std::cout << "-> key to del = " << key << std::endl;
+                    // std::cout << "-> will delete key " << key << std::endl;
                     key_type nextKey = upper_bound(key).operator->()->getKey();
                     iter = find(key);
                     erase(iter);
                     key = nextKey;
-                    // std::cout << "next key = " << key << std::endl;
+                    // std::cout << "  next key will be " << key << std::endl;
                 }
                 iter = find(lastKey);
                 erase(iter);
+                // std::cout << "ERASE by iterators -> END" << std::endl;
             }
             
             void swap(Map &x) {
-                binTree *tmp = x._tree;
+                binTree *tmpRoot = x._tree;
+                binTree *tmpEnd = x._tree->getEnd();
                 size_t tmpSize = x._size;
                 x._tree = this->_tree;
+                x._tree->setEnd(this->_tree->getEnd());
                 x._size = this->_size;
-                this->_tree = tmp;
+                this->_tree = tmpRoot;
                 this->_size = tmpSize;
+                this->_tree->setEnd(tmpEnd);
             }
 
             void clear() {
@@ -210,12 +216,25 @@ namespace ft
             // ----- OPERATIONS ----- //
 
             iterator        find(const key_type& k) {
-                return (iterator(_tree->getNode(k, _tree))); }
-            const_iterator  find (const key_type& k) const {
-                return (const_iterator(_tree->getNode(k, _tree))); }
+                binTree *node = _tree->getNode(k, _tree);
+                if (node)
+                    return (iterator(node));
+                return (iterator(_tree->getEnd()));
+            }
+            const_iterator  find(const key_type& k) const {
+                binTree *node = _tree->getNode(k, _tree);
+                if (node)
+                    return (const_iterator(node));
+                return (const_iterator(_tree->getEnd()));
+            }
             size_type       count(const key_type& k) const {
                 return (_tree->getNode(k, _tree) ? 1 : 0); }
             iterator        lower_bound(const key_type &k) {
+                if (!_size)
+                {
+                    operator[](0);
+                    return (find(0));
+                }
                 iterator it = begin();
                 while (it != end())
                 {
@@ -227,6 +246,11 @@ namespace ft
                 return (it);
             }
             const_iterator  lower_bound(const key_type &k) const {
+                if (!_size)
+                {
+                    operator[](0);
+                    return (find(0));
+                }
                 const_iterator it = begin();
                 while (it != end())
                 {
@@ -238,6 +262,11 @@ namespace ft
                 return (it);
             }
             iterator        upper_bound(const key_type &k) {
+                if (!_size)
+                {
+                    operator[](0);
+                    return (find(0));
+                }
                 iterator it = begin();
                 while (it != end())
                 {
@@ -249,6 +278,11 @@ namespace ft
                 return (it);
             }
             const_iterator  upper_bound(const key_type &k) const {
+                if (!_size)
+                {
+                    operator[](0);
+                    return (find(0));
+                }
                 const_iterator it = begin();
                 while (it != end())
                 {

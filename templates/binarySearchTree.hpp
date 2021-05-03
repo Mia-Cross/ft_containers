@@ -36,7 +36,7 @@ class binTree
             _comp(Compare()), _allocBT(Alloc())
         { 
             _pair = _allocBT.allocate(1);
-            _allocBT.construct(_pair, *ref.value);
+            _allocBT.construct(_pair, *ref._pair);
         }
         
         ~binTree() {
@@ -45,7 +45,6 @@ class binTree
         }
         
         binTree &operator=(const binTree &ref) {
-            // std::cout << "/!\\ WARNING : BST operator= called -> undefined behavior for now..." << std::endl;
             _allocBT.destroy(_pair);
             if (ref._pair)
                 _allocBT.construct(_pair, *ref._pair);
@@ -55,19 +54,17 @@ class binTree
                 _allocBT.deallocate(_pair, 1);
                 _pair = NULL;
             }
-            // this->_root = ref._root;
-            // this->_left = ref._left;
-            // this->_right = ref._right;
             return (*this);
         }
 
         binTree     *getRoot() const { return (this->_root); }
-        binTree     *getEnd() const { return (this->_end); }
         const Key   &getKey() const { return (this->_pair->first); }
         T           &getValue() const { return (this->_pair->second); }
         pair_t      *getPair() const { return (this->_pair); }
         binTree     *getLeft() const { return (this->_left); }
         binTree     *getRight() const { return (this->_right); }
+        binTree     *getEnd() const { return (this->_end); }
+        void        setEnd(binTree *end) { this->_end = end; }
         
         binTree     *getMostRight(binTree *node) const {
             if (node && node->_right)
@@ -107,7 +104,9 @@ class binTree
 
         binTree  *getNode(const Key &to_find, binTree *node) const {
             // std::cout << "GET NODE : node = " << node << " // key = " << node->getKey() << std::endl;
-            if (!node || node->getKey() == to_find)
+            if (!node || !node->_pair)
+                return (NULL);
+            if (node->getKey() == to_find)
                 return (node);
             if (_comp(to_find, node->getKey()))
                 return (getNode(to_find, node->_left));
@@ -192,48 +191,44 @@ class binTree
                     parent->_left = newChild;
                 else if (this == parent->_right)
                     parent->_right = newChild;
+                delete this;
             }
         }
 
         void deleteElement() {
             if (this == _root)
                 return (deleteRoot());
-            if (this->_left && this->_right)  // If both children are present
+            if (this->_left && this->_right)
             {
                 binTree *successor = getMostLeft(this->_right);
-                *this = *successor;
+                binTree tmp = *successor;
                 successor->deleteElement();
+                *this = tmp;
             }
-            else if (this->_left)  // If the node has only a *_left* child
+            else if (this->_left)
                 this->replaceInParent(this->_left);
-            else if (this->_right) // If the node has only a *_right* child
+            else if (this->_right)
                 this->replaceInParent(this->_right);
-            else                    // This node has no children
+            else
                 this->replaceInParent(NULL);
-            delete this;
         }
 
         void deleteRoot() {
-            if (this->_left && this->_right)  // If both children are present
-            {
-                binTree *successor = getMostLeft(this->_right);
-                *this = *successor;
-                successor->deleteElement();
-            }
-            else if (this->_left)  // If root has only a *_left* child
-            {
-                *this = *this->_left;
-                // this->_left->deleteElement();
-            }
-            else if (this->_right) // If root has only a *_right* child
-            {
-                *this = *this->_right;
-                // this->_right->deleteElement();
-            }
-            else                    // Root has no children
+            binTree *successor = NULL;
+            if (this->_right)
+                successor = getMostLeft(this->_right);
+            else if (this->_left)
+                successor = getMostRight(this->_left);
+            else
             {
                 _allocBT.destroy(this->_pair);
                 this->_pair = NULL;
+            }
+            if (successor)
+            {
+                binTree tmp = *successor;
+                successor->deleteElement();
+                *this = tmp;
             }
         }
 
@@ -253,49 +248,6 @@ class binTree
         Compare _comp;
         Alloc   _allocBT;
 };
-
-        // original version
-
-        // void replaceInParent(binTree *newChild) {
-        //     binTree *parent = this->getParent();
-        //     if (parent)
-        //     {
-        //         if (this == parent->_left)
-        //             parent->_left = newChild;
-        //         else
-        //             parent->_right = newChild;
-        //     }
-        // }
-
-        // void deleteFromTree(const Key &to_del) {
-        //     if (_comp(to_del, this->getKey()))
-        //     {
-        //         this->_left->deleteFromTree(to_del);
-        //         return;
-        //     }
-        //     if (_comp(this->getKey(), to_del))
-        //     {
-        //         this->_right->deleteFromTree(to_del);
-        //         return;
-        //     }
-        //     // Delete the key here
-        //     if (this->_left && this->_right)  // If both children are present
-        //     {
-        //         binTree *successor = getMostLeft(this->_right);
-        //         // pair_t newContent(successor->getKey(), this->_pair->second);
-        //         *this = *successor;
-        //         // this->getKey() = successor->getKey();
-        //         successor->deleteFromTree(successor->getKey());
-        //     }
-        //     else if (this->_left)  // If the node has only a *_left* child
-        //         this->replaceInParent(this->_left);
-        //     else if (this->_right) // If the node has only a *_right* child
-        //         this->replaceInParent(this->_right);
-        //     else
-        //         this->replaceInParent(NULL);  // This node has no children
-        //     if (this != _root)
-        //         delete this;
-        // }
 
 template < class Key, class T, class Compare, class Alloc >
 class bstIter
