@@ -7,13 +7,26 @@ stack   none            Single end -> last in, first out
 
 DETAILS A REVOIR AVANT DE TERMINER :
 ---------
-        Insert avec reverse_iterator ??
-        Voir quelles securités sont superflues dans DLL
-        Je ferai mieux d'utiliser plus de polymorphisme dans mes fcts sur dynamic array
-        Je fais quoi avec les difference_type ? ca sert a r mais c'est dans la stl domc hmmm.........
         Faire des tests avec autre chose que des ints
-        Voir si je peux enlever Alloc du template de vector vu que je m'en sers pas
+
+DETAILS REVUS AVEC COMMENTAIRE :
+---------
+        Voir les fonctions membres passables en private
+                dll ok
+                dynArray ok
+                bst revu, c'est pas hyper pertinent et moins lisible
         typedef inutiles dans les iters ?
+                dll ok
+                dynArray ok
+                bst ok
+        Voir quelles securités sont superflues dans DLL
+                >> euh ben en fait c'etait deja fait...
+        Insert avec reverse_iterator ??
+                >> finalement je pense pas que ca soit censé fonctionner donc ballec
+        Je ferai mieux d'utiliser plus de polymorphisme dans mes fcts sur dynamic array
+                >> non je pense qu'avoir des noms de fonctions differents et plus explicites aide a y voir plus clair
+        Je fais quoi avec les difference_type ? ca sert a r mais c'est dans la stl domc hmmm.........
+                >> je crois que c'est géré, c'est toujours ptrdiff_t de toute facon, et ca sert que pour <vector>
 
 QUESTIONS :
 --------------
@@ -21,9 +34,20 @@ Pourquoi ils ont mis "explicit" devant les constructeurs ?
 Est ce qu'on a le droit de rajouter des fonctions pas dans la STL dans nos containers ?
 Est ce qu'il faut faire la specialisation vector<bool> ?
 
-Left to do :
-        insert(position, value);
+LEFT TO DO :
+--------------
+>> MAP <<
+        Fix leaks
+        verifier insert(position, value);
         value_comp();
+        passer le testeur de servane
+>> LIST <<
+        faire compiler la ligne maudite
+        passer le testeur de servane
+>> STACK & QUEUE <<
+        quand <LIST> sera ok, passer le testeur de servane
+>> VECTOR <<
+        comprendre ce qui cloche avec insert dans le testeur de servane
 
 [03/05]
 J'avais crié victoire un peu trop tot vendredi mais la ça m'a vraiment l'air pas mal : tous les tests run jusqu'a la fin avec les

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/01 18:03:28 by schene            #+#    #+#             */
-/*   Updated: 2021/05/03 21:49:00 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 02:00:11 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "utils.hpp"
 #include "color.h"
 #include "../containers/list.hpp"
+// #include "../other/listThomas.hpp"
 
 template <class T>
 void	error_diff(ft::list<T> &mylst, std::list<T> &list)

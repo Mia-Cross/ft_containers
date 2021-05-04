@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 21:52:23 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 04:01:18 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace ft
 
         public :
 
-            //defining every member in my list as in the STL
+            //defining every member in my queue as in the STL
             typedef T                                   value_type;
             typedef C                                   container_type;
             typedef typename container_type::size_type  size_type;
@@ -83,7 +83,7 @@ namespace ft
         out << "\t>> QUEUE [" << size << "]\t= { ";
         if (size)
         {
-            for (typename list<T>::iterator it = queue.getContainer().begin(); size-- > 0; it++)
+            for (typename ft::list<T>::iterator it = queue.getContainer().begin(); size-- > 0; it++)
             {
                 out << *it;
                 if (size)

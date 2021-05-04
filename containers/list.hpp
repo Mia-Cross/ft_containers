@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 21:59:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 03:00:48 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../templates/doublyLinkedList.hpp"
 # include <memory>
 # include <iostream>
+# include <limits>
 
 namespace ft
 {
@@ -51,12 +52,14 @@ namespace ft
                     push_front(val);
             }
             // CONSTRUCTOR BY RANGE
-            list(iterator first, iterator last,
+            template <class InputIterator>
+            list(InputIterator first, InputIterator last,
                 const allocator_type& alloc = allocator_type()) :
                 _list(new dLList<T, Alloc>), _size(0), _alloc(alloc)
             {
-                while (first != last)
-                    push_back(*first++);
+                // while (first != last)
+                //     push_back(*first++);
+                assign(first, last);
             }
             // CONSTRUCTOR BY COPY
             list(const list &ref) : _list(new dLList<T, Alloc>),
@@ -67,7 +70,7 @@ namespace ft
             // DESTRUCTOR
             ~list()
             {
-                this->clear();
+                clear();
                 delete _list;
             }
             // ASSIGNATION
@@ -104,13 +107,18 @@ namespace ft
             
             // ----- MODIFIERS ----- //
             
-            void assign(iterator first, iterator last) {
-                while (first != last)
-                    push_back(*first++);
+            template <class InputIterator>
+            void assign(InputIterator first, InputIterator last) {
+                clear();
+                insert(begin(), first, last);
+                // while (first != last)
+                    // push_back(first++);
             }
             void assign(size_type n, const value_type &val) {
-                while (_size < n)
-                    push_back(val);
+                clear();
+                insert(begin(), n, val);
+                // while (_size < n)
+                //     push_back(val);
             }
             void push_front(const value_type &val) {
                 dLList<T, Alloc> *elem = new dLList<T, Alloc>(val);
@@ -146,11 +154,14 @@ namespace ft
             }
             void insert(iterator position, size_type n, const value_type &val) {
                 while (position != NULL && n--)
-                    position = this->insert(position, val);
+                    position = insert(position, val);
             }
-            void insert(iterator position, iterator first, iterator last) {
-                while (position != NULL && last != NULL && last != first)
-                    position = this->insert(position, *(--last));
+            template <class InputIterator>
+            void insert(iterator position, InputIterator first, InputIterator last) {
+                while (position != NULL && first != last)
+                    insert(position, *first++);
+                // while (position != NULL && last != NULL && last != first)
+                    // position = insert(position, *(--last));
             }
             iterator erase(iterator position) {
                 dLList<T, Alloc> *elem = _list->getElement(position.operator->());

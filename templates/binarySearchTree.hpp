@@ -1,7 +1,7 @@
 #ifndef BINARY_SEARCH_TREE_H
 # define BINARY_SEARCH_TREE_H
 
-# include "../containers/list.hpp"
+// # include "../containers/list.hpp"
 # include <memory>
 # include <cstddef>
 
@@ -144,31 +144,6 @@ class binTree
         //    INSERTION    //
         /////////////////////
 
-        // std::pair<binTree*,bool> insertElement(binTree *node, const pair_t *pair) {
-        //     if (!_pair)
-        //     {
-        //         _pair = _allocBT.allocate(1);
-        //         _allocBT.construct(_pair, *pair);
-        //         return (std::pair<binTree*,bool>(_root, true));
-        //     }
-        //     if (!node)
-        //     {
-        //         node = new binTree(*pair, _root);
-        //         node->setChildInParent(node, pair->first);
-        //         return (std::pair<binTree*,bool>(node, true));
-        //     }
-        //     if (node->getKey() == pair->first)
-        //     {
-        //         node->_pair->second = pair->second;
-        //         // delete pair;
-        //         return (std::pair<binTree*,bool>(node, false));
-        //     }
-        //     if (_comp(pair->first, node->getKey()))
-        //         return (insertElement(node->_left, pair));
-        //     else
-        //         return (insertElement(node->_right, pair));
-        // }
-
         std::pair<binTree*,bool> insertElement(binTree *node, const pair_t &pair) {
             if (!_pair)
             {
@@ -206,8 +181,6 @@ class binTree
         /////////////////////
         //     DELETION    //
         /////////////////////
-
-        // new version
 
         void replaceInParent(binTree *newChild) {
             binTree *parent = this->getParent();
@@ -280,15 +253,9 @@ class bstIter
 {
     public :
 
-        typedef std::pair< const Key, T >       value_type;
         typedef std::pair< const Key, T > *     pointer_type;
         typedef std::pair< const Key, T > &     reference_type;
-        typedef binTree<Key,T,Compare,Alloc>    element_type;
         typedef binTree<Key,T,Compare,Alloc> *  elem_ptr_type;
-        typedef ptrdiff_t                       difference_type;
-        typedef Compare                         key_compare;
-        //typedef ___                           value_compare;
-        typedef Alloc                           allocator_type;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         bstIter() : node(NULL) {}
@@ -297,19 +264,19 @@ class bstIter
         virtual ~bstIter() {}
 
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
-        bstIter  &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
+        bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
         bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
         bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
-        //----- OPERATORS :  'dereference' -----//
-        reference_type  operator*() const { return (*this->node->getPair()); }
-        elem_ptr_type   operator->() const { return (this->node); }
-        // elem_ptr_type   getNodeM() const { return (this->node); }
-        
+
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         bstIter  &operator++() { this->node = this->node->getNextIter(operator*().first); return (*this); }
         bstIter  operator++(int) { bstIter tmp(*this); operator++(); return (tmp); }
         bstIter  &operator--() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
         bstIter  operator--(int) { bstIter tmp(*this); operator--(); return (tmp); }
+
+        //----- OPERATORS :  'dereference' -----//
+        reference_type  operator*() const { return (*this->node->getPair()); }
+        elem_ptr_type   operator->() const { return (this->node); }
 
     protected :
 
@@ -323,14 +290,26 @@ class cBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
     
         typedef const std::pair< const Key, T > *   const_pointer_type;
         typedef const std::pair< const Key, T > &   const_reference_type;
-        typedef binTree<Key,T,Compare,Alloc> *   elem_ptr_type;
+        typedef binTree<Key,T,Compare,Alloc> *      elem_ptr_type;
         
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         cBSTIter() : bstIter<Key,T,Compare,Alloc>() {}
         cBSTIter(elem_ptr_type node) : bstIter<Key,T,Compare,Alloc>(node) { }
         cBSTIter(const cBSTIter &ref) : bstIter<Key,T,Compare,Alloc>(ref.node) {}
         virtual ~cBSTIter() {}
+
+        //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         cBSTIter  &operator=(const cBSTIter &ref) { this->node = ref.node; return (*this); }
+        // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
+        bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
+        bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
+
+        //----- OPERATORS : 'incrementation' & 'decrementation' -----//
+        bstIter  &operator++() { this->node = this->node->getNextIter(operator*().first); return (*this); }
+        bstIter  operator++(int) { bstIter tmp(*this); operator++(); return (tmp); }
+        bstIter  &operator--() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
+        bstIter  operator--(int) { bstIter tmp(*this); operator--(); return (tmp); }
+
         //----- OPERATORS :  'dereference' -----//
         const_reference_type  operator*() const { return (*this->node->getPair()); }
         elem_ptr_type           operator->() const { return (this->node); }
@@ -340,7 +319,8 @@ template < class Key, class T, class Compare, class Alloc >
 class rBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
 {
     public :
-        
+
+        typedef std::pair< const Key, T > *     pointer_type;
         typedef std::pair< const Key, T > &     reference_type;
         typedef binTree<Key,T,Compare,Alloc> *   elem_ptr_type;
 
@@ -349,14 +329,19 @@ class rBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
         rBSTIter(elem_ptr_type node) : bstIter<Key,T,Compare,Alloc>(node) {}
         rBSTIter(const rBSTIter &ref) : bstIter<Key,T,Compare,Alloc>(ref.node) {}
         virtual ~rBSTIter() {}
+
+        //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         rBSTIter  &operator=(const rBSTIter &ref) { this->node = ref.node; return (*this); }
+        // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
+        bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
+        bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         rBSTIter  &operator++() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
         rBSTIter  operator++(int) { rBSTIter tmp(*this); operator++(); return (tmp); }
         rBSTIter  &operator--() { this->node = this->node->getNextIter(operator*().first); return (*this); }
         rBSTIter  operator--(int) { rBSTIter tmp(*this); operator--(); return (tmp); }
-        
+
         //----- OPERATORS :  'dereference' -----//
         reference_type  operator*() const { return (*this->node->getPair()); }
         elem_ptr_type   operator->() const { return (this->node); }
@@ -369,14 +354,19 @@ class crBSTIter : public virtual cBSTIter<Key,T,Compare,Alloc>, public virtual r
 
         typedef const std::pair< const Key, T > *   const_pointer_type;
         typedef const std::pair< const Key, T > &   const_reference_type;
-        typedef binTree<Key,T,Compare,Alloc> *   elem_ptr_type;
+        typedef binTree<Key,T,Compare,Alloc> *      elem_ptr_type;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         crBSTIter() : bstIter<Key,T,Compare,Alloc>() {}
         crBSTIter(elem_ptr_type node) : bstIter<Key,T,Compare,Alloc>(node) {}
         crBSTIter(const crBSTIter &ref) : bstIter<Key,T,Compare,Alloc>(ref.node) {}
         virtual ~crBSTIter() {}
+
+        //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         crBSTIter  &operator=(const crBSTIter &ref) { this->node = ref.node; return (*this); }
+        // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
+        bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
+        bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         crBSTIter  &operator++() { this->node = this->node->getPrevIter(operator*().first); return (*this); }

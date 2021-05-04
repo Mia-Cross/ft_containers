@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 23:11:48 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 04:01:00 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,18 @@ namespace ft
         public :
 
             //defining every member in my vector as in the STL
-            typedef T                       value_type;
-            typedef Alloc                   allocator_type;
-            typedef T &                     reference;
-            typedef T *                     pointer;
-            typedef const T &	            const_reference;
-            typedef const T *	            const_pointer;
-            typedef vectIter<T,Alloc>     iterator;
-            typedef cVectIter<T,Alloc>    const_iterator;
-            typedef rVectIter<T,Alloc>    reverse_iterator;
-            typedef crVectIter<T,Alloc>   const_reverse_iterator;
-            typedef size_t                  size_type;
-            typedef ptrdiff_t               difference_type;
+            typedef T                   value_type;
+            typedef Alloc               allocator_type;
+            typedef T &                 reference;
+            typedef T *                 pointer;
+            typedef const T &	        const_reference;
+            typedef const T *	        const_pointer;
+            typedef vectIter<T,Alloc>   iterator;
+            typedef cVectIter<T,Alloc>  const_iterator;
+            typedef rVectIter<T,Alloc>  reverse_iterator;
+            typedef crVectIter<T,Alloc> const_reverse_iterator;
+            typedef size_t              size_type;
+            typedef ptrdiff_t           difference_type;
 
             // DEFAULT CONSTRUCTOR
             explicit vector(const allocator_type& alloc = allocator_type()) :
@@ -246,7 +246,7 @@ namespace ft
     std::ostream &operator<<(std::ostream &out, vector<T> const &vect) {
         size_t size = vect.size();
         out << "\t>> VECTOR [" << size << "]\t= { ";
-        for (typename vector<T>::const_iterator it = vect.begin(); size-- > 0; it++)
+        for (typename ft::vector<T>::const_iterator it = vect.begin(); size-- > 0; it++)
         {
             out << *it;
             if (size)

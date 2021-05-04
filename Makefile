@@ -4,11 +4,11 @@ CXX = clang++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g -fsanitize=address
 SRCDIR =	mains
 SRCS = 	main.cpp \
-		testList.cpp \
 		testQueue.cpp \
 		testStack.cpp \
 		testVector.cpp \
 		testMap.cpp
+		# testList.cpp \
 		# testThomas.cpp
 
 INCLUDES =	-I containers/

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 22:53:21 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 04:41:27 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,10 @@ class dynArr {
         //copy dynamic array
         dynArr(const dynArr &ref) : allocDA(Alloc()), capacity(ref.size),
             size(ref.size), array(allocDA.allocate(ref.size)), nul(0) {
-                *this = ref;
-        }
+                *this = ref;  }
 
-        ~dynArr() {
-            allocDA.deallocate(array, capacity);
-        }
-        
+        ~dynArr() { allocDA.deallocate(array, capacity); }
+
         dynArr &operator=(const dynArr &ref) {
             if (this->capacity < ref.size)
                 reallocateArray(ref.size);
@@ -120,15 +117,14 @@ class vectIter
 {
     public :
 
-        typedef T               value_type;
-        typedef ptrdiff_t       difference_type;
-        typedef T *             pointer_type;
-        typedef T &             reference_type;
-        typedef dynArr<T,Alloc> *dynamic_array;
+        typedef T *                 pointer_type;
+        typedef T &                 reference_type;
+        typedef ptrdiff_t           difference_type;
+        typedef dynArr<T,Alloc> *   dynamic_array;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         vectIter() {}
-        vectIter(T *ptr) : it(ptr) {}
+        vectIter(pointer_type ptr) : it(ptr) {}
         vectIter(dynamic_array arr) : it(arr->getArray()) {}
         vectIter(const vectIter &ref) : it(ref.it) {}
         virtual ~vectIter() {}
@@ -144,8 +140,7 @@ class vectIter
             dynamic_array arr = it->getArray();
             if (n < arr->size())
                 return (*(arr + n));
-            return (arr->throwNulRef());
-        }
+            return (arr->throwNulRef()); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         vectIter  &operator++() { this->it++; return (*this); }
@@ -181,27 +176,47 @@ class cVectIter : public virtual vectIter<T,Alloc>
 {
     public :
 
-        typedef const T *   const_pointer_type;
-        typedef const T &   const_reference_type;
-        typedef ptrdiff_t       difference_type;
-        typedef dynArr<T,Alloc> *dynamic_array;
+        typedef T *                 pointer_type;
+        typedef const T *           const_pointer_type;
+        typedef const T &           const_reference_type;
+        typedef ptrdiff_t           difference_type;
+        typedef dynArr<T,Alloc> *   dynamic_array;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         cVectIter() {}
-        cVectIter(T *ptr) : vectIter<T,Alloc>(ptr) {}
+        cVectIter(pointer_type ptr) : vectIter<T,Alloc>(ptr) {}
         cVectIter(dynamic_array arr) : vectIter<T,Alloc>(arr->getArray()) {}
         cVectIter(const cVectIter &ref) : vectIter<T,Alloc>(ref.it) {}
         virtual ~cVectIter() {}
-        cVectIter  &operator=(const cVectIter &ref) { this->it = ref.it; return (*this); }
 
+        //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
+        cVectIter  &operator=(const cVectIter &ref) { this->it = ref.it; return (*this); }
+        bool        operator==(const cVectIter &ref) const { return (this->it == ref.it); }
+        bool        operator!=(const cVectIter &ref) const { return (this->it != ref.it); }
+        
         //----- OPERATORS :  'dereference' -----//
         const_reference_type  operator*() const { return (*this->it); }
         const_reference_type  operator[](difference_type n) const {
             dynamic_array arr = this->it->getArray();
             if (n < arr->size())
                 return (*(arr + n));
-            return (arr->throwNulRef());
-        }
+            return (arr->throwNulRef()); }
+        
+        //----- OPERATORS : 'incrementation' & 'decrementation' -----//
+        cVectIter  &operator++() { this->it++; return (*this); }
+        cVectIter  operator++(int) { cVectIter tmp(*this); operator++(); return (tmp); }
+        cVectIter  &operator--() { this->it--; return (*this); }
+        cVectIter  operator--(int) { cVectIter tmp(*this); operator--(); return (tmp); }
+
+        //----- OPERATORS : 'pointers arithmetics' -----//
+        cVectIter  &operator+(difference_type x) {
+            while (x--)
+                this->it++;
+            return (*this); }
+        cVectIter  &operator-(difference_type x) {
+            while (x--)
+                this->it--;
+            return (*this); }
         
         //----- OPERATORS : 'pointers distance' -----//
         size_t distanceBetween(cVectIter begin, cVectIter end) {
@@ -217,19 +232,30 @@ class rVectIter : public virtual vectIter<T,Alloc>
 {
     public :
 
-        typedef T               value_type;
-        typedef ptrdiff_t       difference_type;
-        typedef T *             pointer_type;
-        typedef T &             reference_type;
-        typedef dynArr<T,Alloc> *dynamic_array;
+        typedef T *                 pointer_type;
+        typedef T &                 reference_type;
+        typedef ptrdiff_t           difference_type;
+        typedef dynArr<T,Alloc> *   dynamic_array;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         rVectIter() {}
-        rVectIter(T *ptr) : vectIter<T,Alloc>(ptr) {}
+        rVectIter(pointer_type ptr) : vectIter<T,Alloc>(ptr) {}
         rVectIter(dynamic_array arr) : vectIter<T,Alloc>(arr->getArray()) {}
         rVectIter(const rVectIter &ref) : vectIter<T,Alloc>(ref.it) {}
         virtual ~rVectIter() {}
+
+        //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         rVectIter  &operator=(const rVectIter &ref) { this->it = ref.it; return (*this); }
+        bool        operator==(const rVectIter &ref) const { return (this->it == ref.it); }
+        bool        operator!=(const rVectIter &ref) const { return (this->it != ref.it); }
+
+        //----- OPERATORS :  'dereference' -----//
+        reference_type  operator*() const { return (*this->it); }
+        reference_type  operator[](difference_type n) const {
+            dynamic_array arr = this->it->getArray();
+            if (n < arr->size())
+                return (*(arr + n));
+            return (arr->throwNulRef()); }
 
         //----- OPERATORS : & 'incrementation''decrementation' -----//
         rVectIter  &operator++() { this->it--; return (*this); }
@@ -261,19 +287,23 @@ class crVectIter : public virtual cVectIter<T,Alloc>, public virtual rVectIter<T
 {
     public :
     
-        typedef T               value_type;
-        typedef ptrdiff_t       difference_type;
-        typedef const T *   const_pointer_type;
-        typedef const T &   const_reference_type;
-        typedef dynArr<T,Alloc> *dynamic_array;
+        typedef T *                 pointer_type;
+        typedef const T *           const_pointer_type;
+        typedef const T &           const_reference_type;
+        typedef ptrdiff_t           difference_type;
+        typedef dynArr<T,Alloc> *   dynamic_array;
 
         //----- CONSTRUCTORS & DESTRUCTORS -----//
         crVectIter() {}
-        crVectIter(T *ptr) : vectIter<T,Alloc>(ptr) {}
+        crVectIter(pointer_type ptr) : vectIter<T,Alloc>(ptr) {}
         crVectIter(dynamic_array arr) : vectIter<T,Alloc>(arr->getArray()) {}
         crVectIter(const crVectIter &ref) : vectIter<T,Alloc>(ref.it) {}
         virtual ~crVectIter() {}
+
+        //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         crVectIter  &operator=(const crVectIter &ref) { this->it = ref.it; return (*this); }
+        bool        operator==(const crVectIter &ref) const { return (this->it == ref.it); }
+        bool        operator!=(const crVectIter &ref) const { return (this->it != ref.it); }
 
         //----- OPERATORS :  'dereference' -----//
         const_reference_type  operator*() const { return (*this->it); }
@@ -281,8 +311,7 @@ class crVectIter : public virtual cVectIter<T,Alloc>, public virtual rVectIter<T
             dynamic_array arr = this->it->getArray();
             if (n < arr->size())
                 return (*(arr + n));
-            return (arr->throwNulRef());
-        }
+            return (arr->throwNulRef()); }
 
         //----- OPERATORS : & 'incrementation''decrementation' -----//
         crVectIter  &operator++() { this->it--; return (*this); }

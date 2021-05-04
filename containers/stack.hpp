@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 21:52:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 04:01:08 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace ft
 
         public :
 
-            //defining every member in my list as in the STL
+            //defining every member in my stack as in the STL
             typedef T                                   value_type;
             typedef C                                   container_type;
             typedef typename container_type::size_type  size_type;
@@ -81,7 +81,7 @@ namespace ft
         out << "\t>> STACK [" << size << "]\t= { ";
         if (size)
         {
-            for (typename list<T>::reverse_iterator it = stack.getContainer().rbegin(); size-- > 0; it++)
+            for (typename ft::list<T>::reverse_iterator it = stack.getContainer().rbegin(); size-- > 0; it++)
             {
                 out << *it;
                 if (size)

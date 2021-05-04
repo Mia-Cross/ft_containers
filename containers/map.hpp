@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 21:51:29 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 01:03:51 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,7 +339,7 @@ namespace ft
         // for (typename map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
         if (size)
         {
-            for (typename map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
+            for (typename ft::map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
             {
                 out << it;
                 // if (size)
