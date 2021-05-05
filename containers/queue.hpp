@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 04:01:18 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 17:44:18 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,18 @@ namespace ft
             // ADDITION ( ONLY FOR DISPLAY )
             C &getContainer() const { return (const_cast<C&>(_container)); }
 
+            friend bool operator==(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container== rhs._container); }
+            friend bool operator!=(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container!= rhs._container); }
+            friend bool operator<(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container< rhs._container); }
+            friend bool operator<=(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container<= rhs._container); }
+            friend bool operator>(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container> rhs._container); }
+            friend bool operator>=(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container>= rhs._container); }
+
         private :
 
             container_type  _container;
 
     };
-
-    template < typename T, class Alloc >
-    bool operator==(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs == rhs); }
-    template < typename T, class Alloc >
-    bool operator!=(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs != rhs); }
-    template < typename T, class Alloc >
-    bool operator<(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs < rhs); }
-    template < typename T, class Alloc >
-    bool operator<=(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs <= rhs); }
-    template < typename T, class Alloc >
-    bool operator>(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs > rhs); }
-    template < typename T, class Alloc >
-    bool operator>=(const queue<T, Alloc> &lhs, const queue<T, Alloc> &rhs) { return (lhs >= rhs); }
 
     template < typename T >
     std::ostream &operator<<(std::ostream &out, queue<T> const &queue) {

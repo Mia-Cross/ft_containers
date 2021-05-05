@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 04:01:08 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 17:43:02 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,19 @@ namespace ft
             // ADDITION ( ONLY FOR DISPLAY )
             C &getContainer() const { return (const_cast<C&>(_container)); }
 
+            friend bool operator==(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container == rhs._container); }
+            friend bool operator!=(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container != rhs._container); }
+            friend bool operator<(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container < rhs._container); }
+            friend bool operator<=(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container <= rhs._container); }
+            friend bool operator>(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container > rhs._container); }
+            friend bool operator>=(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container >= rhs._container); }
+
         private :
 
             container_type  _container;
 
     };
 
-    template < typename T, class Alloc >
-    bool operator==(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs == rhs); }
-    template < typename T, class Alloc >
-    bool operator!=(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs != rhs); }
-    template < typename T, class Alloc >
-    bool operator<(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs < rhs); }
-    template < typename T, class Alloc >
-    bool operator<=(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs <= rhs); }
-    template < typename T, class Alloc >
-    bool operator>(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs > rhs); }
-    template < typename T, class Alloc >
-    bool operator>=(const stack<T, Alloc> &lhs, const stack<T, Alloc> &rhs) { return (lhs >= rhs); }
-    
     template < typename T >
     std::ostream &operator<<(std::ostream &out, stack<T> const &stack) {
         size_t size = stack.size();

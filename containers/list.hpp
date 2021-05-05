@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 03:00:48 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/04 17:10:14 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "../templates/doublyLinkedList.hpp"
 # include <memory>
 # include <iostream>
-# include <limits>
+# include "enable_if.hpp"
 
 namespace ft
 {
@@ -24,7 +24,7 @@ namespace ft
     class list {
 
         public :
-
+            
             //defining every member in my list as in the STL
             typedef T                       value_type;
             typedef Alloc                   allocator_type;
@@ -157,7 +157,9 @@ namespace ft
                     position = insert(position, val);
             }
             template <class InputIterator>
-            void insert(iterator position, InputIterator first, InputIterator last) {
+            // void insert(iterator position, InputIterator first, InputIterator last) {
+            void insert(iterator position, InputIterator first, 
+					typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type last) {
                 while (position != NULL && first != last)
                     insert(position, *first++);
                 // while (position != NULL && last != NULL && last != first)
@@ -361,17 +363,49 @@ namespace ft
     };
 
     template < typename T, class Alloc >
-    bool operator==(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs == rhs); }
+    bool operator==(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { 
+        if (lhs.size() != rhs.size())
+            return false;
+        typename list<T>::iterator rhs_it = rhs.begin();
+        for (typename list<T>::iterator lhs_it = lhs.begin(); lhs_it != lhs.end(); lhs_it++)
+        {
+            if (*lhs_it != *rhs_it++)
+                return false;
+        }
+        return true;
+    }
     template < typename T, class Alloc >
-    bool operator!=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs != rhs); }
+    bool operator!=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return !(lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator<(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs < rhs); }
+    bool operator<(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) {
+        typename list<T>::iterator lhs_it = lhs.begin();
+		typename list<T>::iterator rhs_it = rhs.begin();
+		while (lhs_it != lhs.end() && rhs_it != rhs.end())
+		{
+			if (*lhs_it++ < *rhs_it++)
+				return true;
+		}
+		if (lhs_it == lhs.end() && rhs_it != rhs.end())
+			return true;
+		return false;
+    }
     template < typename T, class Alloc >
-    bool operator<=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs <= rhs); }
+    bool operator<=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs < rhs || lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator>(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs > rhs); }
+    bool operator>(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) {
+        typename list<T>::iterator lhs_it = lhs.begin();
+		typename list<T>::iterator rhs_it = rhs.begin();
+		while (lhs_it != lhs.end() && rhs_it != rhs.end())
+		{
+			if (*lhs_it++ > *rhs_it++)
+				return true;
+		}
+		if (rhs_it == lhs.end() && lhs_it != rhs.end())
+			return true;
+		return false;
+    }
     template < typename T, class Alloc >
-    bool operator>=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs >= rhs); }
+    bool operator>=(const list<T, Alloc> &lhs, const list<T, Alloc> &rhs) { return (lhs > rhs || lhs == rhs); }
     
     template < typename T >
     void swap(list<T> &x, list<T> &y) {

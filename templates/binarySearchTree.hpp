@@ -301,14 +301,14 @@ class cBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         cBSTIter  &operator=(const cBSTIter &ref) { this->node = ref.node; return (*this); }
         // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
-        bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
-        bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
+        bool        operator==(const cBSTIter &ref) const { return (this->node == ref.node); }
+        bool        operator!=(const cBSTIter &ref) const { return (this->node != ref.node); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
-        bstIter  &operator++() { this->node = this->node->getNextIter(operator*().first); return (*this); }
-        bstIter  operator++(int) { bstIter tmp(*this); operator++(); return (tmp); }
-        bstIter  &operator--() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
-        bstIter  operator--(int) { bstIter tmp(*this); operator--(); return (tmp); }
+        cBSTIter  &operator++() { this->node = this->node->getNextIter(operator*().first); return (*this); }
+        cBSTIter  operator++(int) { cBSTIter tmp(*this); operator++(); return (tmp); }
+        cBSTIter  &operator--() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
+        cBSTIter  operator--(int) { cBSTIter tmp(*this); operator--(); return (tmp); }
 
         //----- OPERATORS :  'dereference' -----//
         const_reference_type  operator*() const { return (*this->node->getPair()); }
@@ -333,8 +333,8 @@ class rBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         rBSTIter  &operator=(const rBSTIter &ref) { this->node = ref.node; return (*this); }
         // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
-        bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
-        bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
+        bool        operator==(const rBSTIter &ref) const { return (this->node == ref.node); }
+        bool        operator!=(const rBSTIter &ref) const { return (this->node != ref.node); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         rBSTIter  &operator++() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
@@ -365,8 +365,8 @@ class crBSTIter : public virtual cBSTIter<Key,T,Compare,Alloc>, public virtual r
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         crBSTIter  &operator=(const crBSTIter &ref) { this->node = ref.node; return (*this); }
         // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
-        bool        operator==(const bstIter &ref) const { return (this->node == ref.node); }
-        bool        operator!=(const bstIter &ref) const { return (this->node != ref.node); }
+        bool        operator==(const crBSTIter &ref) const { return (this->node == ref.node); }
+        bool        operator!=(const crBSTIter &ref) const { return (this->node != ref.node); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         crBSTIter  &operator++() { this->node = this->node->getPrevIter(operator*().first); return (*this); }
