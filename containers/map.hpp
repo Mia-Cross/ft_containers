@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 01:03:51 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/05 22:52:54 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <functional>
 # include <iostream>
 # include <memory>
+# include "enable_if.hpp"
 
 namespace ft
 {
@@ -51,7 +52,8 @@ namespace ft
                 _size(0), _comp(comp)
             {}
             // CONSTRUCTOR BY RANGE
-            map(iterator first, iterator last, const key_compare& comp = key_compare(),
+            template <class InputIterator>
+            map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(new binTree),
                 _size(0), _comp(comp)
             {
@@ -122,29 +124,30 @@ namespace ft
             }
 
             iterator insert(iterator position, const value_type &val) {
-                binTree *elem = position.operator->();
+                binTree *elem = position.getNode();
                 if (elem && elem->getParent()->couldBeParent(val.first))
                 {
                     std::pair<binTree*,bool> ret = elem->insertElement(elem->getParent(), val);
-                    //c'est pas bon ca marchera pas si position est plus bas que la ou on devrait inserer
                     _size++;
                     return (iterator(ret.first));
                 }
                 std::pair<iterator,bool> ret = insert(val);
                 return (ret.first);
             }
-            void insert(iterator first, iterator last) {
+            template <class InputIterator>
+            void insert(InputIterator first, InputIterator last) {
                 while (first != last)
                 {
-                    value_type val = *first++;
-                    insert(val);
+                    // value_type val = *first++;
+                    // insert(val);
+                    insert(*first++);
                 }
             }
             
             void erase(iterator position) {
                 if (!_size)
                     return ;
-                binTree *to_del = position.operator->();
+                binTree *to_del = position.getNode();
                 to_del->deleteElement();
                 _size--;
             }
@@ -163,12 +166,12 @@ namespace ft
                 iterator iter = first;
                 key_type lastKey;
                 while (iter != last)
-                    lastKey = iter++.operator->()->getKey();
-                key_type key = first.operator->()->getKey();
+                    lastKey = iter++->first;
+                key_type key = first->first;
                 while (key != lastKey)
                 {
                     // std::cout << "-> will delete key " << key << std::endl;
-                    key_type nextKey = upper_bound(key).operator->()->getKey();
+                    key_type nextKey = upper_bound(key)->first;
                     iter = find(key);
                     erase(iter);
                     key = nextKey;

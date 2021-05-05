@@ -276,7 +276,8 @@ class bstIter
 
         //----- OPERATORS :  'dereference' -----//
         reference_type  operator*() const { return (*this->node->getPair()); }
-        elem_ptr_type   operator->() const { return (this->node); }
+        pointer_type    operator->() const { return (this->node->getPair()); }
+        elem_ptr_type   getNode() const { return (this->node); }
 
     protected :
 
@@ -300,7 +301,6 @@ class cBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
 
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         cBSTIter  &operator=(const cBSTIter &ref) { this->node = ref.node; return (*this); }
-        // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
         bool        operator==(const cBSTIter &ref) const { return (this->node == ref.node); }
         bool        operator!=(const cBSTIter &ref) const { return (this->node != ref.node); }
 
@@ -311,8 +311,9 @@ class cBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
         cBSTIter  operator--(int) { cBSTIter tmp(*this); operator--(); return (tmp); }
 
         //----- OPERATORS :  'dereference' -----//
-        const_reference_type  operator*() const { return (*this->node->getPair()); }
-        elem_ptr_type           operator->() const { return (this->node); }
+        const_reference_type    operator*() const { return (*this->node->getPair()); }
+        const_pointer_type      operator->() const { return (this->node->getPair()); }
+        elem_ptr_type           getNode() const { return (this->node); }
 };
 
 template < class Key, class T, class Compare, class Alloc >
@@ -332,7 +333,6 @@ class rBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
 
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         rBSTIter  &operator=(const rBSTIter &ref) { this->node = ref.node; return (*this); }
-        // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
         bool        operator==(const rBSTIter &ref) const { return (this->node == ref.node); }
         bool        operator!=(const rBSTIter &ref) const { return (this->node != ref.node); }
 
@@ -344,7 +344,8 @@ class rBSTIter : public virtual bstIter<Key,T,Compare,Alloc>
 
         //----- OPERATORS :  'dereference' -----//
         reference_type  operator*() const { return (*this->node->getPair()); }
-        elem_ptr_type   operator->() const { return (this->node); }
+        pointer_type    operator->() const { return (this->node->getPair()); }
+        elem_ptr_type   getNode() const { return (this->node); }
 };
 
 template < class Key, class T, class Compare, class Alloc >
@@ -364,7 +365,6 @@ class crBSTIter : public virtual cBSTIter<Key,T,Compare,Alloc>, public virtual r
 
         //----- OPERATORS : 'assignation' 'equality' 'inequality' -----//
         crBSTIter  &operator=(const crBSTIter &ref) { this->node = ref.node; return (*this); }
-        // bstIter     &operator=(const bstIter &ref) { this->node = ref.node; return (*this); }
         bool        operator==(const crBSTIter &ref) const { return (this->node == ref.node); }
         bool        operator!=(const crBSTIter &ref) const { return (this->node != ref.node); }
 
@@ -376,7 +376,8 @@ class crBSTIter : public virtual cBSTIter<Key,T,Compare,Alloc>, public virtual r
 
         //----- OPERATORS :  'dereference' -----//
         const_reference_type    operator*() const { return (*this->node->getPair()); }
-        elem_ptr_type           operator->() const { return (this->node); }
+        const_pointer_type      operator->() const { return (this->node->getPair()); }
+        elem_ptr_type           getNode() const { return (this->node); }
 };
 
 template < class Key, class T, class Compare, class Alloc >

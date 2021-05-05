@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 04:01:00 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/05 23:37:28 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../templates/dynamicArray.hpp"
 # include <memory>
 # include <iostream>
+# include "enable_if.hpp"
 
 namespace ft
 {
@@ -51,8 +52,9 @@ namespace ft
                     _array.addElement(val);
             }
             // CONSTRUCTOR BY RANGE
-            vector(iterator first, iterator last,
-                const allocator_type& alloc = allocator_type()) :
+            template <class InputIterator>
+            vector(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,
+				InputIterator last, const allocator_type& alloc = allocator_type()) :
                 _array(), _size(0), _alloc(alloc)
             {
                 while (first != last)
@@ -144,7 +146,10 @@ namespace ft
             
             // ----- MODIFIERS ----- //
             
-            void assign(iterator first, iterator last) {
+            template <class InputIterator>
+            void assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,
+				InputIterator last)
+            {
                 while (first != last)
                     push_back(*first++);
             }
@@ -181,13 +186,19 @@ namespace ft
                 _size += n;
                 // std::cout << "insert - end" << std::endl;
             }
-            void insert(iterator position, iterator first, iterator last) {
+            template <class InputIterator>
+            void insert(iterator position, InputIterator first, 
+				typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type last)
+            {
                 size_t index = position.distanceBetween(begin(), position);
-                size_t dist = first.distanceBetween(first, last);
+                size_t dist = position.distanceBetween(first, last);
                 if (capacity() <= _size + dist)
                     _array.reallocateSplitArray(index, dist);
                 while (index < _size + dist && first != last)
-                    _array.constructValue(index++, *first++);
+                {
+                    _array.constructValue(index++, *first);
+                    first++;
+                }
                 _size += dist;
             }
             iterator erase(iterator position) {

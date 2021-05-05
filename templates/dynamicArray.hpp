@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 04:41:27 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/05 23:20:12 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,13 @@ class vectIter
                 dist++;
             return (dist);
         }
+        template <class InputIterator>
+        size_t distanceBetween(InputIterator begin, InputIterator end) {
+            size_t dist = 0;
+            while (begin++ != end)
+                dist++;
+            return (dist);
+        }
 
     protected :
 
@@ -225,6 +232,13 @@ class cVectIter : public virtual vectIter<T,Alloc>
                 dist++;
             return (dist);
         }
+        template <class InputIterator>
+        size_t distanceBetween(InputIterator begin, InputIterator end) {
+            size_t dist = 0;
+            while (begin++ != end)
+                dist++;
+            return (dist);
+        }
 };
 
 template < typename T, class Alloc >
@@ -275,6 +289,13 @@ class rVectIter : public virtual vectIter<T,Alloc>
         
         //----- OPERATORS : 'pointers distance' -----//
         size_t distanceBetween(rVectIter begin, rVectIter end) {
+            size_t dist = 0;
+            while (begin++ != end)
+                dist++;
+            return (dist);
+        }
+        template <class InputIterator>
+        size_t distanceBetween(InputIterator begin, InputIterator end) {
             size_t dist = 0;
             while (begin++ != end)
                 dist++;
@@ -331,6 +352,13 @@ class crVectIter : public virtual cVectIter<T,Alloc>, public virtual rVectIter<T
 
         //----- OPERATORS : 'pointers distance' -----//
         size_t distanceBetween(crVectIter begin, crVectIter end) {
+            size_t dist = 0;
+            while (begin++ != end)
+                dist++;
+            return (dist);
+        }
+        template <class InputIterator>
+        size_t distanceBetween(InputIterator begin, InputIterator end) {
             size_t dist = 0;
             while (begin++ != end)
                 dist++;

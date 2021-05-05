@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 17:10:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/05 23:10:59 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,12 +158,12 @@ namespace ft
             }
             template <class InputIterator>
             // void insert(iterator position, InputIterator first, InputIterator last) {
-            void insert(iterator position, InputIterator first, 
-					typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type last) {
+            void insert(iterator position,
+                typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,
+                InputIterator last)
+            {
                 while (position != NULL && first != last)
                     insert(position, *first++);
-                // while (position != NULL && last != NULL && last != first)
-                    // position = insert(position, *(--last));
             }
             iterator erase(iterator position) {
                 dLList<T, Alloc> *elem = _list->getElement(position.operator->());
