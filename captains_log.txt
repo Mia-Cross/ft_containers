@@ -53,6 +53,7 @@ LEFT TO DO :
 >> VECTOR <<
         rework overloads
         comprendre ce qui cloche avec insert dans le testeur de servane
+                fixed !
         passer le testeur de thomas :
                 assign() throws logic error expection (construct())
 

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/05 23:20:12 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 13:33:56 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,13 @@ class dynArr {
         }
 
         void reallocateArray(size_t n) {
+            // size_t newSize = size + length;
             T *newArr = duplicateArray(this->size, n);
             allocDA.deallocate(this->array, this->capacity);
-            this->array = newArr;
+            this->array = allocDA.allocate(n);
+            for (size_t i = 0; i < n; i++)
+                allocDA.construct(array + i, *(newArr + i));
+            // this->array = newArr;
             this->capacity = n;
         }
 
@@ -98,9 +102,13 @@ class dynArr {
         }
         
         void reallocateSplitArray(size_t index, size_t length) {
+            size_t newSize = size + length;
             T *newArr = duplicateSplitArray(index, length);
             allocDA.deallocate(this->array, this->capacity);
-            this->array = newArr;
+            this->array = allocDA.allocate(newSize);
+            for (size_t i = 0; i < newSize; i++)
+                allocDA.construct(array + i, *(newArr + i));
+            // this->array = newArr;
         }
 
     private :

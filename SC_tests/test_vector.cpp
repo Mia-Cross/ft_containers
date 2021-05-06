@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/19 10:13:03 by schene            #+#    #+#             */
-/*   Updated: 2021/05/03 23:04:53 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 13:49:38 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,18 +515,14 @@ int 		main()
 		ft::vector<int>::iterator my_it;
 		std::vector<int>::iterator it;
 
-		my_it = myvector.begin()++;
-		it = vector.begin()++;
-		// my_it = ++myvector.begin();
-		// it = ++vector.begin();
+		my_it = ++myvector.begin();
+		it = ++vector.begin();
 		my_it = myvector.insert (my_it , 200);
 		it = vector.insert (it , 200);
 
 		compareVector("vector.insert ( it , 200 )", myvector, vector);
 
-std::cout << "hey" << std::endl;
 		myvector.insert (my_it, 2, 300);
-std::cout << "yo" << std::endl;
 		vector.insert (it, 2, 300);
 		compareVector("vector.insert (it, 2, 300)", myvector, vector);
 // 		// "it" no longer valid, get a new one:
