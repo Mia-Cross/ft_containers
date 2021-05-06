@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 17:43:02 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:10:41 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ namespace ft
 
     };
 
+    // THIS IS NOT PART OF THE STL CONTAINER
     template < typename T >
     std::ostream &operator<<(std::ostream &out, stack<T> const &stack) {
         size_t size = stack.size();

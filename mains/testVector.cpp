@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:23:12 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 21:51:52 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:24:37 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,4 +214,6 @@ std::cout << "\n// ----- MODIFIERS ----- //\n\n";
     //restoring vectors from const copies
     vectorA = vectorC;
     vectorB = vectorD;
+
+    std::cout << std::endl << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:07:17 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 03:38:58 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:04:04 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,6 @@ class binTree
             _pair = _allocBT.allocate(1);
             _allocBT.construct(_pair, pair_t());
         }
-
-        // create end element with no content
-        // binTree(binTree *root) : _pair(NULL), _root(root), _left(NULL), _right(NULL), _end(this),
-        //     _comp(Compare()), _allocBT(Alloc())
-        // { }
 
         // create new element with a pair of values
         binTree(const pair_t &pair, binTree *root) : _root(root), _left(NULL),
@@ -77,8 +72,6 @@ class binTree
         pair_t      *getPair() const { return (this->_pair); }
         const Key   &getKey() const { return (this->_pair->first); }
         T           &getValue() const { return (this->_pair->second); }
-        // binTree     *getLeft() const { return (this->_left); }
-        // binTree     *getRight() const { return (this->_right); }
         binTree     *getEnd() const { return (this->_end); }
         void        setEnd(binTree *end) { this->_end = end; }
         

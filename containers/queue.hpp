@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 17:44:18 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:10:24 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ namespace ft
             value_type &back() { return (_container.back()); }
             const value_type &back() const { return (_container.back()); }
             void push(const value_type &val) { _container.push_back(val); }
-            void pop() { _container.pop_back(); }
+            void pop() { _container.pop_front(); }
             
             // ADDITION ( ONLY FOR DISPLAY )
             C &getContainer() const { return (const_cast<C&>(_container)); }
@@ -71,6 +71,7 @@ namespace ft
 
     };
 
+    // THIS IS NOT PART OF THE STL CONTAINER
     template < typename T >
     std::ostream &operator<<(std::ostream &out, queue<T> const &queue) {
         size_t size = queue.size();

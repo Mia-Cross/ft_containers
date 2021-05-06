@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 03:29:45 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:23:59 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,4 +275,6 @@ void testMap()
     std::cout << "Upper_bound for 20 in map B -> " << mapB.upper_bound(20) << std::endl;
     std::cout << "Upper_bound for 20 in map E -> " << mapE.upper_bound(20) << std::endl;
     std::cout << "Upper_bound for 42 in map A -> " << mapA.upper_bound(42) << std::endl;
+
+    std::cout << std::endl << std::endl;
 }

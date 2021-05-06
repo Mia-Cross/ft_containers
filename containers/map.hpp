@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 03:52:16 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:11:38 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,6 @@ namespace ft
             std::pair<iterator,iterator>             equal_range(const key_type &k) {
                 return (std::pair<iterator,iterator>(lower_bound(k), upper_bound(k)));
             }
-            binTree *getMapRoot() const { return (_tree->getRoot()); }
 
         private :
 
@@ -370,29 +369,16 @@ namespace ft
     }
 
 
-   
     // THIS IS NOT PART OF THE STL CONTAINER
     template < class Key, class T, class Compare, class Alloc >
     std::ostream &operator<<(std::ostream &out, map<Key,T,Compare,Alloc> const &map) {
         size_t size = map.size();
         out << "\t>> MAP {" << size << "}\t= { ";
-        // const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
-        // out << "ROOT->" << root;
-        // if (root && size)
-        // {
-        //     out << " = [" << root->getKey() << "] [L=";
-        //     out << root->getLeft() << "] [R=" << root->getRight() << "] || ";
-        // }
-        // for (typename map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
-        if (size)
+        for (typename ft::map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
         {
-            for (typename ft::map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
-            {
-                out << it;
-                // if (size)
-                if (--size)
-                    out << ", ";
-            }
+            out << it;
+            if (--size)
+                out << ", ";
         }
         out << " }" << std::endl;
         return (out);

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:22:30 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 21:52:15 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:24:17 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,7 @@ void testStack()
    stackB.pop();
    stackE.pop();
    std::cout << stackA << stackB << stackE;
+
+   std::cout << std::endl << std::endl;
 }
 

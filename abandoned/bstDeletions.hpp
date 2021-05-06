@@ -1,3 +1,33 @@
+// old operator<<
+
+        // binTree     *getLeft() const { return (this->_left); }
+        // binTree     *getRight() const { return (this->_right); }
+        template < class Key, class T, class Compare, class Alloc >
+    std::ostream &operator<<(std::ostream &out, map<Key,T,Compare,Alloc> const &map) {
+        size_t size = map.size();
+        out << "\t>> MAP {" << size << "}\t= { ";
+        // const binTree<Key,T,Compare,Alloc> *root = map.getMapRoot();
+        // out << "ROOT->" << root;
+        // if (root && size)
+        // {
+        //     out << " = [" << root->getKey() << "] [L=";
+        //     out << root->getLeft() << "] [R=" << root->getRight() << "] || ";
+        // }
+        // for (typename map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); size-- > 0; it++)
+        if (size)
+        {
+            for (typename ft::map<Key,T,Compare,Alloc>::const_iterator it = map.begin(); it != map.end(); it++)
+            {
+                out << it;
+                // if (size)
+                if (--size)
+                    out << ", ";
+            }
+        }
+        out << " }" << std::endl;
+        return (out);
+    }
+
         // create new element with only a key
         binTree(const Key key, binTree *root) : _root(root), _left(NULL), _right(NULL),
             _comp(Compare()), _allocBT(Alloc())
@@ -8,6 +38,11 @@
             if (!_root)
                 _root = this;
         }
+
+                // create end element with no content
+        binTree(binTree *root) : _pair(NULL), _root(root), _left(NULL), _right(NULL), _end(this),
+            _comp(Compare()), _allocBT(Alloc())
+        { }
 
 // original version
 

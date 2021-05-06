@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 01:27:04 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 19:52:56 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,12 @@ namespace ft
             void assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,
 				InputIterator last)
             {
+                clear();
                 while (first != last)
                     push_back(*first++);
             }
             void assign(size_type n, const value_type &val) {
+                clear();
                 while (_size < n)
                     push_back(val);
             }
@@ -172,19 +174,17 @@ namespace ft
                 _array.constructValue(index, val);
                 _array.incrementSize(1);
                 _size++;
+                // return (iterator(_array.getArray() + index));
                 return (position);
             }
             void insert(iterator position, size_type n, const value_type &val) {
-                // std::cout << "insert - begin" << std::endl;
                 size_t index = position.distanceBetween(begin(), position);
-                // std::cout << "nyaaaa" << std::endl;
                 if (capacity() <= _size + n)
                     _array.reallocateSplitArray(index, n);
                 for (size_t i = 0; i < n; i++)
                     _array.constructValue(index + i, val);
                 _array.incrementSize(n);
                 _size += n;
-                // std::cout << "insert - end" << std::endl;
             }
             template <class InputIterator>
             void insert(iterator position, InputIterator first, 
@@ -233,17 +233,49 @@ namespace ft
     };
 
     template < typename T, class Alloc >
-    bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs == rhs); }
+    bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+        if (lhs.size() != rhs.size())
+            return false;
+        typename vector<T>::iterator rhs_it = rhs.begin();
+        for (typename vector<T>::iterator lhs_it = lhs.begin(); lhs_it != lhs.end(); lhs_it++)
+        {
+            if (*lhs_it != *rhs_it++)
+                return false;
+        }
+        return true;
+    }
     template < typename T, class Alloc >
-    bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs != rhs); }
+    bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return !(lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs < rhs); }
+    bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+        typename vector<T>::iterator lhs_it = lhs.begin();
+		typename vector<T>::iterator rhs_it = rhs.begin();
+		while (lhs_it != lhs.end() && rhs_it != rhs.end())
+		{
+			if (*lhs_it++ < *rhs_it++)
+				return true;
+		}
+		if (lhs_it == lhs.end() && rhs_it != rhs.end())
+			return true;
+		return false;
+    }
     template < typename T, class Alloc >
-    bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs <= rhs); }
+    bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs < rhs || lhs == rhs); }
     template < typename T, class Alloc >
-    bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs > rhs); }
+    bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) {
+        typename vector<T>::iterator lhs_it = lhs.begin();
+		typename vector<T>::iterator rhs_it = rhs.begin();
+		while (lhs_it != lhs.end() && rhs_it != rhs.end())
+		{
+			if (*lhs_it++ > *rhs_it++)
+				return true;
+		}
+		if (rhs_it == lhs.end() && lhs_it != rhs.end())
+			return true;
+		return false;
+    }
     template < typename T, class Alloc >
-    bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs >= rhs); }
+    bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs) { return (lhs > rhs || lhs == rhs); }
     
     template < typename T >
     void swap(vector<T> &x, vector<T> &y) {
@@ -252,15 +284,16 @@ namespace ft
         x = y;
         y = tmp;
     }
-    
+
+    // THIS IS NOT PART OF THE STL CONTAINER
     template < typename T >
     std::ostream &operator<<(std::ostream &out, vector<T> const &vect) {
         size_t size = vect.size();
         out << "\t>> VECTOR [" << size << "]\t= { ";
-        for (typename ft::vector<T>::const_iterator it = vect.begin(); size-- > 0; it++)
+        for (typename ft::vector<T>::const_iterator it = vect.begin(); it != vect.end(); it++)
         {
             out << *it;
-            if (size)
+            if (--size)
                 out << ", ";
         }
         out << " }" << std::endl;

@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:20:50 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 01:49:44 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 17:24:07 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,6 @@ void testQueue()
    QueueB.pop();
    QueueE.pop();
    std::cout << QueueA << QueueB << QueueE;
+
+   std::cout << std::endl << std::endl;
 }
