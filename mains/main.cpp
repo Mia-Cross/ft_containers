@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:11:46 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 01:42:15 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 02:16:47 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void testVector();
 int main()
 {
     // testList();
-    testQueue();
+    // testQueue();
     // testStack();
     // testVector();
-    // testMap();
+    testMap();
     // test();
 }

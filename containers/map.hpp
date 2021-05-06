@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 01:26:15 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 03:52:16 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ namespace ft
                     typedef value_type first_argument_type;
                     typedef value_type second_argument_type;
                     bool operator() (const value_type &x, const value_type &y) const {
-                        return comp(x.first, y.first); }
+                        return _comp(x.first, y.first); }
             };
             typedef CompObject                          value_compare;
 
@@ -85,7 +85,7 @@ namespace ft
             ~map()
             {
                 clear();
-                delete _tree->getEnd();
+                // delete _tree->getEnd();
                 delete _tree;
             }
             // ASSIGNATION
@@ -93,8 +93,11 @@ namespace ft
             {
                 if (_size)
                     clear();
-                for (iterator it = ref.begin(); it != ref.end(); it++)
-                    insert(*it);
+                if (ref._size)
+                {
+                    for (iterator it = ref.begin(); it != ref.end(); it++)
+                        insert(*it);
+                }
                 return (*this);
             }
 
@@ -122,7 +125,7 @@ namespace ft
                 if (node)
                     return (node->getValue());
                 value_type *val = new value_type(k, 0);
-                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, *val);
+                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, *val, _size);
                 delete val;
                 _size++;
                 return (ret.first->getValue());
@@ -132,7 +135,7 @@ namespace ft
 
             std::pair<iterator,bool> insert(const value_type &val)
             {
-                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, val);
+                std::pair<binTree*,bool> ret = _tree->insertElement(_tree, val, _size);
                 if (ret.second)
                     _size++;
                 return (std::pair<iterator,bool>(iterator(ret.first), ret.second));
@@ -142,7 +145,7 @@ namespace ft
                 binTree *elem = position.getNode();
                 if (elem && elem->getParent()->couldBeParent(val.first))
                 {
-                    std::pair<binTree*,bool> ret = elem->insertElement(elem->getParent(), val);
+                    std::pair<binTree*,bool> ret = elem->insertElement(elem->getParent(), val, _size);
                     _size++;
                     return (iterator(ret.first));
                 }
@@ -152,11 +155,7 @@ namespace ft
             template <class InputIterator>
             void insert(InputIterator first, InputIterator last) {
                 while (first != last)
-                {
-                    // value_type val = *first++;
-                    // insert(val);
                     insert(*first++);
-                }
             }
             
             void erase(iterator position) {
@@ -188,11 +187,13 @@ namespace ft
                     // std::cout << "-> will delete key " << key << std::endl;
                     key_type nextKey = upper_bound(key)->first;
                     iter = find(key);
+                    // std::cout << "-> erasing " << iter.getNode() << std::endl;
                     erase(iter);
                     key = nextKey;
                     // std::cout << "  next key will be " << key << std::endl;
                 }
                 iter = find(lastKey);
+                // std::cout << "-> erasing " << iter.getNode() << std::endl;
                 erase(iter);
                 // std::cout << "ERASE by iterators -> END" << std::endl;
             }
@@ -314,20 +315,62 @@ namespace ft
             key_compare     _comp;
             difference_type _diff;
     };
+   
+    template < class Key, class T >
+    bool operator==(const map<Key, T> &lhs, const map<Key, T> &rhs) { 
+        if (lhs.size() != rhs.size())
+            return false;
+        typename map<Key,T>::iterator rhs_it = rhs.begin();
+        for (typename map<Key,T>::iterator lhs_it = lhs.begin(); lhs_it != lhs.end(); lhs_it++)
+        {
+            if (*lhs_it != *rhs_it++)
+                return false;
+        }
+        return true;
+    }
+    template < class Key, class T >
+    bool operator!=(const map<Key, T> &lhs, const map<Key, T> &rhs) { return !(lhs == rhs); }
+    template < class Key, class T >
+    bool operator<(const map<Key, T> &lhs, const map<Key, T> &rhs) {
+        typename map<Key,T>::iterator lhs_it = lhs.begin();
+		typename map<Key,T>::iterator rhs_it = rhs.begin();
+		while (lhs_it != lhs.end() && rhs_it != rhs.end())
+		{
+			if (*lhs_it++ < *rhs_it++)
+				return true;
+		}
+		if (lhs_it == lhs.end() && rhs_it != rhs.end())
+			return true;
+		return false;
+    }
+    template < class Key, class T >
+    bool operator<=(const map<Key, T> &lhs, const map<Key, T> &rhs) { return (lhs < rhs || lhs == rhs); }
+    template < class Key, class T >
+    bool operator>(const map<Key, T> &lhs, const map<Key, T> &rhs) {
+        typename map<Key,T>::iterator lhs_it = lhs.begin();
+		typename map<Key,T>::iterator rhs_it = rhs.begin();
+		while (lhs_it != lhs.end() && rhs_it != rhs.end())
+		{
+			if (*lhs_it++ > *rhs_it++)
+				return true;
+		}
+		if (rhs_it == lhs.end() && lhs_it != rhs.end())
+			return true;
+		return false;
+    }
+    template < class Key, class T >
+    bool operator>=(const map<Key, T> &lhs, const map<Key, T> &rhs) { return (lhs > rhs || lhs == rhs); }
     
-    template < class Key, class T, class Compare, class Alloc >
-    bool operator==(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs == rhs); }
-    template < class Key, class T, class Compare, class Alloc >
-    bool operator!=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs != rhs); }
-    template < class Key, class T, class Compare, class Alloc >
-    bool operator<(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs < rhs); }
-    template < class Key, class T, class Compare, class Alloc >
-    bool operator<=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs <= rhs); }
-    template < class Key, class T, class Compare, class Alloc >
-    bool operator>(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs > rhs); }
-    template < class Key, class T, class Compare, class Alloc >
-    bool operator>=(const map<Key,T,Compare,Alloc> &lhs, const map<Key,T,Compare,Alloc> &rhs) { return (lhs >= rhs); }
-    
+    template < class Key, class T >
+    void swap(map<Key,T> &x, map<Key,T> &y) {
+        map<Key,T> tmp;
+        tmp = x;
+        x = y;
+        y = tmp;
+    }
+
+
+   
     // THIS IS NOT PART OF THE STL CONTAINER
     template < class Key, class T, class Compare, class Alloc >
     std::ostream &operator<<(std::ostream &out, map<Key,T,Compare,Alloc> const &map) {

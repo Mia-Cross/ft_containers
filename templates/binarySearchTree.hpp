@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:07:17 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 02:07:19 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 03:38:58 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,17 @@ class binTree
         typedef std::pair<const Key, T> pair_t;
         
         // create root element with no content
-        binTree() : _pair(NULL), _root(this), _left(NULL), _right(NULL), _end(new binTree(this)),
+        binTree() : _pair(NULL), _root(this), _left(NULL), _right(NULL), _end(this),
             _comp(Compare()), _allocBT(Alloc())
-        { }
-        
+        {
+            _pair = _allocBT.allocate(1);
+            _allocBT.construct(_pair, pair_t());
+        }
+
         // create end element with no content
-        binTree(binTree *root) : _pair(NULL), _root(root), _left(NULL), _right(NULL), _end(this),
-            _comp(Compare()), _allocBT(Alloc())
-        { }
+        // binTree(binTree *root) : _pair(NULL), _root(root), _left(NULL), _right(NULL), _end(this),
+        //     _comp(Compare()), _allocBT(Alloc())
+        // { }
 
         // create new element with a pair of values
         binTree(const pair_t &pair, binTree *root) : _root(root), _left(NULL),
@@ -156,12 +159,14 @@ class binTree
         //    INSERTION    //
         /////////////////////
 
-        std::pair<binTree*,bool> insertElement(binTree *node, const pair_t &pair) {
-            if (!_pair)
+        std::pair<binTree*,bool> insertElement(binTree *node, const pair_t &pair, size_t mapSize) {
+            if (_root == _end)
             {
-                _pair = _allocBT.allocate(1);
-                // _allocBT.construct(_pair, pair_t(pair.first, pair.second));
+                // _pair = _allocBT.allocate(1);
+                _allocBT.destroy(_pair);
                 _allocBT.construct(_pair, pair);
+                _end = new binTree(pair_t(), _root);
+                _end->_end = _root->_end;
                 return (std::pair<binTree*,bool>(_root, true));
             }
             if (!node)
@@ -176,9 +181,9 @@ class binTree
                 return (std::pair<binTree*,bool>(node, false));
             }
             if (_comp(pair.first, node->getKey()))
-                return (insertElement(node->_left, pair));
+                return (insertElement(node->_left, pair, mapSize));
             else
-                return (insertElement(node->_right, pair));
+                return (insertElement(node->_right, pair, mapSize));
         }
 
         void setChildInParent(binTree *child, const Key &key) {
@@ -233,7 +238,11 @@ class binTree
             else
             {
                 _allocBT.destroy(this->_pair);
-                this->_pair = NULL;
+                binTree *tmp = _end;
+                _end = _root;
+                delete tmp;
+                // _allocBT.deallocate(this->_pair, 1);
+                // this->_pair = NULL;
             }
             if (successor)
             {

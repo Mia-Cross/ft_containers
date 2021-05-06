@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 01:39:55 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 03:41:17 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,6 +414,7 @@ namespace ft
         y = tmp;
     }
     
+    // THIS IS NOT PART OF THE STL CONTAINER
     template < typename T >
     std::ostream &operator<<(std::ostream &out, list<T> const &list) {
         size_t size = list.size();

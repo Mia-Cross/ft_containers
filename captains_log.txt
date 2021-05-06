@@ -37,9 +37,13 @@ Est ce qu'il faut faire la specialisation vector<bool> ?
 LEFT TO DO :
 --------------
 >> MAP <<
-        Fix leaks
         passer le testeur de servane
-        passer le testeur de thomas --> segfaults on default constructor WTF
+                find doesn't return end() when not found ?
+                        fairly confident it's good now
+                apparently when !size begin() and end() are supposed to be the same
+                        fairly confident it's good now
+        passer le testeur de thomas
+                impossible, throws logic error exception everytime rand() is used (and it's a lot...)
 >> LIST <<
         C'EST TOUT BON POUR MOI
 >> STACK & QUEUE <<
@@ -47,79 +51,97 @@ LEFT TO DO :
         testeur de servane = perfect pour les 2
         testeur de thomas = queue : Back() Front() failed WTF ??
 >> VECTOR <<
+        rework overloads
         comprendre ce qui cloche avec insert dans le testeur de servane
         passer le testeur de thomas :
                 assign() throws logic error expection (construct())
 
+[06/05]
+J'ai fix la derniere leak, elle etait bien cachee la poulette... J'ai revu tous les overloads et fonctions
+non membres sauf pour <VECTOR>. List, Stack & Queue sont parfaits en ce qui me concerne. Sur <MAP> j'ai
+aussi changé la facon de gerer end pour que quand size = 0, begin = end, ca evite beaucoup de segfaults
+et/ou protections de debutant. J'attend la confirmation de servane sur les couleurs chelou du testeur mais
+je pense que j'ai 4/5 containers de bons !
+NEXT TIME :     Prendre 2 pts de correction
+                Retravailler <VECTOR>
 [03/05]
-J'avais crié victoire un peu trop tot vendredi mais la ça m'a vraiment l'air pas mal : tous les tests run jusqu'a la fin avec les
-résultats attendus, j'ai enfin fix les deletions qui restaient un peu aléatoires. Cependant...... je leake 52ko en 164 allocs.
+J'avais crié victoire un peu trop tot vendredi mais la ça m'a vraiment l'air pas mal : tous les tests run 
+jusqu'a la fin avec les résultats attendus, j'ai enfin fix les deletions qui restaient un peu aléatoires. 
+Cependant...... je leake 52ko en 164 allocs.
 NEXT TIME : Fix leaks
 [30/04]
-Le truc majeur que j'ai changé : avant, l'operator= du BST ne copiait que le contenu/la paire, maintenant je copie aussi les liens
-left et right, du coup dans deleteElement() pour enlever le maillon dont j'ai copié le contenu je refais plus appel a deleteElement
-mais a delete directement.
+Le truc majeur que j'ai changé : avant, l'operator= du BST ne copiait que le contenu/la paire, maintenant
+je copie aussi les liens left et right, du coup dans deleteElement() pour enlever le maillon dont j'ai 
+copié le contenu je refais plus appel a deleteElement mais a delete directement.
 >> eh ben j'ai fait un dessin et en fait non c'est pas une super idee...
 J'ai a mort de leaks mais il a l'air gueri !
 [27/04]
-Serait-ce la fin de ma souffrance et le debut de la remontada ?? J'ai presque reussi a le soigner, il run parfaitement jusqu'a erase,
-mais ca se complique quand je supprime root (donc je peux pas utiliser clear, ni operator= ni le destructeur pour l'instant). Les
-<operations> ont des resultats un peu random mais en meme temps je teste pas les maps dans l'etat ou je voudrais qu'elles soient.
+Serait-ce la fin de ma souffrance et le debut de la remontada ?? J'ai presque reussi a le soigner, il run 
+parfaitement jusqu'a erase, mais ca se complique quand je supprime root (donc je peux pas utiliser clear,
+ni operator= ni le destructeur pour l'instant). Les <operations> ont des resultats un peu random mais en 
+meme temps je teste pas les maps dans l'etat ou je voudrais qu'elles soient.
 NEXT TIME : gerer proprement la suppression de root
 [19/04]
-Okéééé bon ben mettre un _parent a ce stade ca change absolument R parce que j'avais déjà trouvé une solution a tous les problemes
-que ca causait, du coup j'ai une fois de plus perdu mon temps. J'ai encore essayé pleiiin d'architectures differentes et je finis
-toujours par tomber sur un os. Du coup ma conclusion de ces 2 jours c'est qu'il faut que _tree soit un maillon vide avec juste
-_root qui est defini, et qu'il serve de borne (min->_left = _tree && max->_right = _tree) comme ca il se mord la queue et il fait
-pas chier.
+Okéééé bon ben mettre un _parent a ce stade ca change absolument R parce que j'avais déjà trouvé une 
+solution a tous les problemes que ca causait, du coup j'ai une fois de plus perdu mon temps. J'ai encore
+essayé pleiiin d'architectures differentes et je finis toujours par tomber sur un os. Du coup ma conclusion
+de ces 2 jours c'est qu'il faut que _tree soit un maillon vide avec juste _root qui est defini, et qu'il 
+serve de borne (min->_left = _tree && max->_right = _tree) comme ca il se mord la queue et il fait pas chier.
 NEXT TIME : mettre en place ce systeme (pour la 3 ou 4eme fois)
 [17/04]
-Bon nique sa mere j'ai tout essayé : repecher mes precedents commits, avec des references (je tenais un truc mais je l'ai encore
-perdu et impossible de retourner au moment ou ca marchait >.<), avec des doubles pointeurs (j'y ai cru mais "&this c'est pas un
-pointeur c'est juste une rvalue", du coup non), et la je commence a en avoir trop marre d'ecrire et effacer les memes putains de
-lignes pour toujours le meme resultat merdique ! 
+Bon nique sa mere j'ai tout essayé : repecher mes precedents commits, avec des references (je tenais un
+truc mais je l'ai encore perdu et impossible de retourner au moment ou ca marchait >.<), avec des doubles 
+pointeurs (j'y ai cru mais "&this c'est pas un pointeur c'est juste une rvalue", du coup non), et la je 
+commence a en avoir trop marre d'ecrire et effacer les memes putains de lignes pour toujours le meme 
+resultat merdique ! 
 NEXT TIME : mettre un pointeur sur parent et tout recommencer
 [13/04]
-Bon en vrai je crois que je vais juste reformer pour mettre un systeme de parent, ca me simplifiera ENORMEMENT la tache et je sais
-meme pas si j'ai raison de me l'interdire depuis le debut. Parce que la je suis a bout, toutes les fonctions sont quasi terminées
-mais j'ai changé un mini truc quelque part qui a été recouvert par les autres changements du coup j'arrive pas a retrouver ce que
-c'est et j'ai vraiment l'impression que je le fixerai jamais, y'a plus qu'a rm rf a ce stade la.
+Bon en vrai je crois que je vais juste reformer pour mettre un systeme de parent, ca me simplifiera 
+ENORMEMENT la tache et je sais meme pas si j'ai raison de me l'interdire depuis le debut. Parce que la je
+suis a bout, toutes les fonctions sont quasi terminées mais j'ai changé un mini truc quelque part qui a été
+recouvert par les autres changements du coup j'arrive pas a retrouver ce que c'est et j'ai vraiment 
+l'impression que je le fixerai jamais, y'a plus qu'a rm rf a ce stade la.
 NEXT TIME : tenter encore de changer l'archi -> sinon rm -rf * !!!!
         (essayer de sauvegarder juste les operations et revenir a une ancienne version)
 [08/04]
-Enorme avancée aujourd'hui, ca fait plaisir putain ! J'ai terminé les iterateurs (end, decrementation et reverse), j'ai fait les
-autres constructeurs et l'operateur = du coup j'en suis aux modifiers, sachant que insert() est deja parfaite, erase() me parait
-pas mal mais j'ai 2 leaks (mais plus de double free de root), reste les polymorphes. Ensuite swap() c'est ok, et j'ai massivement
-renommé mes variables sur tout le projet.
+Enorme avancée aujourd'hui, ca fait plaisir putain ! J'ai terminé les iterateurs (end, decrementation et
+reverse), j'ai fait les autres constructeurs et l'operateur = du coup j'en suis aux modifiers, sachant que 
+insert() est deja parfaite, erase() me parait pas mal mais j'ai 2 leaks (mais plus de double free de root),
+reste les polymorphes. Ensuite swap() c'est ok, et j'ai massivement renommé mes variables sur tout le projet.
 NEXT TIME :     terminer les modifiers
                 ou attaquer les operations, jviens de check ca a l'air eazyyy avec ce que j'ai deja fait
 [07/04]
 J'etais en plein debug d'iterateur mais la j'ai vraiment trop mal sa race je dois m'arreter pour aujourd'hui.
-NEXT TIME : trouver la condition parfaite pour getNextIter() pour eviter qu'il fasse des aller-retours sur la meme branche.
+NEXT TIME : trouver la condition parfaite pour getNextIter() pour eviter qu'il fasse des aller-retours sur la
+meme branche.
 [06/04]
-J'ai a peu pres debuggé les soucis de la derniere fois, enfin j'ai surtout tout recommencé au niveau de l'iterateur : maintenant
-je transforme ma map en LIST dans l'ordre de l'iteration. Reste quelques details a regler mais c'est prometteur...
+J'ai a peu pres debuggé les soucis de la derniere fois, enfin j'ai surtout tout recommencé au niveau de 
+l'iterateur : maintenant je transforme ma map en LIST dans l'ordre de l'iteration. Reste quelques details a
+regler mais c'est prometteur...
 [01/04]
-Bon en vrai y'avait des soucis partout, notament j'avais completement foiré mon algo d'iteration, donc j'ai rien
-resolu j'ai juste mis en evidence plus de problemes.
-NEXT TIME :     ecrire une fonction qui cherche un endroit dans l'arbre, pas une valeur ou un node, juste le "lieu d'interet"
+Bon en vrai y'avait des soucis partout, notament j'avais completement foiré mon algo d'iteration, donc j'ai
+rien resolu j'ai juste mis en evidence plus de problemes.
+NEXT TIME :     ecrire une fonction qui cherche un endroit dans l'arbre, pas une valeur ou un node, juste
+                        le "lieu d'interet"
                 debugger getLevel()
                 fix l'iterateur qui fait du sur place
-                trouver pourquoi mon 8 et 9 ne remplacent au lieu de s'ajouter l'un en dessous/a la suite de l'autre.
+                trouver pourquoi mon 8 et 9 ne remplacent au lieu de s'ajouter l'un en dessous/a la suite
+                        de l'autre.
 [30/03]
 J'ai un peu tout chamboulé pour faire des fonctions inspirees du code source, plus courtes et plus propres,
-en recursif et tout ! Mais j'ai gros un souci avec insert qui ne set pas le child dans le parent ce qui fait
-que j'ai beau ajouter du contenu, je peux pas y acceder. Aussi l'operateur[]=newValue ne fonctionne pas, j'ai
-toujours le * du default :/
+en recursif et tout ! Mais j'ai gros un souci avec insert qui ne set pas le child dans le parent ce qui 
+fait que j'ai beau ajouter du contenu, je peux pas y acceder. Aussi l'operateur[]=newValue ne fonctionne 
+pas, j'ai toujours le * du default :/
 NEXT TIME : debugger...
 [24/03]
-J'ai ecrit une fonction d'insert et l'operator[] dans l'espoir de pouvoir ajouter du contenu ou le visualiser
-au moins, j'ai meme fait l'iterateur simple et la surcharge operator<< mais il semblerait que j'aie une boucle
-infinie quelque part, on verra ca demain.
+J'ai ecrit une fonction d'insert et l'operator[] dans l'espoir de pouvoir ajouter du contenu ou le 
+visualiser au moins, j'ai meme fait l'iterateur simple et la surcharge operator<< mais il semblerait que 
+j'aie une boucle infinie quelque part, on verra ca demain.
 NEXT TIME : debugger...
 [23/03]
-Je peux creer une map via le constructeur par defaut, maintenant faut se pencher sur l'iterateur et les inserts.
-Par contre je pige rien au coup du value_compare, je vois pas du tout a quel objet ca peut faire reference.
+Je peux creer une map via le constructeur par defaut, maintenant faut se pencher sur l'iterateur et les
+inserts. Par contre je pige rien au coup du value_compare, je vois pas du tout a quel objet ca peut faire 
+reference.
 NEXT TIME : inserer du contenu et afficher le contenu via iterateur et non le syteme D comme actuellement
 [13/03]
 #vectorisoverparty !!
@@ -129,13 +151,13 @@ la ouf je vais lire la docu, histoire de voir si je vais dans le mur ou pas.
 NEXT TIME : tester les constructeurs par defaut et copie et essayer d'ajouter et visualiser le contenu,
 les iterateurs on verra plus tard.
 [12/03]
-Sur VECTOR il reste plus que erase et swap (avec une liste vide) et on est bons. Ca segfault depuis que j'ai
-modifie deleteElement() donc il faut que je me penche dessus, et que je fasse aussi une fonction qui delete et
-decale plusieurs elements en meme temps.
+Sur VECTOR il reste plus que erase et swap (avec une liste vide) et on est bons. Ca segfault depuis que
+j'ai modifie deleteElement() donc il faut que je me penche dessus, et que je fasse aussi une fonction qui
+delete et decale plusieurs elements en meme temps.
 NEXT TIME : S'arranger pour ne pas perdre les iterateurs dans erase
 [10/03]
-Je m'embrouille entre les sizes selon depuis quelle fonction "mere" fait appel a une autre, du coup ca segfault.
-Faut revoir la gestion de la reallocation, ou les moments où la size est verifiée/incrementée
+Je m'embrouille entre les sizes selon depuis quelle fonction "mere" fait appel a une autre, du coup ca 
+segfault. Faut revoir la gestion de la reallocation, ou les moments où la size est verifiée/incrementée
 [6/03].bis
 Bon ben je me suis chauffée a faire STACK ET QUEUE en 2h donc bénef !
 NEXT TIME : -> VECTOR (j'ai deja fait les typedef et les constr/destr)
@@ -143,9 +165,9 @@ NEXT TIME : -> VECTOR (j'ai deja fait les typedef et les constr/destr)
 J'AI FINI LIST !!! Et ca aura pris seulement... un mois. Du coup on se revoit fin juin pour push sans bonus !
 NEXT TIME : Reprendre STACK ou QUEUE, au choix (maintenant que j'ai ma LIST pour mettre dedans)
 [5/03]
-Le systeme de tete unique a 2 entrees marche tres bien. Il me reste plus que 3 fcts a ecrire. Et il faudrait un peu
-remanier le main : creer une chaine sur laquelle on pourrait montrer toutes les operations et reset les changements
-a chaque fois parce que la jpp de travailler avec des chaines de 2 elements en fin de test
+Le systeme de tete unique a 2 entrees marche tres bien. Il me reste plus que 3 fcts a ecrire. Et il faudrait
+un peu remanier le main : creer une chaine sur laquelle on pourrait montrer toutes les operations et reset 
+les changements a chaque fois parce que la jpp de travailler avec des chaines de 2 elements en fin de test
 NEXT TIME :     fix sort(comp);                 done
                 merge(); merge(list, comp);     done
                 remanier le main                done

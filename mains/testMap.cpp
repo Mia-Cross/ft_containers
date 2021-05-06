@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:16:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/03 21:51:34 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 03:29:45 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,16 @@ void testMap()
     mapA[3] = 't';
     std::cout << mapA;
     std::cout << "Creating map B with content (iterators) \n";
-    ft::map<int, char> mapB(mapA.begin(), mapA.end());   //leak
+    ft::map<int, char> mapB(mapA.begin(), mapA.end());   
     std::cout << mapB;
     {
         std::cout << "Creating map C as a const copy of A\n";
-        const ft::map<int, char> mapC(mapA);        //leak
+        const ft::map<int, char> mapC(mapA);        
         std::cout << mapC;
     }
     std::cout << "Creating map D as a copy of B by assignation\n";
     ft::map<int, char> mapD;
-    mapD = mapB;      // leak
+    mapD = mapB;      
     std::cout << mapD;
     std::cout << "Creating map E empty\n";
     ft::map<int, char> mapE;
@@ -89,7 +89,7 @@ void testMap()
     }
     {
         std::cout << "\nDisplaying MapC with CONST ITERATION :\t\t";
-        const ft::map<int, char> mapC(mapA);
+        const ft::map<int, char> mapC(mapA);      
         for (ft::map<int, char>::const_iterator it = mapC.begin(); it != mapC.end(); it++)
         {
             std::pair<int, char> pair = *it;
@@ -145,8 +145,8 @@ void testMap()
     mapB.erase(1);
     mapB.erase(9);
     mapA.erase(7);
-    const ft::map<int, char> mapC(mapA);
-    mapD = mapB;
+    const ft::map<int, char> mapC(mapA);      
+    mapD = mapB;                            
 
     std::cout << "\n// ----- MODIFIERS ----- //\n\n";    
     
@@ -158,8 +158,8 @@ void testMap()
     mapA.swap(mapE);
     std::cout << "After :\t\tmap A -> " << &mapA << mapA << "\t\tmap E -> " << &mapE << mapE;
     //restoring maps from const copies
-    mapA = mapC;
-    mapB = mapD;
+    mapA = mapC;          
+    mapB = mapD;              
     mapE.clear();
     
     std::cout << "\n/ - INSERT - /\n";
