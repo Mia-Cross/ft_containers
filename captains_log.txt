@@ -38,17 +38,14 @@ LEFT TO DO :
 --------------
 >> MAP <<
         Fix leaks
-        value_comp();
         passer le testeur de servane
-        passer le testeur de thomas --> segfaults on default constructor
+        passer le testeur de thomas --> segfaults on default constructor WTF
 >> LIST <<
-        revoir splice() tous prototypes
-        erase(iter, iter) the 3 first elements -> doesn't remove the 1st, only 2 & 3
-        passer le testeur de thomas --> il dit les memes choses
+        C'EST TOUT BON POUR MOI
 >> STACK & QUEUE <<
+        C'EST TOUT BON POUR MOI
         testeur de servane = perfect pour les 2
-        passer le testeur de thomas
-                Stack : Back() Front() failed
+        testeur de thomas = queue : Back() Front() failed WTF ??
 >> VECTOR <<
         comprendre ce qui cloche avec insert dans le testeur de servane
         passer le testeur de thomas :

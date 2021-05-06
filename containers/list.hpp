@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/05 23:10:59 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 01:39:55 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define LIST_H
 
 # include "../templates/doublyLinkedList.hpp"
+# include "../templates/enable_if.hpp"
 # include <memory>
 # include <iostream>
-# include "enable_if.hpp"
 
 namespace ft
 {
@@ -179,6 +179,7 @@ namespace ft
                 --last;
                 while (last != NULL && last != first)
                     last = this->erase(last);
+                last = this->erase(last);
                 return (last);
             }
             void swap(list &x) {
@@ -215,10 +216,8 @@ namespace ft
                 }
             }
             void splice(iterator position, list& x, iterator first, iterator last) {
-                --last;
-                while (last != NULL && last != first)
-                    splice(position, x, last--);
-                splice(position, x, first);
+                while (first != NULL && first != last)
+                    splice(position, x, first++);
             }
             
             // ----- REMOVE ----- //

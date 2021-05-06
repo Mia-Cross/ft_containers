@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/05 22:52:54 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 01:26:15 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define MAP_H
 
 # include "../templates/binarySearchTree.hpp"
+# include "../templates/enable_if.hpp"
 # include <functional>
 # include <iostream>
 # include <memory>
-# include "enable_if.hpp"
 
 namespace ft
 {
@@ -44,6 +44,21 @@ namespace ft
             typedef ptrdiff_t                           difference_type;
             typedef size_t                              size_type;
             typedef binTree<Key, T, Compare, Alloc>     binTree;
+
+            class CompObject : public std::binary_function<value_type,value_type,bool>
+            {
+                friend class map;
+                protected:
+                    Compare _comp;
+                    CompObject(Compare c) : _comp(c) {}  // constructed with map's comparison object
+                public:
+                    typedef bool result_type;
+                    typedef value_type first_argument_type;
+                    typedef value_type second_argument_type;
+                    bool operator() (const value_type &x, const value_type &y) const {
+                        return comp(x.first, y.first); }
+            };
+            typedef CompObject                          value_compare;
 
 
             // DEFAULT CONSTRUCTOR
@@ -200,22 +215,8 @@ namespace ft
 
             // ----- OBSERVERS ----- //
 
-            class CompObject
-            {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-                // friend class map;
-                protected:
-                    Compare _comp;
-                    CompObject(Compare c) : _comp(c) {}  // constructed with map's comparison object
-                public:
-                    typedef bool result_type;
-                    typedef value_type first_argument_type;
-                    typedef value_type second_argument_type;
-                    bool operator() (const value_type &x, const value_type &y) const {
-                        return comp(x.first, y.first); }
-            };
-            typedef CompObject                          value_compare;
-            value_compare value_comp() const { return (value_compare(_comp)); }
-            key_compare key_comp() const { return (_comp); }
+            value_compare   value_comp() const { return (value_compare(_comp)); }
+            key_compare     key_comp() const { return (_comp); }
 
             // ----- OPERATIONS ----- //
 

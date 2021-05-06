@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/05 23:37:28 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 01:27:04 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define VECTOR_H
 
 # include "../templates/dynamicArray.hpp"
+# include "../templates/enable_if.hpp"
 # include <memory>
 # include <iostream>
-# include "enable_if.hpp"
 
 namespace ft
 {
