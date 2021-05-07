@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:07:17 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 17:04:04 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 03:15:07 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class binTree
             _comp(Compare()), _allocBT(Alloc())
         {
             _pair = _allocBT.allocate(1);
-            _allocBT.construct(_pair, pair_t());
+            _allocBT.construct(_pair, pair_t(Key(), T()));
         }
 
         // create new element with a pair of values
@@ -158,7 +158,7 @@ class binTree
                 // _pair = _allocBT.allocate(1);
                 _allocBT.destroy(_pair);
                 _allocBT.construct(_pair, pair);
-                _end = new binTree(pair_t(), _root);
+                _end = new binTree(pair_t(Key(), T()), _root);
                 _end->_end = _root->_end;
                 return (std::pair<binTree*,bool>(_root, true));
             }

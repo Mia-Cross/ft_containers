@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 14:51:30 by schene            #+#    #+#             */
-/*   Updated: 2021/05/07 02:03:31 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 04:26:29 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "../containers/vector.hpp"
 
 template <class T>
-void	error_diff(ft::vector<T> &myv, std::vector<T> vector)
+void	error_diff(ft::vector<T> &myv, std::vector<T> &vector)
 {
 	std::cout << _RED << "ERROR - DIFF" << _END << std::endl;
 	std::cout << std::setw(30) << "myv.empty(): " << myv.empty() << std::endl;
@@ -26,7 +26,7 @@ void	error_diff(ft::vector<T> &myv, std::vector<T> vector)
 	std::cout << std::setw(30) << "myv.size(): " << myv.size() << std::endl;
 	std::cout << std::setw(30) << "vector.size(): " << vector.size() << std::endl;
 	std::cout << std::setw(30) << "myv : ";
-	// printContainer(myv);
+	printContainer(myv);
 	std::cout << std::setw(30) << "vector : ";
 	printContainer(vector);
 }
@@ -294,10 +294,10 @@ void	test_vector_string()
 	
 	compareVector("[JOHN]", myJOHN, JOHN);
 	std::cout << "[size] myJOHN = " << myJOHN.size() << " JOHN = " << JOHN.size() << std::endl;
-	std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
+	// std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
 	compareVector("[BOB]", myBOB, BOB);
 	std::cout << "[size] myBOB = " << myBOB.size() << " BOB = " << BOB.size() << std::endl;
-	std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
+	// std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
 
 	
 	myJOHN.swap(myBOB);
@@ -306,17 +306,17 @@ void	test_vector_string()
 	
 	compareVector("[JOHN]", myJOHN, JOHN);
 	std::cout << "[size] myJOHN = " << myJOHN.size() << " JOHN = " << JOHN.size() << std::endl;
-	std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
+	// std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
 	compareVector("[BOB]", myBOB, BOB);
 	std::cout << "[size] myBOB = " << myBOB.size() << " BOB = " << BOB.size() << std::endl;
-	std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
+	// std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
 
 	compareVector("[JOHN]", myJOHN, JOHN);
 	std::cout << "[size] myJOHN = " << myJOHN.size() << " JOHN = " << JOHN.size() << std::endl;
-	std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
+	// std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
 	compareVector("[MIKE]", myMIKE, MIKE);
 	std::cout << "[size] myMIKE = " << myMIKE.size() << " MIKE = " << MIKE.size() << std::endl;
-	std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
+	// std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
 	
 	myMIKE.swap(myJOHN);
 	MIKE.swap(JOHN);
@@ -324,10 +324,10 @@ void	test_vector_string()
 	
 	compareVector("[JOHN]", myJOHN, JOHN);
 	std::cout << "[size] myJOHN = " << myJOHN.size() << " JOHN = " << JOHN.size() << std::endl;
-	std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
+	// std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
 	compareVector("[MIKE]", myMIKE, MIKE);
 	std::cout << "[size] myMIKE = " << myMIKE.size() << " MIKE = " << MIKE.size() << std::endl;
-	std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
+	// std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
 	
 	std::cout << _CYAN << "==================== CLEAR ====================" << _END << std::endl;
 
@@ -338,7 +338,7 @@ void	test_vector_string()
 
 	compareVector("[JOHN]", myJOHN, JOHN);
 	std::cout << "[size] myJOHN = " << myJOHN.size() << " JOHN = " << JOHN.size() << std::endl;
-	std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
+	// std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
 	
 	std::cout << _CYAN << "==================== NON MEMBER Functions ====================" << _END << std::endl;
 
@@ -346,10 +346,10 @@ void	test_vector_string()
 
 	compareVector("[BOB]", myBOB, BOB);
 	std::cout << "[size] myBOB = " << myBOB.size() << " BOB = " << BOB.size() << std::endl;
-	std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
+	// std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
 	compareVector("[MIKE]", myMIKE, MIKE);
 	std::cout << "[size] myMIKE = " << myMIKE.size() << " MIKE = " << MIKE.size() << std::endl;
-	std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
+	// std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
 
 	swap(myBOB, myMIKE);
 	swap(BOB, MIKE);
@@ -358,10 +358,10 @@ void	test_vector_string()
 
 	compareVector("[BOB]", myBOB, BOB);
 	std::cout << "[size] myBOB = " << myBOB.size() << " BOB = " << BOB.size() << std::endl;
-	std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
+	// std::cout << "[capacity] myBOB = " << myBOB.capacity() << " BOB = " << BOB.capacity() << std::endl;
 	compareVector("[MIKE]", myMIKE, MIKE);
 	std::cout << "[size] myMIKE = " << myMIKE.size() << " MIKE = " << MIKE.size() << std::endl;
-	std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
+	// std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl;
 
 	std::cout << _CYAN << "----- RELATIONAL OPERATORS -----" << _END << std::endl;
 	
@@ -372,10 +372,10 @@ void	test_vector_string()
 
 	compareVector("[JOHN]", myJOHN, JOHN);
 	std::cout << "[size] myJOHN = " << myJOHN.size() << " JOHN = " << JOHN.size() << std::endl;
-	std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
+	// std::cout << "[capacity] myJOHN = " << myJOHN.capacity() << " JOHN = " << JOHN.capacity() << std::endl;
 	compareVector("[MIKE]", myMIKE, MIKE);
 	std::cout << "[size] myMIKE = " << myMIKE.size() << " MIKE = " << MIKE.size() << std::endl;
-	std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl << std::endl;
+	// std::cout << "[capacity] myMIKE = " << myMIKE.capacity() << " MIKE = " << MIKE.capacity() << std::endl << std::endl;
 
 	std::cout << _CYAN << "myMIKE == myJOHN ? " << _GREEN << std::boolalpha << (myMIKE == myJOHN) << std::endl;
 	std::cout << _CYAN << "MIKE == JOHN ? " << _GREEN << std::boolalpha << (MIKE == JOHN) << std::endl << std::endl;

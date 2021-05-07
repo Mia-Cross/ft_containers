@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/07 01:55:55 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 04:29:06 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <cstddef>
 # include <memory>
 
-# include <iostream>
+// # include <iostream>
 
 template < typename T, class Alloc >
 class dynArr {
@@ -25,9 +25,7 @@ class dynArr {
 
         //create empty vector
         dynArr() : _allocDA(Alloc()), _capacity(1), _sizeDA(0),
-            _arrayDA(_allocDA.allocate(1)), _nullRef(T()) {
-                // array = _allocDA.construct(T());
-            }
+            _arrayDA(_allocDA.allocate(1)), _nullRef(T()) { }
 
         //allocate empty new block
         dynArr(size_t n) : _allocDA(Alloc()), _capacity(n), _sizeDA(0),
@@ -44,15 +42,8 @@ class dynArr {
         dynArr &operator=(const dynArr &ref) {
             if (_capacity < ref._sizeDA)
                 reallocateArray(ref._sizeDA);
-            // std::cout << "ref.size = " << ref.size << std::endl;
-            // std::cout << "_sizeDA = " << _sizeDA << std::endl;
-            // std::cout << "_capacity = " << _capacity << std::endl;
             for (size_t i = 0; i != ref._sizeDA; i++)
-            {
-                // std::cout << i << std::endl;
                 constructValue(i, *(ref._arrayDA + i));
-                // std::cout << i << std::endl;
-            }
             // _sizeDA = ref._sizeDA;
             return (*this);
         }
@@ -82,16 +73,11 @@ class dynArr {
                 _allocDA.destroy(_arrayDA + i);
             _sizeDA -= n;
             for (size_t i = index; i < _sizeDA; i++)
-            {
-                // std::cout << i << " | " << i + n << std::endl;
                 _allocDA.construct(_arrayDA + i, *(_arrayDA + i + n));
-            }
         }
 
         T *duplicateArray(size_t size, size_t newCapacity) {
-            // std::cout << "trying to alloc in dup array " << capacity << std::endl;
             T *dup = _allocDA.allocate(newCapacity);
-            // std::cout << "SUCCESS" << std::endl;
             for (size_t i = 0; i < size; i++)
                 _allocDA.construct(dup + i, *(_arrayDA + i));
             return (dup);
@@ -102,22 +88,17 @@ class dynArr {
             _allocDA.deallocate(_arrayDA, _capacity);
             _arrayDA = newArr;
             _capacity = n;
+        }
 
-            // T *newArr = duplicateArray(_sizeDA, n);
-            // _allocDA.deallocate(_arrayDA, _capacity);
-            // // std::cout << "trying to alloc in realloc array " << n << std::endl;
-            // _arrayDA = _allocDA.allocate(n);
-            // // std::cout << "SUCCESS" << std::endl;
-            // for (size_t i = 0; i < n; i++)
-            //     _allocDA.construct(array + i, *(newArr + i));
-            // _capacity = n;
-            // delete newArr;
+        void splitArray(size_t newSize, size_t index, size_t length) {
+            for (size_t i = newSize - 1; i >= index + length; i--)
+                _allocDA.construct(_arrayDA + i, *(_arrayDA + i - length));
+            for (size_t i = index; i < index + length; i++)
+                _allocDA.destroy(_arrayDA + i);
         }
 
         T *duplicateSplitArray(size_t index, size_t length) {
-            // std::cout << "trying to alloc in dup split array " << _capacity + length << std::endl;
             T *dup = _allocDA.allocate(_capacity + length);
-            // std::cout << "SUCCESS" << std::endl;
             size_t j = 0;
             for (size_t i = 0; i < index; i++)
                 _allocDA.construct(dup + i, *(_arrayDA + j++));
@@ -132,16 +113,6 @@ class dynArr {
             T *newArr = duplicateSplitArray(index, length);
             _allocDA.deallocate(_arrayDA, _capacity);
             _arrayDA = newArr;
-
-            // size_t newSize = capacity + length;
-            // T *newArr = duplicateSplitArray(index, length);
-            // _allocDA.deallocate(_arrayDA, _capacity);
-            // // std::cout << "trying to alloc in realloc split array " << newSize << std::endl;
-            // _arrayDA = _allocDA.allocate(newSize);
-            // // std::cout << "SUCCESS" << std::endl;
-            // for (size_t i = 0; i < newSize; i++)
-            //     _allocDA.construct(array + i, *(newArr + i));
-            // delete newArr;
         }
 
     private :

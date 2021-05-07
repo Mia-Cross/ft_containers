@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 17:11:38 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 04:29:58 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,8 +238,8 @@ namespace ft
             iterator        lower_bound(const key_type &k) {
                 if (!_size)
                 {
-                    operator[](0);
-                    return (find(0));
+                    operator[](key_type());
+                    return (find(key_type()));
                 }
                 iterator it = begin();
                 while (it != end())
@@ -254,8 +254,8 @@ namespace ft
             const_iterator  lower_bound(const key_type &k) const {
                 if (!_size)
                 {
-                    operator[](0);
-                    return (find(0));
+                    operator[](key_type());
+                    return (find(key_type()));
                 }
                 const_iterator it = begin();
                 while (it != end())
@@ -270,8 +270,8 @@ namespace ft
             iterator        upper_bound(const key_type &k) {
                 if (!_size)
                 {
-                    operator[](0);
-                    return (find(0));
+                    operator[](key_type());
+                    return (find(key_type()));
                 }
                 iterator it = begin();
                 while (it != end())
@@ -286,8 +286,8 @@ namespace ft
             const_iterator  upper_bound(const key_type &k) const {
                 if (!_size)
                 {
-                    operator[](0);
-                    return (find(0));
+                    operator[](key_type());
+                    return (find(key_type()));
                 }
                 const_iterator it = begin();
                 while (it != end())

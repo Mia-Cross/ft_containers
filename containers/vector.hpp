@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/07 01:17:33 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 04:20:14 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ namespace ft
                 size_t newSize = _size + n;
                 if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, n);
+                else
+                    _array.splitArray(newSize, index, n);
                 for (size_t i = 0; i < n; i++)
                     _array.constructValue(index + i, val);
                 _size = newSize;
@@ -199,6 +201,8 @@ namespace ft
                 size_t newSize = _size + dist;
                 if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, dist);
+                else
+                    _array.splitArray(newSize, index, dist);
                 while (index < newSize && first != last)
                 {
                     // std::cout << "index " << index << std::endl;
