@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 17:10:41 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:56:55 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,15 @@ namespace ft
             }
 
             // MEMBER FUNCTIONS
-            bool empty() const { return (_container.empty()); }
-            size_type size() const { return (_container.size()); }
-            value_type &top() { return (_container.back()); }
-            const value_type &top() const { return (_container.back()); }
-            void push(const value_type &val) { _container.push_back(val); }
-            void pop() { _container.pop_back(); }
+            bool                empty() const { return (_container.empty()); }
+            size_type           size() const { return (_container.size()); }
+            value_type          &top() { return (_container.back()); }
+            const value_type    &top() const { return (_container.back()); }
+            void                push(const value_type &val) { _container.push_back(val); }
+            void                pop() { _container.pop_back(); }
             
             // ADDITION ( ONLY FOR DISPLAY )
-            C &getContainer() const { return (const_cast<C&>(_container)); }
+            C   &getContainer() const { return (const_cast<C&>(_container)); }
 
             friend bool operator==(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container == rhs._container); }
             friend bool operator!=(const stack<T, C> &lhs, const stack<T, C> &rhs) { return (lhs._container != rhs._container); }
@@ -74,14 +74,11 @@ namespace ft
     std::ostream &operator<<(std::ostream &out, stack<T> const &stack) {
         size_t size = stack.size();
         out << "\t>> STACK [" << size << "]\t= { ";
-        if (size)
+        for (typename ft::list<T>::reverse_iterator it = stack.getContainer().rbegin(); size-- > 0; it++)
         {
-            for (typename ft::list<T>::reverse_iterator it = stack.getContainer().rbegin(); size-- > 0; it++)
-            {
-                out << *it;
-                if (size)
-                    out << ", ";
-            }
+            out << *it;
+            if (size)
+                out << ", ";
         }
         out << " }" << std::endl;
         return (out);

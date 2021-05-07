@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 04:26:15 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 17:12:54 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:47:44 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ namespace ft
             explicit list(const allocator_type& alloc = allocator_type()) :
                 _list(new dLList<T, Alloc>), _size(0), _alloc(alloc)
             { }
+
             // CONSTRUCTOR BY FILLING
             explicit list(size_type n, const value_type& val = value_type(),
                 const allocator_type& alloc = allocator_type()) : 
@@ -51,28 +52,30 @@ namespace ft
                 while (_size < n)
                     push_front(val);
             }
+
             // CONSTRUCTOR BY RANGE
             template <class InputIterator>
             list(InputIterator first, InputIterator last,
                 const allocator_type& alloc = allocator_type()) :
                 _list(new dLList<T, Alloc>), _size(0), _alloc(alloc)
             {
-                // while (first != last)
-                //     push_back(*first++);
                 assign(first, last);
             }
+
             // CONSTRUCTOR BY COPY
             list(const list &ref) : _list(new dLList<T, Alloc>),
                 _size(0), _alloc(ref._alloc)
             {
                 *this = ref;
             }
+
             // DESTRUCTOR
             ~list()
             {
                 clear();
                 delete _list;
             }
+
             // ASSIGNATION
             list &operator=(const list &ref)
             {
@@ -111,15 +114,12 @@ namespace ft
             void assign(InputIterator first, InputIterator last) {
                 clear();
                 insert(begin(), first, last);
-                // while (first != last)
-                    // push_back(first++);
             }
             void assign(size_type n, const value_type &val) {
                 clear();
                 insert(begin(), n, val);
-                // while (_size < n)
-                //     push_back(val);
             }
+
             void push_front(const value_type &val) {
                 dLList<T, Alloc> *elem = new dLList<T, Alloc>(val);
                 _list->insertAfter(elem);
@@ -142,6 +142,7 @@ namespace ft
                 _list->getLast()->deleteElement();
                 _size--;
             }
+
             iterator insert(iterator position, const value_type &val) {
                 dLList<T, Alloc> *elem = _list->getElement(position.operator->());
                 if (elem)
@@ -157,7 +158,6 @@ namespace ft
                     position = insert(position, val);
             }
             template <class InputIterator>
-            // void insert(iterator position, InputIterator first, InputIterator last) {
             void insert(iterator position,
                 typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,
                 InputIterator last)
@@ -165,6 +165,7 @@ namespace ft
                 while (position != NULL && first != last)
                     insert(position, *first++);
             }
+
             iterator erase(iterator position) {
                 dLList<T, Alloc> *elem = _list->getElement(position.operator->());
                 if (elem && _size)
@@ -182,17 +183,20 @@ namespace ft
                 last = this->erase(last);
                 return (last);
             }
+
             void swap(list &x) {
                 list tmp(x);
                 x = *this;
                 *this = tmp;
             }
+
             void resize (size_type n, value_type val = value_type()) {
                 while (_size < n)
                     this->push_back(val);
                 while (_size > n)
                     this->pop_back();
             }
+
             void clear() { resize(0); }
 
             ////////////////////////////
@@ -204,6 +208,7 @@ namespace ft
             void splice(iterator position, list& x) {
                 splice(position, x, x.begin(), x.end());
             }
+
             void splice(iterator position, list& x, iterator i) {
                 dLList<T, Alloc> *dest = position.operator->();
                 dLList<T, Alloc> *src = i.operator->();
@@ -215,6 +220,7 @@ namespace ft
                     x._size--;
                 }
             }
+
             void splice(iterator position, list& x, iterator first, iterator last) {
                 while (first != NULL && first != last)
                     splice(position, x, first++);
@@ -236,6 +242,7 @@ namespace ft
                         it++;
                 }
             }
+
             template < class Predicate >
             void remove_if (Predicate pred) {
                 iterator it = begin();
@@ -268,6 +275,7 @@ namespace ft
                     }
                 }
             }
+
             template < class BinaryPredicate >
             void unique(BinaryPredicate binary_pred) {
                 iterator it = begin();
@@ -297,6 +305,7 @@ namespace ft
                         ity++;
                 }
             }
+
             template < class Compare >
             void merge(list &x, Compare comp) {
                 iterator itx = x.begin();
@@ -325,6 +334,7 @@ namespace ft
                     }
                 }
             }
+
             template < class Compare >
             void sort(Compare comp) {
                 iterator it = begin();
@@ -419,15 +429,12 @@ namespace ft
     std::ostream &operator<<(std::ostream &out, list<T> const &list) {
         size_t size = list.size();
         out << "\t>> LIST [" << size << "]\t= { ";
-        // if (size)
-        // {
-            for (typename ft::list<T>::const_iterator it = list.begin(); size-- > 0; it++)
-            {
-                out << *it;
-                if (size)
-                    out << ", ";
-            }
-        // }
+        for (typename ft::list<T>::const_iterator it = list.begin(); size-- > 0; it++)
+        {
+            out << *it;
+            if (size)
+                out << ", ";
+        }
         out << " }" << std::endl;
         return (out);
     }

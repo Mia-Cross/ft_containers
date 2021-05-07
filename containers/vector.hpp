@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/07 04:20:14 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:59:30 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ namespace ft
             explicit vector(const allocator_type& alloc = allocator_type()) :
                 _array(), _size(0), _alloc(alloc)
             { }
+
             // CONSTRUCTOR BY FILLING
             explicit vector(size_type n, const value_type &val = value_type(),
                 const allocator_type& alloc = allocator_type()) :
@@ -51,24 +52,28 @@ namespace ft
                 for (size_t i = 0; i < n; i++)
                     _array.addElement(val);
             }
+
             // CONSTRUCTOR BY RANGE
             template <class InputIterator>
             vector(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,
-				InputIterator last, const allocator_type& alloc = allocator_type()) :
+                InputIterator last, const allocator_type& alloc = allocator_type()) :
                 _array(), _size(0), _alloc(alloc)
             {
                 while (first != last)
                     push_back(*first++);
             }
+
             // CONSTRUCTOR BY COPY
             vector(const vector &ref) : _array(ref._size),
                 _size(ref._size), _alloc(ref._alloc)
             {
                 *this = ref;
             }
+
             // DESTRUCTOR
             ~vector()
-            { }
+            { clear(); }
+
             // ASSIGNATION
             const vector &operator=(const vector &ref)
             {
@@ -92,17 +97,17 @@ namespace ft
 
             // ----- CAPACITY ----- //
             
-            size_type size() const { return (_size); }
-            size_type max_size() const { return (_alloc.max_size()); }
-            void resize(size_type n, value_type val = value_type()) {
+            bool        empty() const { return (_size == 0); }
+            size_type   size() const { return (_size); }
+            size_type   max_size() const { return (_alloc.max_size()); }
+            size_type   capacity() const { return (_array.getCapacity()); }
+            void        resize(size_type n, value_type val = value_type()) {
                 while (_size < n)
                     this->push_back(val);
                 while (_size > n)
                     this->pop_back();
             }
-            size_type capacity() const { return (_array.getCapacity()); }
-            bool empty() const { return (_size == 0); }
-            void reserve(size_type n) {
+            void        reserve(size_type n) {
                 if (capacity() < n)
                     _array.reallocateArray(n);
             }
@@ -119,6 +124,7 @@ namespace ft
                     return (*(_array.getArray()));
                 return (_array.throwNullRef());
             }
+
             reference back() {
                 if (_size)
                     return (*(_array.getArray() + _size - 1));
@@ -129,12 +135,14 @@ namespace ft
                     return (*(_array.getArray() + _size - 1));
                 return (_array.throwNullRef());
             }
+
             reference operator[](size_type n) {
                 return (*(_array.getArray() + n));
             }
             const_reference operator[] (size_type n) const {
                 return (*(_array.getArray() + n));
             }
+
             reference at (size_type n) {
                 if (n < _size)
                     return (*(_array.getArray() + n));
@@ -150,39 +158,46 @@ namespace ft
             
             template <class InputIterator>
             void assign(typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type first,
-				InputIterator last)
-            {
+                InputIterator last) {
                 clear();
                 while (first != last)
                     push_back(*first++);
             }
+
             void assign(size_type n, const value_type &val) {
                 clear();
                 while (_size < n)
                     push_back(val);
             }
+
             void push_back(const value_type &val) {
                 _array.addElement(val);
                 _size++;
             }
+
             void pop_back() {
                 if (_size)
                     _array.deleteElements(--_size, 1);
             }
-            iterator insert(iterator position, const value_type &val) {
+
+            iterator insert(iterator position, const value_type &val)
+            {
                 size_t index = position.distanceBetween(begin(), position);
                 size_t newSize = _size + 1;
+
                 if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, 1);
+                else
+                    _array.splitArray(newSize, index, 1);
                 _array.constructValue(index, val);
-                // _size++;
                 _size = newSize;
                 return (iterator(_array.getArray() + index));
-                // return (position);
             }
-            void insert(iterator position, size_type n, const value_type &val) {
+            void insert(iterator position, size_type n, const value_type &val)
+            {
                 size_t index = position.distanceBetween(begin(), position);
                 size_t newSize = _size + n;
+
                 if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, n);
                 else
@@ -190,28 +205,25 @@ namespace ft
                 for (size_t i = 0; i < n; i++)
                     _array.constructValue(index + i, val);
                 _size = newSize;
-                // _size += n;
             }
+
             template <class InputIterator>
             void insert(iterator position, InputIterator first, 
-				typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type last)
+                typename ft::enable_if<!std::numeric_limits<InputIterator>::is_integer, InputIterator>::type last)
             {
                 size_t index = position.distanceBetween(begin(), position);
                 size_t dist = position.distanceBetween(first, last);
                 size_t newSize = _size + dist;
+
                 if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, dist);
                 else
                     _array.splitArray(newSize, index, dist);
                 while (index < newSize && first != last)
-                {
-                    // std::cout << "index " << index << std::endl;
-                    _array.constructValue(index++, *first);
-                    first++;
-                }
+                    _array.constructValue(index++, *first++);
                 _size = newSize;
-                // _size += dist;
             }
+
             iterator erase(iterator position) {
                 if (_size)
                 {
@@ -221,17 +233,20 @@ namespace ft
                 }
                 return (position);
             }
+
             iterator erase(iterator first, iterator last) {
                 size_t dist = first.distanceBetween(first, last);
                 _array.deleteElements(first.distanceBetween(begin(), first), dist);
                 _size -= dist;
                 return (last);
             }
+
             void swap(vector &x) {
                 vector tmp(x);
                 x = *this;
                 *this = tmp;
             }
+
             void clear() { resize(0); }
 
         private :

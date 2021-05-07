@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:25:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 17:10:24 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:55:45 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,17 @@ namespace ft
             }
 
             // MEMBER FUNCTIONS
-            bool empty() const { return (_container.empty()); }
-            size_type size() const { return (_container.size()); }
-            value_type &front() { return (_container.front()); }
-            const value_type &front() const { return (_container.front()); }
-            value_type &back() { return (_container.back()); }
-            const value_type &back() const { return (_container.back()); }
-            void push(const value_type &val) { _container.push_back(val); }
-            void pop() { _container.pop_front(); }
+            bool                empty() const { return (_container.empty()); }
+            size_type           size() const { return (_container.size()); }
+            value_type          &front() { return (_container.front()); }
+            const value_type    &front() const { return (_container.front()); }
+            value_type          &back() { return (_container.back()); }
+            const value_type    &back() const { return (_container.back()); }
+            void                push(const value_type &val) { _container.push_back(val); }
+            void                pop() { _container.pop_front(); }
             
             // ADDITION ( ONLY FOR DISPLAY )
-            C &getContainer() const { return (const_cast<C&>(_container)); }
+            C   &getContainer() const { return (const_cast<C&>(_container)); }
 
             friend bool operator==(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container== rhs._container); }
             friend bool operator!=(const queue<T, C> &lhs, const queue<T, C> &rhs) { return (lhs._container!= rhs._container); }
@@ -76,14 +76,11 @@ namespace ft
     std::ostream &operator<<(std::ostream &out, queue<T> const &queue) {
         size_t size = queue.size();
         out << "\t>> QUEUE [" << size << "]\t= { ";
-        if (size)
+        for (typename ft::list<T>::iterator it = queue.getContainer().begin(); size-- > 0; it++)
         {
-            for (typename ft::list<T>::iterator it = queue.getContainer().begin(); size-- > 0; it++)
-            {
-                out << *it;
-                if (size)
-                    out << ", ";
-            }
+            out << *it;
+            if (size)
+                out << ", ";
         }
         out << " }" << std::endl;
         return (out);

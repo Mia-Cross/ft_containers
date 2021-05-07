@@ -1,6 +1,11 @@
 # Executables
 */a.out
 ft_containers
+SC_tests/stack
+SC_tests/vector
+SC_tests/list
+SC_tests/map
+SC_tests/queue
 # Prerequisites
 *.d
 # Compiled Object files

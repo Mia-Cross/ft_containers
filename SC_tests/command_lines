@@ -1,0 +1,5 @@
+clang++ -Wall -Wextra -Werror -std=c++98 -o list test_list.cpp
+clang++ -Wall -Wextra -Werror -std=c++98 -o stack test_stack.cpp
+clang++ -Wall -Wextra -Werror -std=c++98 -o queue test_queue.cpp
+clang++ -Wall -Wextra -Werror -std=c++98 -o vector test_vector.cpp vector_test_string.cpp
+clang++ -Wall -Wextra -Werror -std=c++98 -o map test_map.cpp

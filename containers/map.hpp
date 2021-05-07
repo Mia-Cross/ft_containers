@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/13 02:52:25 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/07 04:29:58 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:52:18 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ namespace ft
                 friend class map;
                 protected:
                     Compare _comp;
-                    CompObject(Compare c) : _comp(c) {}  // constructed with map's comparison object
+                    CompObject(Compare c) : _comp(c) {}
                 public:
                     typedef bool result_type;
                     typedef value_type first_argument_type;
@@ -65,7 +65,8 @@ namespace ft
             explicit map(const key_compare& comp = key_compare(),
                 const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(new binTree),
                 _size(0), _comp(comp)
-            {}
+            { }
+
             // CONSTRUCTOR BY RANGE
             template <class InputIterator>
             map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
@@ -75,19 +76,21 @@ namespace ft
                 while (first != last)
                     insert(*first++);
             }
+
             // CONSTRUCTOR BY COPY
             map(const map &ref) : _alloc(ref._alloc), _tree(new binTree),
                 _size(0), _comp(ref._comp)
             {
                 *this = ref;
             }
+
             // DESTRUCTOR
             ~map()
             {
                 clear();
-                // delete _tree->getEnd();
                 delete _tree;
             }
+
             // ASSIGNATION
             const map &operator=(const map &ref)
             {
@@ -114,9 +117,9 @@ namespace ft
             
             // ----- CAPACITY ----- //
             
-            bool empty() const { return (_size == 0); }
-            size_type size() const { return (_size); }
-            size_type max_size() const { return (_alloc.max_size()); }
+            bool        empty() const { return (_size == 0); }
+            size_type   size() const { return (_size); }
+            size_type   max_size() const { return (_alloc.max_size()); }
 
             // ----- ELEMENT ACCESS ----- //
 
@@ -124,7 +127,7 @@ namespace ft
                 binTree *node = _tree->getNode(k, _tree);
                 if (node)
                     return (node->getValue());
-                value_type *val = new value_type(k, 0);
+                value_type *val = new value_type(k, mapped_type());
                 std::pair<binTree*,bool> ret = _tree->insertElement(_tree, *val, _size);
                 delete val;
                 _size++;
@@ -152,12 +155,13 @@ namespace ft
                 std::pair<iterator,bool> ret = insert(val);
                 return (ret.first);
             }
+
             template <class InputIterator>
             void insert(InputIterator first, InputIterator last) {
                 while (first != last)
                     insert(*first++);
             }
-            
+
             void erase(iterator position) {
                 if (!_size)
                     return ;
@@ -165,6 +169,7 @@ namespace ft
                 to_del->deleteElement();
                 _size--;
             }
+
             size_type erase(const key_type &k) {
                 binTree *to_del = _tree->getNode(k, _tree);
                 if (!to_del || !_size)
@@ -173,10 +178,10 @@ namespace ft
                 _size--;
                 return (1);
             }
+
             void erase(iterator first, iterator last) {
                 if (!_size)
                     return ;
-                // std::cout << "ERASE by iterators -> BEGIN" << std::endl;
                 iterator iter = first;
                 key_type lastKey;
                 while (iter != last)
@@ -184,18 +189,13 @@ namespace ft
                 key_type key = first->first;
                 while (key != lastKey)
                 {
-                    // std::cout << "-> will delete key " << key << std::endl;
                     key_type nextKey = upper_bound(key)->first;
                     iter = find(key);
-                    // std::cout << "-> erasing " << iter.getNode() << std::endl;
                     erase(iter);
                     key = nextKey;
-                    // std::cout << "  next key will be " << key << std::endl;
                 }
                 iter = find(lastKey);
-                // std::cout << "-> erasing " << iter.getNode() << std::endl;
                 erase(iter);
-                // std::cout << "ERASE by iterators -> END" << std::endl;
             }
             
             void swap(map &x) {
@@ -210,9 +210,7 @@ namespace ft
                 this->_tree->setEnd(tmpEnd);
             }
 
-            void clear() {
-                erase(begin(), end());
-            }
+            void clear() { erase(begin(), end()); }
 
             // ----- OBSERVERS ----- //
 
@@ -233,8 +231,11 @@ namespace ft
                     return (const_iterator(node));
                 return (const_iterator(_tree->getEnd()));
             }
+
             size_type       count(const key_type& k) const {
-                return (_tree->getNode(k, _tree) ? 1 : 0); }
+                return (_tree->getNode(k, _tree) ? 1 : 0);
+            }
+
             iterator        lower_bound(const key_type &k) {
                 if (!_size)
                 {
@@ -267,6 +268,7 @@ namespace ft
                 }
                 return (it);
             }
+
             iterator        upper_bound(const key_type &k) {
                 if (!_size)
                 {
@@ -299,11 +301,12 @@ namespace ft
                 }
                 return (it);
             }
-            std::pair<const_iterator,const_iterator> equal_range(const key_type &k) const {
-                return (std::pair<const_iterator,const_iterator>(lower_bound(k), upper_bound(k)));
-            }
+
             std::pair<iterator,iterator>             equal_range(const key_type &k) {
                 return (std::pair<iterator,iterator>(lower_bound(k), upper_bound(k)));
+            }
+            std::pair<const_iterator,const_iterator> equal_range(const key_type &k) const {
+                return (std::pair<const_iterator,const_iterator>(lower_bound(k), upper_bound(k)));
             }
 
         private :
@@ -367,7 +370,6 @@ namespace ft
         x = y;
         y = tmp;
     }
-
 
     // THIS IS NOT PART OF THE STL CONTAINER
     template < class Key, class T, class Compare, class Alloc >

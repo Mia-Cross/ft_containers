@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:23:12 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 21:19:55 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:21:01 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,9 @@ std::cout << "\n// ----- MODIFIERS ----- //\n\n";
 
     std::cout << "\n/ - POP - /\n";
     std::cout << " * Popping back...\n";
+    vectorA.pop_back();
+    vectorB.pop_back();
+    vectorE.pop_back();
     vectorA.pop_back();
     vectorB.pop_back();
     vectorE.pop_back();

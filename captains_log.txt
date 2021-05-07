@@ -7,9 +7,10 @@ stack   none            Single end -> last in, first out
 
 DETAILS A REVOIR AVANT DE TERMINER :
 ---------
-        enlever throwNulRef() et nul(0)
 DETAILS REVUS AVEC COMMENTAIRE :
 ---------
+        enlever throwNulRef() et nul(0)
+                finalement ca reste, juste on passe par le constructeur par defaut au lieu de 0
         Faire des tests avec autre chose que des ints
                 fait avec les testeurs de servane et thomas
         Voir les fonctions membres passables en private
@@ -38,19 +39,16 @@ Est ce qu'il faut faire la specialisation vector<bool> ?
 LEFT TO DO :
 --------------
 >> MAP <<
-        passer le testeur de servane
-                find doesn't return end() when not found ?
-                        fairly confident it's good now
-                apparently when !size begin() and end() are supposed to be the same
-                        fairly confident it's good now
-        passer le testeur de thomas
-                impossible, throws logic error exception everytime rand() is used (and it's a lot...)
+        C'EST TOUT BON POUR MOI
+        testeur de servane = perfect pour les 2
+        testeur de thomas
+                comportement chelou avec insert(value already exists) -> valeur ne change pas dans std::vector
 >> LIST <<
         C'EST TOUT BON POUR MOI
 >> STACK & QUEUE <<
         C'EST TOUT BON POUR MOI
         testeur de servane = perfect pour les 2
-        testeur de thomas = queue : Back() Front() failed WTF ??
+        testeur de thomas = perfect pour les 2
 >> VECTOR <<
         rework overloads
         comprendre ce qui cloche avec insert dans le testeur de servane

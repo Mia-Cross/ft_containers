@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/05 01:33:33 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/04 16:53:47 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:31:48 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <memory>
 # include <cstddef>
-# include <string.h>
 
 template < typename T, class Alloc >
 class dLList
@@ -34,14 +33,13 @@ class dLList
         dLList() : head(this), next(this), prev(this),
             allocDLL(Alloc()) {
                 this->content = allocDLL.allocate(1);
-                memset(this->content, 0, sizeof(*this->content));
+                allocDLL.construct(this->content, T());
             }
 
         // create new element with given value
         dLList(T value) : head(NULL), next(NULL), prev(NULL), allocDLL(Alloc()) {
             this->content = allocDLL.allocate(1);
             allocDLL.construct(this->content, value);
-            // *this->content = value;
         }
 
         ~dLList() { 
@@ -53,7 +51,6 @@ class dLList
         
         dLList &operator=(const dLList &ref) {
             allocDLL.construct(this->content, *ref.content);
-            // *this->content = *ref.content;
             this->head = ref.head;
             this->next = ref.next;
             this->prev = ref.prev;

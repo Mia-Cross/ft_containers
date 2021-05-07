@@ -6,17 +6,15 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 02:07:17 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/07 03:15:07 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:42:16 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BINARY_SEARCH_TREE_H
 # define BINARY_SEARCH_TREE_H
 
-// # include "../containers/list.hpp"
 # include <memory>
 # include <cstddef>
-
 # include <iostream>
 
 template < class Key, class T, class Compare, class Alloc >
@@ -88,7 +86,6 @@ class binTree
         binTree     *getParent() const {
             binTree *parent = _root;
             while (parent && parent->_pair && parent->_left != this && parent->_right != this)
-            // while (parent && (parent->_left || parent->_right) && parent->_left != this && parent->_right != this)
             {
                 if (_comp(this->getKey(), parent->getKey()) && parent->_left)
                     parent = parent->_left;
@@ -155,7 +152,6 @@ class binTree
         std::pair<binTree*,bool> insertElement(binTree *node, const pair_t &pair, size_t mapSize) {
             if (_root == _end)
             {
-                // _pair = _allocBT.allocate(1);
                 _allocBT.destroy(_pair);
                 _allocBT.construct(_pair, pair);
                 _end = new binTree(pair_t(Key(), T()), _root);
@@ -181,7 +177,6 @@ class binTree
 
         void setChildInParent(binTree *child, const Key &key) {
             binTree *parent = this->getParent();
-            // std::cout << "SET CHILD IN PARENT = ";
             if (_comp(parent->getKey(), key))
                 parent->_right = child;
             else if (_comp(key, parent->getKey()))
@@ -234,8 +229,6 @@ class binTree
                 binTree *tmp = _end;
                 _end = _root;
                 delete tmp;
-                // _allocBT.deallocate(this->_pair, 1);
-                // this->_pair = NULL;
             }
             if (successor)
             {

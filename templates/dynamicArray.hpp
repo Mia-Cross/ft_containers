@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/07 04:29:06 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 15:11:16 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include <cstddef>
 # include <memory>
-
-// # include <iostream>
 
 template < typename T, class Alloc >
 class dynArr {
@@ -29,12 +27,11 @@ class dynArr {
 
         //allocate empty new block
         dynArr(size_t n) : _allocDA(Alloc()), _capacity(n), _sizeDA(0),
-            _arrayDA(_allocDA.allocate(n)), _nullRef(T()) {}
+            _arrayDA(_allocDA.allocate(n)), _nullRef(T()) { }
         
         //copy dynamic array
         dynArr(const dynArr &ref) : _allocDA(Alloc()), _capacity(ref._sizeDA),
             _sizeDA(0), _arrayDA(_allocDA.allocate(ref._sizeDA)), _nullRef(T()) {
-            // _sizeDA(ref._sizeDA), _arrayDA(_allocDA.allocate(ref._sizeDA)), _nullRef(T()) {
                 *this = ref;  }
 
         ~dynArr() { _allocDA.deallocate(_arrayDA, _capacity); }
@@ -44,7 +41,6 @@ class dynArr {
                 reallocateArray(ref._sizeDA);
             for (size_t i = 0; i != ref._sizeDA; i++)
                 constructValue(i, *(ref._arrayDA + i));
-            // _sizeDA = ref._sizeDA;
             return (*this);
         }
 
@@ -52,13 +48,11 @@ class dynArr {
         size_t  getSize() const { return (_sizeDA); }
         T       &throwNullRef() const { return (const_cast<T&>(_nullRef)); }
         T       *getArray() const { return (_arrayDA); }
-        // void    incrementDynArraySize(size_t n) { _sizeDA += n; }
 
         void addElement(const T &value) {
             if (_capacity <= _sizeDA)
                 reallocateArray(_capacity + 1);
             constructValue(_sizeDA, value);
-            // _allocDA.construct(_arrayDA + _sizeDA++, value);
         }
 
         void constructValue(size_t index, const T &value) {
@@ -105,7 +99,6 @@ class dynArr {
             for (size_t i = index + length; i < _capacity + length; i++)
                 _allocDA.construct(dup + i, *(_arrayDA + j++));
             _capacity += length;
-            // _sizeDA += length;
             return (dup);
         }
         
