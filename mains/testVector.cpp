@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 22:23:12 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 17:24:37 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 21:19:55 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,8 @@ std::cout << "\n// ----- MODIFIERS ----- //\n\n";
     std::cout << "Return = " << *it2 << vectorB;
     std::cout << "Return = " << *it3 << vectorE;
     vectorE.clear();
+    it = vectorA.begin(); it++; it++;
+    it2 = vectorB.begin(); it2++; it2++;
     it3 = vectorE.begin();
     std::cout << " * Insert value '808' 3 times\n";
     vectorA.insert(it, 3, 808);
@@ -155,6 +157,9 @@ std::cout << "\n// ----- MODIFIERS ----- //\n\n";
     vectorE.insert(it3, 3, 808);
     std::cout << vectorA << vectorB << vectorE;
     vectorE.clear();
+    it = vectorA.begin(); it++; it++;
+    it2 = vectorB.begin(); it2++; it2++;
+    it3 = vectorE.begin();
     std::cout << " * Insert using iterators\n";
     vectorA.insert(it, vectorC.begin(), vectorC.end());
     vectorB.insert(it2, vectorC.begin(), vectorC.end());

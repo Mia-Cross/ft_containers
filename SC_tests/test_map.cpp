@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/18 12:00:10 by schene            #+#    #+#             */
-/*   Updated: 2021/05/03 21:52:51 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/06 03:03:59 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 template<typename K, typename V>
 void print_map(std::map<K,V> const &m)
 {
-	for (typename std::map<K,V>::const_iterator it = m.begin(); it != m.end(); ++it)
+	for (typename std::map<K,V>::const_iterator it = m.begin(); it != m.end(); it++)
         std::cout  << "{" << _GREEN <<  (*it).first << _YELLOW ": " << _GREEN << (*it).second << _YELLOW "} ";
         // std::cout << "{" << (*it).first << ": " << (*it).second << "} ";
 	std::cout << std::endl;
@@ -94,9 +94,9 @@ int		main()
 		std::cout << _CYAN << "==================== (single and with int) INSERT TEST ====================" << _END << std::endl;
 
 		//single element:
-		mymap.insert(ft::pair<char, int>('a', 100));
-		mymap.insert(ft::pair<char, int>('c', 80));
-		mymap.insert(ft::pair<char, int>('e', 60));
+		mymap.insert(std::pair<char, int>('a', 100));
+		mymap.insert(std::pair<char, int>('c', 80));
+		mymap.insert(std::pair<char, int>('e', 60));
 		map.insert(std::pair<char, int>('a', 100));
 		map.insert(std::pair<char, int>('c', 80));
 		map.insert(std::pair<char, int>('e', 60));
@@ -104,12 +104,12 @@ int		main()
 		compareMap("3 insert of single element", mymap, map);
 
 		//with int:
-		mymap.insert(++mymap.begin(), ft::pair<char, int>('b', 90));
+		mymap.insert(++mymap.begin(), std::pair<char, int>('b', 90));
 		map.insert(++map.begin(), std::pair<char, int>('b', 90));
 		
 		compareMap("insert b w/ correct hint", mymap, map);
 		
-		mymap.insert(mymap.begin(), ft::pair<char, int>('d', 70));
+		mymap.insert(mymap.begin(), std::pair<char, int>('d', 70));
 		map.insert(map.begin(), std::pair<char, int>('d', 70));
 		
 		compareMap("insert d w/ an incorrect hint", mymap, map);
@@ -289,11 +289,11 @@ int		main()
 		compareMap("content", mymap, map);
 		
 		std::cout << _YELLOW << "iterating from rbegin to rend in mymap : " << _END << std::endl;
-		for (ft::map<char,int>::const_reverse_iterator it = mymap.rbegin(); it != mymap.rend(); it++)
+		for (ft::map<char,int>::reverse_iterator it = mymap.rbegin(); it != mymap.rend(); it++)
 			std::cout << it->first << " => " << it->second << '\n';
 
 		std::cout << _YELLOW << "the same in map : " << _END << std::endl;
-		for (std::map<char,int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); it++)
+		for (std::map<char,int>::reverse_iterator it = map.rbegin(); it != map.rend(); it++)
 			std::cout << it->first << " => " << it->second << '\n';
 	}
 	{
@@ -403,7 +403,7 @@ int		main()
 		}
 		compareMap("content", mymap, map);
 
-		ft::pair<char,int> myhighest = *mymap.rbegin();          // last element
+		std::pair<char,int> myhighest = *mymap.rbegin();          // last element
 		std::pair<char,int> highest = *map.rbegin();          // last element
 
 		std::cout << _YELLOW << "using map.value_comp() to iter trough our maps : " << _END << std::endl;
@@ -466,7 +466,7 @@ int		main()
 		}
 		compareMap("content", mymap, map);
 
-		ft::pair<ft::map<char,int>::iterator, ft::map<char,int>::iterator>	myret;
+		std::pair<ft::map<char,int>::iterator, ft::map<char,int>::iterator>	myret;
 		std::pair<std::map<char,int>::iterator, std::map<char,int>::iterator>	ret;
 		
 		myret = mymap.equal_range('b');

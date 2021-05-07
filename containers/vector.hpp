@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 06:19:44 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 19:52:56 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 01:17:33 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ namespace ft
             // ASSIGNATION
             const vector &operator=(const vector &ref)
             {
+                if (this->_size)
+                    clear();
                 this->_array = ref._array;
                 this->_size = ref._size;
                 return (*this);
@@ -110,22 +112,22 @@ namespace ft
             reference front() {
                 if (_size)
                     return (*(_array.getArray()));
-                return (_array.throwNulRef());
+                return (_array.throwNullRef());
             }
             const_reference front() const { 
                  if (_size)
                     return (*(_array.getArray()));
-                return (_array.throwNulRef());
+                return (_array.throwNullRef());
             }
             reference back() {
                 if (_size)
                     return (*(_array.getArray() + _size - 1));
-                return (_array.throwNulRef());
+                return (_array.throwNullRef());
             }
             const_reference back() const {
                 if (_size)
                     return (*(_array.getArray() + _size - 1));
-                return (_array.throwNulRef());
+                return (_array.throwNullRef());
             }
             reference operator[](size_type n) {
                 return (*(_array.getArray() + n));
@@ -136,12 +138,12 @@ namespace ft
             reference at (size_type n) {
                 if (n < _size)
                     return (*(_array.getArray() + n));
-                return (_array.throwNulRef());
+                throw std::out_of_range("vector");
             }
             const_reference at (size_type n) const {
                 if (n < _size)
                     return (*(_array.getArray() + n));
-                return (_array.throwNulRef());
+                throw std::out_of_range("vector");
             }
             
             // ----- MODIFIERS ----- //
@@ -169,22 +171,24 @@ namespace ft
             }
             iterator insert(iterator position, const value_type &val) {
                 size_t index = position.distanceBetween(begin(), position);
-                if (capacity() <= _size + 1)
+                size_t newSize = _size + 1;
+                if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, 1);
                 _array.constructValue(index, val);
-                _array.incrementSize(1);
-                _size++;
-                // return (iterator(_array.getArray() + index));
-                return (position);
+                // _size++;
+                _size = newSize;
+                return (iterator(_array.getArray() + index));
+                // return (position);
             }
             void insert(iterator position, size_type n, const value_type &val) {
                 size_t index = position.distanceBetween(begin(), position);
-                if (capacity() <= _size + n)
+                size_t newSize = _size + n;
+                if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, n);
                 for (size_t i = 0; i < n; i++)
                     _array.constructValue(index + i, val);
-                _array.incrementSize(n);
-                _size += n;
+                _size = newSize;
+                // _size += n;
             }
             template <class InputIterator>
             void insert(iterator position, InputIterator first, 
@@ -192,14 +196,17 @@ namespace ft
             {
                 size_t index = position.distanceBetween(begin(), position);
                 size_t dist = position.distanceBetween(first, last);
-                if (capacity() <= _size + dist)
+                size_t newSize = _size + dist;
+                if (capacity() <= newSize)
                     _array.reallocateSplitArray(index, dist);
-                while (index < _size + dist && first != last)
+                while (index < newSize && first != last)
                 {
+                    // std::cout << "index " << index << std::endl;
                     _array.constructValue(index++, *first);
                     first++;
                 }
-                _size += dist;
+                _size = newSize;
+                // _size += dist;
             }
             iterator erase(iterator position) {
                 if (_size)

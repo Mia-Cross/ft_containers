@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 01:49:53 by lemarabe          #+#    #+#             */
-/*   Updated: 2021/05/06 20:01:51 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 01:55:55 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <cstddef>
 # include <memory>
 
-// # include <iostream>
+# include <iostream>
 
 template < typename T, class Alloc >
 class dynArr {
@@ -24,125 +24,133 @@ class dynArr {
     public :
 
         //create empty vector
-        dynArr() : allocDA(Alloc()), capacity(1), size(0),
-            array(allocDA.allocate(1)), nul(T()) {}
+        dynArr() : _allocDA(Alloc()), _capacity(1), _sizeDA(0),
+            _arrayDA(_allocDA.allocate(1)), _nullRef(T()) {
+                // array = _allocDA.construct(T());
+            }
 
         //allocate empty new block
-        dynArr(size_t n) : allocDA(Alloc()), capacity(n), size(0),
-            array(allocDA.allocate(n)), nul(T()) {}
+        dynArr(size_t n) : _allocDA(Alloc()), _capacity(n), _sizeDA(0),
+            _arrayDA(_allocDA.allocate(n)), _nullRef(T()) {}
         
         //copy dynamic array
-        dynArr(const dynArr &ref) : allocDA(Alloc()), capacity(ref.size),
-            size(ref.size), array(allocDA.allocate(ref.size)), nul(T()) {
+        dynArr(const dynArr &ref) : _allocDA(Alloc()), _capacity(ref._sizeDA),
+            _sizeDA(0), _arrayDA(_allocDA.allocate(ref._sizeDA)), _nullRef(T()) {
+            // _sizeDA(ref._sizeDA), _arrayDA(_allocDA.allocate(ref._sizeDA)), _nullRef(T()) {
                 *this = ref;  }
 
-        ~dynArr() { allocDA.deallocate(array, capacity); }
+        ~dynArr() { _allocDA.deallocate(_arrayDA, _capacity); }
 
         dynArr &operator=(const dynArr &ref) {
-            if (this->capacity < ref.size)
-                reallocateArray(ref.size);
+            if (_capacity < ref._sizeDA)
+                reallocateArray(ref._sizeDA);
             // std::cout << "ref.size = " << ref.size << std::endl;
-            // std::cout << "this->size = " << this->size << std::endl;
-            // std::cout << "this->capacity = " << this->capacity << std::endl;
-            for (size_t i = 0; i != ref.size; i++)
+            // std::cout << "_sizeDA = " << _sizeDA << std::endl;
+            // std::cout << "_capacity = " << _capacity << std::endl;
+            for (size_t i = 0; i != ref._sizeDA; i++)
             {
                 // std::cout << i << std::endl;
-                allocDA.construct(this->array + i, *(ref.array + i));
+                constructValue(i, *(ref._arrayDA + i));
                 // std::cout << i << std::endl;
             }
-            this->size = ref.size;
+            // _sizeDA = ref._sizeDA;
             return (*this);
         }
 
-        size_t  getCapacity() const { return (capacity); }
-        size_t  getSize() const { return (size); }
-        T       &throwNulRef() const { return (const_cast<T&>(nul)); }
-        T       *getArray() const { return (array); }
-        void    incrementSize(size_t n) { size += n; }
-        
+        size_t  getCapacity() const { return (_capacity); }
+        size_t  getSize() const { return (_sizeDA); }
+        T       &throwNullRef() const { return (const_cast<T&>(_nullRef)); }
+        T       *getArray() const { return (_arrayDA); }
+        // void    incrementDynArraySize(size_t n) { _sizeDA += n; }
+
         void addElement(const T &value) {
-            if (capacity <= size)
-                reallocateArray(capacity + 1);
-            allocDA.construct(array + size++, value);
+            if (_capacity <= _sizeDA)
+                reallocateArray(_capacity + 1);
+            constructValue(_sizeDA, value);
+            // _allocDA.construct(_arrayDA + _sizeDA++, value);
         }
 
         void constructValue(size_t index, const T &value) {
-            allocDA.construct(array + index, value);
+            _allocDA.construct(_arrayDA + index, value);
+            _sizeDA++; 
         }
 
         void deleteElements(size_t index, size_t n) {
-            if (index >= size || !size)
+            if (index >= _sizeDA || !_sizeDA)
                 return;
             for (size_t i = index; i < index + n; i++)
-                allocDA.destroy(array + i);
-            size -= n;
-            for (size_t i = index; i < size; i++)
-                array[i] = array[i + n];
+                _allocDA.destroy(_arrayDA + i);
+            _sizeDA -= n;
+            for (size_t i = index; i < _sizeDA; i++)
+            {
+                // std::cout << i << " | " << i + n << std::endl;
+                _allocDA.construct(_arrayDA + i, *(_arrayDA + i + n));
+            }
         }
 
-        T *duplicateArray(size_t size, size_t capacity) {
+        T *duplicateArray(size_t size, size_t newCapacity) {
             // std::cout << "trying to alloc in dup array " << capacity << std::endl;
-            T *dup = allocDA.allocate(capacity);
+            T *dup = _allocDA.allocate(newCapacity);
             // std::cout << "SUCCESS" << std::endl;
             for (size_t i = 0; i < size; i++)
-                allocDA.construct(dup + i, *(array + i));
+                _allocDA.construct(dup + i, *(_arrayDA + i));
             return (dup);
         }
 
         void reallocateArray(size_t n) {
-            // T *newArr = duplicateArray(this->size, n);
-            // allocDA.deallocate(this->array, this->capacity);
-            // this->array = newArr;
-            // this->capacity = n;
+            T *newArr = duplicateArray(_sizeDA, n);
+            _allocDA.deallocate(_arrayDA, _capacity);
+            _arrayDA = newArr;
+            _capacity = n;
 
-            T *newArr = duplicateArray(this->size, n);
-            allocDA.deallocate(this->array, this->capacity);
-            // std::cout << "trying to alloc in realloc array " << n << std::endl;
-            this->array = allocDA.allocate(n);
-            // std::cout << "SUCCESS" << std::endl;
-            for (size_t i = 0; i < n; i++)
-                allocDA.construct(array + i, *(newArr + i));
-            this->capacity = n;
-            delete newArr;
+            // T *newArr = duplicateArray(_sizeDA, n);
+            // _allocDA.deallocate(_arrayDA, _capacity);
+            // // std::cout << "trying to alloc in realloc array " << n << std::endl;
+            // _arrayDA = _allocDA.allocate(n);
+            // // std::cout << "SUCCESS" << std::endl;
+            // for (size_t i = 0; i < n; i++)
+            //     _allocDA.construct(array + i, *(newArr + i));
+            // _capacity = n;
+            // delete newArr;
         }
 
         T *duplicateSplitArray(size_t index, size_t length) {
-            // std::cout << "trying to alloc in dup split array " << this->capacity + length << std::endl;
-            T *dup = allocDA.allocate(this->capacity + length);
+            // std::cout << "trying to alloc in dup split array " << _capacity + length << std::endl;
+            T *dup = _allocDA.allocate(_capacity + length);
             // std::cout << "SUCCESS" << std::endl;
             size_t j = 0;
             for (size_t i = 0; i < index; i++)
-                allocDA.construct(dup + i, *(array + j++));
-            for (size_t i = index + length; i < capacity + length; i++)
-                allocDA.construct(dup + i, *(array + j++));
-            capacity += length;
-            size += length;
+                _allocDA.construct(dup + i, *(_arrayDA + j++));
+            for (size_t i = index + length; i < _capacity + length; i++)
+                _allocDA.construct(dup + i, *(_arrayDA + j++));
+            _capacity += length;
+            // _sizeDA += length;
             return (dup);
         }
         
         void reallocateSplitArray(size_t index, size_t length) {
-            // T *newArr = duplicateSplitArray(index, length);
-            // allocDA.deallocate(this->array, this->capacity);
-            // this->array = newArr;
-
-            size_t newSize = capacity + length;
             T *newArr = duplicateSplitArray(index, length);
-            allocDA.deallocate(this->array, this->capacity);
-            // std::cout << "trying to alloc in realloc split array " << newSize << std::endl;
-            this->array = allocDA.allocate(newSize);
-            // std::cout << "SUCCESS" << std::endl;
-            for (size_t i = 0; i < newSize; i++)
-                allocDA.construct(array + i, *(newArr + i));
-            delete newArr;
+            _allocDA.deallocate(_arrayDA, _capacity);
+            _arrayDA = newArr;
+
+            // size_t newSize = capacity + length;
+            // T *newArr = duplicateSplitArray(index, length);
+            // _allocDA.deallocate(_arrayDA, _capacity);
+            // // std::cout << "trying to alloc in realloc split array " << newSize << std::endl;
+            // _arrayDA = _allocDA.allocate(newSize);
+            // // std::cout << "SUCCESS" << std::endl;
+            // for (size_t i = 0; i < newSize; i++)
+            //     _allocDA.construct(array + i, *(newArr + i));
+            // delete newArr;
         }
 
     private :
     
-        Alloc   allocDA;
-        size_t  capacity;
-        size_t  size;
-        T       *array;
-        const T nul;
+        Alloc   _allocDA;
+        size_t  _capacity;
+        size_t  _sizeDA;
+        T       *_arrayDA;
+        const T _nullRef;
 };
 
 template < typename T, class Alloc >
@@ -173,7 +181,7 @@ class vectIter
             dynamic_array arr = it->getArray();
             if (n < arr->size())
                 return (*(arr + n));
-            return (arr->throwNulRef()); }
+            return (arr->throwNullRef()); }
 
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         vectIter  &operator++() { this->it++; return (*this); }
@@ -240,7 +248,7 @@ class cVectIter : public virtual vectIter<T,Alloc>
             dynamic_array arr = this->it->getArray();
             if (n < arr->size())
                 return (*(arr + n));
-            return (arr->throwNulRef()); }
+            return (arr->throwNullRef()); }
         
         //----- OPERATORS : 'incrementation' & 'decrementation' -----//
         cVectIter  &operator++() { this->it++; return (*this); }
@@ -302,7 +310,7 @@ class rVectIter : public virtual vectIter<T,Alloc>
             dynamic_array arr = this->it->getArray();
             if (n < arr->size())
                 return (*(arr + n));
-            return (arr->throwNulRef()); }
+            return (arr->throwNullRef()); }
 
         //----- OPERATORS : & 'incrementation''decrementation' -----//
         rVectIter  &operator++() { this->it--; return (*this); }
@@ -365,7 +373,7 @@ class crVectIter : public virtual cVectIter<T,Alloc>, public virtual rVectIter<T
             dynamic_array arr = this->it->getArray();
             if (n < arr->size())
                 return (*(arr + n));
-            return (arr->throwNulRef()); }
+            return (arr->throwNullRef()); }
 
         //----- OPERATORS : & 'incrementation''decrementation' -----//
         crVectIter  &operator++() { this->it--; return (*this); }

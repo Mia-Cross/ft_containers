@@ -6,7 +6,7 @@
 /*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/09 14:51:30 by schene            #+#    #+#             */
-/*   Updated: 2021/05/03 21:52:51 by lemarabe         ###   ########.fr       */
+/*   Updated: 2021/05/07 02:03:31 by lemarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void	error_diff(ft::vector<T> &myv, std::vector<T> vector)
 	std::cout << std::setw(30) << "myv.size(): " << myv.size() << std::endl;
 	std::cout << std::setw(30) << "vector.size(): " << vector.size() << std::endl;
 	std::cout << std::setw(30) << "myv : ";
-	printContainer(myv);
+	// printContainer(myv);
 	std::cout << std::setw(30) << "vector : ";
 	printContainer(vector);
 }
 
 template <class T>
-void	compareVector(std::string function, ft::vector<T> &myv, std::vector<T> vector)
+void	compareVector(std::string function, ft::vector<T> &myv, std::vector<T> &vector)
 {
 	std::cout << std::setw(30) << function << ": ";
 	if (myv.empty() != vector.empty())

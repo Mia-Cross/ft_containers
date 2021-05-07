@@ -7,10 +7,11 @@ stack   none            Single end -> last in, first out
 
 DETAILS A REVOIR AVANT DE TERMINER :
 ---------
-        Faire des tests avec autre chose que des ints
-
+        enlever throwNulRef() et nul(0)
 DETAILS REVUS AVEC COMMENTAIRE :
 ---------
+        Faire des tests avec autre chose que des ints
+                fait avec les testeurs de servane et thomas
         Voir les fonctions membres passables en private
                 dll ok
                 dynArray ok
